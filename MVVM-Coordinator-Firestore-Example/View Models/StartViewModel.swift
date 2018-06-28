@@ -39,11 +39,11 @@ class StartViewModel {
   
   lazy var users: Observable<[User]> = {
     privateUsers.asObservable()
-      .map { $0.sorted { $0.name < $1.name } }
+      .map { $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
   
   func didSelect(_ index: Int) {
-    delegate?.didSelect(privateUsers.value[index])
+    delegate?.didSelect(privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
   }
   
   var addButton: Observable<()>? {

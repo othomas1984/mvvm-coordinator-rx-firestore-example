@@ -54,15 +54,16 @@ class UserViewModel {
   }()
   lazy var items: Observable<[Item]> = {
     privateItems.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name < $1.name } }
+      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
   lazy var constraints: Observable<[Constraint]> = {
     privateConstraints.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name < $1.name } }
+      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
 
   func didSelect(_ index: Int) {
-    delegate?.didSelect(privateItems.value[index])
+    delegate?.didSelect(privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
+  }
   
   var addButton: Observable<()>? {
     didSet {

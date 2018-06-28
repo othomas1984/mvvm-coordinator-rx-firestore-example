@@ -43,11 +43,12 @@ class ItemViewModel {
   }()
   lazy var details: Observable<[Detail]> = {
     privateDetails.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name < $1.name } }
+      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
   
   func didSelect(_ index: Int) {
-    delegate?.didSelect(privateDetails.value[index])
+    delegate?.didSelect(privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
+  }
   
   var addButton: Observable<()>? {
     didSet {
