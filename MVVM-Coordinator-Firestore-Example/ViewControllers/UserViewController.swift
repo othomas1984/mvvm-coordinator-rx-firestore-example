@@ -16,15 +16,17 @@ class UserViewController: UIViewController {
   
   @IBOutlet weak var constraintsTableView: UITableView!
   @IBOutlet weak var itemsTableView: UITableView!
-  @IBOutlet weak var nameLabel: UILabel!
+  @IBOutlet weak var itemsLabel: UILabel!
+  @IBOutlet weak var constraintsLabel: UILabel!
   override func viewDidLoad() {
     super.viewDidLoad()
     
     itemsTableView.delegate = self
     constraintsTableView.delegate = self
-    
+    itemsLabel.text = "Items"
+    constraintsLabel.text = "Constraints"
+
     model.userName.bind(to: rx.title).disposed(by: disposeBag)
-    model.userName.bind(to: nameLabel.rx.text).disposed(by: disposeBag)
     model.constraints.bind(to: constraintsTableView.rx.items(cellIdentifier: "constraintCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
     }.disposed(by: disposeBag)
