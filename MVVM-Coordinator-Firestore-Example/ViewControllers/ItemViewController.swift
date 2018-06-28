@@ -15,14 +15,14 @@ class ItemViewController: UIViewController {
   var model: ItemViewModel!
   
   @IBOutlet weak var tableView: UITableView!
-  @IBOutlet weak var nameLabel: UILabel!
+  @IBOutlet weak var detailsLabel: UILabel!
   override func viewDidLoad() {
     super.viewDidLoad()
     
     tableView.delegate = self
-    
+    detailsLabel.text = "Details"
+
     model.itemName.bind(to: rx.title).disposed(by: disposeBag)
-    model.itemName.bind(to: nameLabel.rx.text).disposed(by: disposeBag)
     model.details.bind(to: tableView.rx.items(cellIdentifier: "detailCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       cell.detailTextLabel?.text = item.constraint
