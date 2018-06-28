@@ -12,11 +12,13 @@ import RxSwift
 
 protocol StartViewModelDelegate: class {
   func didSelect(_ user: User)
+  func didTapAdd()
 }
 
 class StartViewModel {
   private var privateUsers = Variable<[User]>([])
   private weak var delegate: StartViewModelDelegate?
+  private var disposeBag = DisposeBag()
   
   init(delegate: StartViewModelDelegate) {
     self.delegate = delegate
@@ -42,6 +44,21 @@ class StartViewModel {
   
   func didSelect(_ index: Int) {
     delegate?.didSelect(privateUsers.value[index])
+  }
+  
+  var addButton: Observable<()>? {
+    didSet {
+      addButton?.subscribe { [unowned self] event in
+        switch event {
+        case .next:
+          self.delegate?.didTapAdd()
+        case let .error(error):
+          print(error)
+        case .completed:
+          break
+        }
+      }.disposed(by: disposeBag)
+    }
   }
 }
 

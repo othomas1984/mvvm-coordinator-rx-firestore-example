@@ -21,6 +21,7 @@ class UsersTableViewController: UITableViewController {
     model.users.bind(to: tableView.rx.items(cellIdentifier: "userCell", cellType: UITableViewCell.self)) { _, user, cell in
       cell.textLabel?.text = user.name
     }.disposed(by: disposeBag)
+    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

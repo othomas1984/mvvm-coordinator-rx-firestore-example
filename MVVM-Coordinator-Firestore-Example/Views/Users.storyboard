@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Users Table View Controller-->
+        <!--Title-->
         <scene sceneID="2kS-IJ-w4v">
             <objects>
                 <tableViewController id="Vkr-Ev-B0S" customClass="UsersTableViewController" customModule="MVVM_Coordinator_Firestore_Example" customModuleProvider="target" sceneMemberID="viewController">
@@ -41,6 +41,9 @@
                             <outlet property="delegate" destination="Vkr-Ev-B0S" id="NCj-Ww-orY"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="Zv4-wt-gnT">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="z3g-bu-E4S"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WUf-1q-8E7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
