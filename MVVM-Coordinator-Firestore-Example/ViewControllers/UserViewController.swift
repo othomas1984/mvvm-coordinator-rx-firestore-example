@@ -31,6 +31,7 @@ class UserViewController: UIViewController {
     model.items.bind(to: itemsTableView.rx.items(cellIdentifier: "itemCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       }.disposed(by: disposeBag)
+    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
   }
 }
 

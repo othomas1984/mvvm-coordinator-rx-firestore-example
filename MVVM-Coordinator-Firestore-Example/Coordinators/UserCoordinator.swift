@@ -37,9 +37,66 @@ extension UserCoordinator {
     addChildCoordinator(itemCoordinator)
     itemCoordinator.start()
   }
+  
+  private func showChooseItemOrConstraintController() {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .actionSheet)
+    let itemAction = UIAlertAction(title: "Item", style: .default) { action in
+      self.showAddItemController()
+    }
+    let constraintAction = UIAlertAction(title: "Constraint", style: .default) { action in
+      self.showAddConstraintController()
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(itemAction)
+    ac.addAction(constraintAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = itemAction
+    navigationController.present(ac, animated: true)
+  }
+  
+  private func showAddItemController() {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.placeholder = "Enter a name"
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+      if let name = ac.textFields?.first?.text, !name.isEmpty {
+        FirestoreService.createItem(for: self.user, with: name)
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
+  
+  private func showAddConstraintController() {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.placeholder = "Enter a name"
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+      if let name = ac.textFields?.first?.text, !name.isEmpty {
+        FirestoreService.createConstraint(for: self.user, with: name)
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
 }
 
 extension UserCoordinator: UserViewModelDelegate {
+  func didTapAdd() {
+    showChooseItemOrConstraintController()
+  }
+  
   func didSelect(_ item: Item) {
     startItemCoordinator(item)
   }
