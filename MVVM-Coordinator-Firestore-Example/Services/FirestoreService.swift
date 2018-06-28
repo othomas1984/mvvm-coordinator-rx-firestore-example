@@ -42,6 +42,11 @@ class FirestoreService {
     return create(forParent: item, with: ["name": name, "constraint": constraint], completion: completion)
   }
   
+  static func delete(_ object: FirestoreModel, completion: ((Error?) -> Void)?) {
+    // TODO: Needs to have server code to delete sub collections and items
+    object.path.delete(completion: completion)
+  }
+
   private static func get<T: FirestoreModel>(atPath path: DocumentReference?, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {
     return (path?.collection(T.collectionPath) ?? Firestore.firestore().collection(T.collectionPath))
       .addSnapshotListener { (snapshot, error) in
