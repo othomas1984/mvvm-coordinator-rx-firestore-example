@@ -27,6 +27,7 @@ class ItemViewController: UIViewController {
       cell.textLabel?.text = item.name
       cell.detailTextLabel?.text = item.constraint
       }.disposed(by: disposeBag)
+    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
   }
 }
 

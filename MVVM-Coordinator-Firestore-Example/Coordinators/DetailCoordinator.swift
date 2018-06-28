@@ -8,9 +8,6 @@
 
 import UIKit
 
-protocol DetailCoordinatorDelegate: class {
-}
-
 class DetailCoordinator: Coordinator {
   private var navigationController: UINavigationController
   private var detail: Detail

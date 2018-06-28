@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item View Controller-->
+        <!--Title-->
         <scene sceneID="Jlm-J3-ovo">
             <objects>
                 <viewController id="6zH-VP-UfY" customClass="ItemViewController" customModule="MVVM_Coordinator_Firestore_Example" customModuleProvider="target" sceneMemberID="viewController">
@@ -67,6 +67,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zDz-Ap-T6Z"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Title" id="Tvj-b7-dQ5">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="xik-mO-mtQ"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="nameLabel" destination="PHc-At-uCa" id="LCS-4l-yS1"/>
                         <outlet property="tableView" destination="3Yd-JD-5Uf" id="sQ7-6t-oaG"/>

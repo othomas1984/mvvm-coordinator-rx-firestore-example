@@ -38,13 +38,37 @@ extension ItemCoordinator {
       addChildCoordinator(detailCoordinator)
       detailCoordinator.start()
   }
+  
+  private func showAddDetailController() {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.placeholder = "Enter a name"
+    }
+    // TODO: Figure out how to access this user's constraints and only allow those (obviously
+    // not through use of a textfield)
+    ac.addTextField { (textField) in
+      textField.placeholder = "Existing Constraint?"
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+      if let name = ac.textFields?.first?.text, !name.isEmpty,
+        ac.textFields?.count ?? 0 > 1, let constraint = ac.textFields?[1].text, !constraint.isEmpty {
+        FirestoreService.createDetail(for: self.item, with: name, constraint: constraint)
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
 }
 
 extension ItemCoordinator: ItemViewModelDelegate {
   func didSelect(_ detail: Detail) {
     startDetailCoordinator(detail)
   }
-}
-
-extension ItemCoordinator: DetailCoordinatorDelegate {
+  func didTapAdd() {
+    showAddDetailController()
+  }
 }

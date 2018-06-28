@@ -37,8 +37,9 @@ class FirestoreService {
     return get(atPath: userPath, completion: completion)
   }
   
-  static func createDetail(for item: Item, with name: String, completion: ((Detail?) -> Void)? = nil) {
-    return create(forParent: item, with: ["name": name], completion: completion)
+  // TODO: Require constraint to be an existing constraint somehow
+  static func createDetail(for item: Item, with name: String, constraint: String, completion: ((Detail?) -> Void)? = nil) {
+    return create(forParent: item, with: ["name": name, "constraint": constraint], completion: completion)
   }
   
   private static func get<T: FirestoreModel>(atPath path: DocumentReference?, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {

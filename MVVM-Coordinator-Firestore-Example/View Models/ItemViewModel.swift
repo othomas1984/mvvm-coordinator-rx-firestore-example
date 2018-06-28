@@ -11,9 +11,11 @@ import RxSwift
 
 protocol ItemViewModelDelegate: class {
   func didSelect(_ detail: Detail)
+  func didTapAdd()
 }
 
 class ItemViewModel {
+  private var disposeBag = DisposeBag()
   private weak var delegate: ItemViewModelDelegate?
   private var privateItem: Variable<Item>
   private var privateDetails = Variable<[Detail]>([])
@@ -46,5 +48,19 @@ class ItemViewModel {
   
   func didSelect(_ index: Int) {
     delegate?.didSelect(privateDetails.value[index])
+  
+  var addButton: Observable<()>? {
+    didSet {
+      addButton?.subscribe { [unowned self] event in
+        switch event {
+        case .next:
+          self.delegate?.didTapAdd()
+        case let .error(error):
+          print(error)
+        case .completed:
+          break
+        }
+      }.disposed(by: disposeBag)
+    }
   }
 }
