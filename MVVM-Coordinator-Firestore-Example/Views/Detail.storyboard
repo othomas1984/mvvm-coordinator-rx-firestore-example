@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nyW-Xq-SrF">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Detail View Controller-->
+        <scene sceneID="beA-vu-e3f">
+            <objects>
+                <viewController id="nyW-Xq-SrF" customClass="DetailViewController" customModule="MVVM_Coordinator_Firestore_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QPW-yE-7wu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpD-Bm-1ke">
+                                <rect key="frame" x="-0.5" y="53" width="375" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GrB-Sa-ACe">
+                                <rect key="frame" x="-0.5" y="104" width="375" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FpD-Bm-1ke" firstAttribute="centerX" secondItem="Cz9-ER-u2c" secondAttribute="centerX" id="1dV-sg-cUr"/>
+                            <constraint firstItem="GrB-Sa-ACe" firstAttribute="width" secondItem="FpD-Bm-1ke" secondAttribute="width" id="Wwv-NZ-Kg3"/>
+                            <constraint firstItem="GrB-Sa-ACe" firstAttribute="centerX" secondItem="FpD-Bm-1ke" secondAttribute="centerX" id="bVi-Ib-gdU"/>
+                            <constraint firstItem="GrB-Sa-ACe" firstAttribute="top" secondItem="FpD-Bm-1ke" secondAttribute="bottom" constant="30" id="ggv-YF-Qhq"/>
+                            <constraint firstItem="FpD-Bm-1ke" firstAttribute="width" secondItem="QPW-yE-7wu" secondAttribute="width" id="nOn-Es-Bzq"/>
+                            <constraint firstItem="FpD-Bm-1ke" firstAttribute="top" secondItem="Cz9-ER-u2c" secondAttribute="top" constant="33" id="zLR-AG-wPz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Cz9-ER-u2c"/>
+                    </view>
+                    <connections>
+                        <outlet property="ConstraintLabel" destination="GrB-Sa-ACe" id="1RY-TU-dPC"/>
+                        <outlet property="nameLabel" destination="FpD-Bm-1ke" id="Doy-9u-Esw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uBv-Mh-Cdw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="152.80000000000001" y="157.87106446776613"/>
+        </scene>
+    </scenes>
+</document>
