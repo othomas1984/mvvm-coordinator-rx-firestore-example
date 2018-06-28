@@ -12,6 +12,7 @@ import RxSwift
 
 protocol StartViewModelDelegate: class {
   func didSelect(_ user: User)
+  func didDelete(_ user: User)
   func didTapAdd()
 }
 
@@ -42,8 +43,24 @@ class StartViewModel {
       .map { $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
   
-  func didSelect(_ index: Int) {
-    delegate?.didSelect(privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
+  var userDeleted: Observable<(IndexPath)>? {
+    didSet {
+      userDeleted?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didDelete(user)
+        }.disposed(by: disposeBag)
+    }
+  }
+  
+  var userSelected: Observable<(IndexPath)>? {
+    didSet {
+      userSelected?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didSelect(user)
+        }.disposed(by: disposeBag)
+    }
   }
   
   var addButton: Observable<()>? {

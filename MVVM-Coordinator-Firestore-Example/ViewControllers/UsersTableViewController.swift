@@ -17,15 +17,15 @@ class UsersTableViewController: UITableViewController {
     super.viewDidLoad()
     title = "Users"
     tableView.dataSource = nil
-    tableView.delegate = self
+    tableView.delegate = nil
     model.users.bind(to: tableView.rx.items(cellIdentifier: "userCell", cellType: UITableViewCell.self)) { _, user, cell in
       cell.textLabel?.text = user.name
     }.disposed(by: disposeBag)
     model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
-  }
-  
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.cellForRow(at: indexPath)?.isSelected = false
-    model.didSelect(indexPath.row)
+    model.userSelected = tableView.rx.itemSelected.map { [unowned self] in
+      self.tableView.cellForRow(at: $0)?.isSelected = false
+      return $0
+      }.asObservable()
+    model.userDeleted = tableView.rx.itemDeleted.asObservable()
   }
 }

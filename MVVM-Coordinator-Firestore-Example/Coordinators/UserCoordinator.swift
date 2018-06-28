@@ -90,9 +90,25 @@ extension UserCoordinator {
     ac.preferredAction = okAction
     navigationController.present(ac, animated: true)
   }
+  
+  private func deleteItem(_ item: FirestoreModel) {
+    FirestoreService.delete(item) { error in
+      if let error = error {
+        print(error)
+      }
+    }
+  }
 }
 
 extension UserCoordinator: UserViewModelDelegate {
+  func didDelete(_ constraint: Constraint) {
+    deleteItem(constraint)
+  }
+  
+  func didDelete(_ item: Item) {
+    deleteItem(item)
+  }
+  
   func didTapAdd() {
     showChooseItemOrConstraintController()
   }

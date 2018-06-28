@@ -11,6 +11,7 @@ import RxSwift
 
 protocol ItemViewModelDelegate: class {
   func didSelect(_ detail: Detail)
+  func didDelete(_ detail: Detail)
   func didTapAdd()
 }
 
@@ -46,8 +47,24 @@ class ItemViewModel {
       .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
   
-  func didSelect(_ index: Int) {
-    delegate?.didSelect(privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
+  var detailDeleted: Observable<(IndexPath)>? {
+    didSet {
+      detailDeleted?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didDelete(detail)
+        }.disposed(by: disposeBag)
+    }
+  }
+  
+  var detailSelected: Observable<(IndexPath)>? {
+    didSet {
+      detailSelected?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didSelect(detail)
+        }.disposed(by: disposeBag)
+    }
   }
   
   var addButton: Observable<()>? {

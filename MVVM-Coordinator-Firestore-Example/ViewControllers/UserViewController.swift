@@ -21,26 +21,23 @@ class UserViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    itemsTableView.delegate = self
-    constraintsTableView.delegate = self
     itemsLabel.text = "Items"
     constraintsLabel.text = "Constraints"
 
     model.userName.bind(to: rx.title).disposed(by: disposeBag)
     model.constraints.bind(to: constraintsTableView.rx.items(cellIdentifier: "constraintCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
+      cell.selectionStyle = .none
     }.disposed(by: disposeBag)
     model.items.bind(to: itemsTableView.rx.items(cellIdentifier: "itemCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       }.disposed(by: disposeBag)
     model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
-  }
-}
-
-extension UserViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.cellForRow(at: indexPath)?.isSelected = false
-    guard tableView == itemsTableView else { return }
-    model.didSelect(indexPath.row)
+    model.itemSelected = itemsTableView.rx.itemSelected.map { [unowned self] in
+      self.itemsTableView.cellForRow(at: $0)?.isSelected = false
+      return $0
+    }.asObservable()
+    model.itemDeleted = itemsTableView.rx.itemDeleted.asObservable()
+    model.constraintDeleted = constraintsTableView.rx.itemDeleted.asObservable()
   }
 }

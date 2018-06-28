@@ -62,12 +62,25 @@ extension ItemCoordinator {
     ac.preferredAction = okAction
     navigationController.present(ac, animated: true)
   }
+  
+  private func deleteDetail(_ detail: Detail) {
+    FirestoreService.delete(detail) { error in
+      if let error = error {
+        print(error)
+      }
+    }
+  }
 }
 
 extension ItemCoordinator: ItemViewModelDelegate {
+  func didDelete(_ detail: Detail) {
+    deleteDetail(detail)
+  }
+  
   func didSelect(_ detail: Detail) {
     startDetailCoordinator(detail)
   }
+  
   func didTapAdd() {
     showAddDetailController()
   }

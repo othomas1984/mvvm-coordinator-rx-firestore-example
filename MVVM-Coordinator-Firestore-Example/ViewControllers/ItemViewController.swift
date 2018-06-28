@@ -19,7 +19,6 @@ class ItemViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    tableView.delegate = self
     detailsLabel.text = "Details"
 
     model.itemName.bind(to: rx.title).disposed(by: disposeBag)
@@ -28,12 +27,10 @@ class ItemViewController: UIViewController {
       cell.detailTextLabel?.text = item.constraint
       }.disposed(by: disposeBag)
     model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
-  }
-}
-
-extension ItemViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.cellForRow(at: indexPath)?.isSelected = false
-    model.didSelect(indexPath.row)
+    model.detailSelected = tableView.rx.itemSelected.map { [unowned self] in
+      self.tableView.cellForRow(at: $0)?.isSelected = false
+      return $0
+      }.asObservable()
+    model.detailDeleted = tableView.rx.itemDeleted.asObservable()
   }
 }

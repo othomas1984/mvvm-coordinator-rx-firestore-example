@@ -64,9 +64,21 @@ extension StartCoordinator {
     ac.preferredAction = okAction
     rootViewController.present(ac, animated: true)
   }
+  
+  private func deleteUser(_ user: User) {
+    FirestoreService.delete(user) { error in
+      if let error = error {
+        print(error)
+      }
+    }
+  }
 }
 
 extension StartCoordinator: StartViewModelDelegate {
+  func didDelete(_ user: User) {
+    deleteUser(user)
+  }
+  
   func didTapAdd() {
     showAddUserController()
   }

@@ -11,6 +11,8 @@ import RxSwift
 
 protocol UserViewModelDelegate: class {
   func didSelect(_ item: Item)
+  func didDelete(_ item: Item)
+  func didDelete(_ constraint: Constraint)
   func didTapAdd()
 }
 
@@ -61,8 +63,34 @@ class UserViewModel {
       .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
   }()
 
-  func didSelect(_ index: Int) {
-    delegate?.didSelect(privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index])
+  var itemDeleted: Observable<(IndexPath)>? {
+    didSet {
+      itemDeleted?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didDelete(item)
+        }.disposed(by: disposeBag)
+    }
+  }
+  
+  var constraintDeleted: Observable<(IndexPath)>? {
+    didSet {
+      constraintDeleted?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let constraint = self.privateConstraints.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didDelete(constraint)
+        }.disposed(by: disposeBag)
+    }
+  }
+  
+  var itemSelected: Observable<(IndexPath)>? {
+    didSet {
+      itemSelected?.subscribe { [unowned self] event in
+        guard let index = event.element?.row else { return }
+        let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
+        self.delegate?.didSelect(item)
+      }.disposed(by: disposeBag)
+    }
   }
   
   var addButton: Observable<()>? {
