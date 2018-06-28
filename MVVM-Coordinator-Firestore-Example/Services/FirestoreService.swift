@@ -12,17 +12,33 @@ class FirestoreService {
   static func getUsers(completion: @escaping ([User]) -> Void) -> ListenerRegistration {
     return get(atPath: nil, completion: completion)
   }
-
+  
+  static func createUser(with name: String, completion: ((User?) -> Void)? = nil) {
+    return create(forParent: nil, with: ["name": name], completion: completion)
+  }
+  
   static func getItems(userPath: DocumentReference, completion: @escaping ([Item]) -> Void) -> ListenerRegistration {
     return get(atPath: userPath, completion: completion)
   }
 
+  static func createItem(for user: User, with name: String, completion: ((Item?) -> Void)? = nil) {
+    return create(forParent: user, with: ["name": name], completion: completion)
+  }
+  
   static func getConstraints(userPath: DocumentReference, completion: @escaping ([Constraint]) -> Void) -> ListenerRegistration {
     return get(atPath: userPath, completion: completion)
   }
   
+  static func createConstraint(for user: User, with name: String, completion: ((Constraint?) -> Void)? = nil) {
+    return create(forParent: user, with: ["name": name], completion: completion)
+  }
+  
   static func getDetails(userPath: DocumentReference, completion: @escaping ([Detail]) -> Void) -> ListenerRegistration {
     return get(atPath: userPath, completion: completion)
+  }
+  
+  static func createDetail(for item: Item, with name: String, completion: ((Detail?) -> Void)? = nil) {
+    return create(forParent: item, with: ["name": name], completion: completion)
   }
   
   private static func get<T: FirestoreModel>(atPath path: DocumentReference?, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {
@@ -33,6 +49,15 @@ class FirestoreService {
         
         let items: [T] = snapshot.documents.compactMap { T(snapShot: $0) }
         completion(items)
+    }
+  }
+  
+  private static func create<T: FirestoreModel>(forParent parent: FirestoreModel?, with data: [String: Any], completion: ((T?) -> Void)?) {
+    (parent?.path.collection(T.collectionPath) ?? Firestore.firestore().collection(T.collectionPath)).addDocument(data: data).getDocument { (snapshot, error) in
+      if let error = error { print(error); return }
+      guard let snapshot = snapshot else { print("New item not found"); completion?(nil); return}
+      let item = T(snapShot: snapshot)
+      completion?(item)
     }
   }
 }
