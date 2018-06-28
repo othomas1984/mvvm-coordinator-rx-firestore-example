@@ -15,11 +15,15 @@ class DetailViewController: UIViewController {
   var model: DetailViewModel!
   
   @IBOutlet weak var nameLabel: UILabel!
-  @IBOutlet weak var ConstraintLabel: UILabel!
+  @IBOutlet weak var constraintLabel: UILabel!
+  @IBOutlet weak var nameValueLabel: UILabel!
+  @IBOutlet weak var constraintValueLabel: UILabel!
   override func viewDidLoad() {
     super.viewDidLoad()
+    nameLabel.text = "Name: "
+    constraintLabel.text = "Constraint: "
     model.detailName.bind(to: rx.title).disposed(by: disposeBag)
-    model.detailName.bind(to: nameLabel.rx.text).disposed(by: disposeBag)
-    model.detailConstraint.bind(to: ConstraintLabel.rx.text).disposed(by: disposeBag)
+    model.detailName.bind(to: nameValueLabel.rx.text).disposed(by: disposeBag)
+    model.detailConstraint.bind(to: constraintValueLabel.rx.text).disposed(by: disposeBag)
   }
 }
