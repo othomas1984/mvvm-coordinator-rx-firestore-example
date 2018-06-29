@@ -62,7 +62,11 @@ class FirestoreService {
     // TODO: Needs to have server code to delete sub collections and items
     object.path.delete(completion: completion)
   }
-
+  
+  static func update(_ object: FirestoreModel, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    object.path.updateData(data, completion: completion)
+  }
+  
   private static func get<T: FirestoreModel>(atPath path: DocumentReference?, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {
     return (path?.collection(T.collectionPath) ?? Firestore.firestore().collection(T.collectionPath))
       .addSnapshotListener { (snapshot, error) in
