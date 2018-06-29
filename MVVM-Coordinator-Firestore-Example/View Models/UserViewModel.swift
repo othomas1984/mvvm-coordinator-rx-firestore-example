@@ -10,10 +10,11 @@ import FirebaseFirestore
 import RxSwift
 
 protocol UserViewModelDelegate: class {
-  func didSelect(_ item: Item)
-  func didDelete(_ item: Item)
-  func didDelete(_ constraint: Constraint)
-  func didTapAdd()
+  func select(_ item: Item)
+  func delete(_ item: Item)
+  func delete(_ constraint: Constraint)
+  func edit(_ user: User)
+  func add()
 }
 
 class UserViewModel {
@@ -68,7 +69,7 @@ class UserViewModel {
       itemDeleted?.subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.didDelete(item)
+        self.delegate?.delete(item)
         }.disposed(by: disposeBag)
     }
   }
@@ -78,7 +79,7 @@ class UserViewModel {
       constraintDeleted?.subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let constraint = self.privateConstraints.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.didDelete(constraint)
+        self.delegate?.delete(constraint)
         }.disposed(by: disposeBag)
     }
   }
@@ -88,7 +89,7 @@ class UserViewModel {
       itemSelected?.subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.didSelect(item)
+        self.delegate?.select(item)
       }.disposed(by: disposeBag)
     }
   }
@@ -98,7 +99,7 @@ class UserViewModel {
       addButton?.subscribe { [unowned self] event in
         switch event {
         case .next:
-          self.delegate?.didTapAdd()
+          self.delegate?.add()
         case let .error(error):
           print(error)
         case .completed:

@@ -101,19 +101,19 @@ extension UserCoordinator {
 }
 
 extension UserCoordinator: UserViewModelDelegate {
-  func didDelete(_ constraint: Constraint) {
+  func delete(_ constraint: Constraint) {
     deleteItem(constraint)
   }
   
-  func didDelete(_ item: Item) {
+  func delete(_ item: Item) {
     deleteItem(item)
   }
   
-  func didTapAdd() {
+  func add() {
     showChooseItemOrConstraintController()
   }
   
-  func didSelect(_ item: Item) {
+  func select(_ item: Item) {
     startItemCoordinator(item)
   }
 }

@@ -10,9 +10,9 @@ import FirebaseFirestore
 import RxSwift
 
 protocol ItemViewModelDelegate: class {
-  func didSelect(_ detail: Detail)
-  func didDelete(_ detail: Detail)
-  func didTapAdd()
+  func select(_ detail: Detail)
+  func delete(_ detail: Detail)
+  func add()
 }
 
 class ItemViewModel {
@@ -52,7 +52,7 @@ class ItemViewModel {
       detailDeleted?.subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.didDelete(detail)
+        self.delegate?.delete(detail)
         }.disposed(by: disposeBag)
     }
   }
@@ -62,7 +62,7 @@ class ItemViewModel {
       detailSelected?.subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.didSelect(detail)
+        self.delegate?.select(detail)
         }.disposed(by: disposeBag)
     }
   }
@@ -72,7 +72,7 @@ class ItemViewModel {
       addButton?.subscribe { [unowned self] event in
         switch event {
         case .next:
-          self.delegate?.didTapAdd()
+          self.delegate?.add()
         case let .error(error):
           print(error)
         case .completed:

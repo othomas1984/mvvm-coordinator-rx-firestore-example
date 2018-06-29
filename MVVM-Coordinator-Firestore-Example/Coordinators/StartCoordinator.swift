@@ -75,15 +75,15 @@ extension StartCoordinator {
 }
 
 extension StartCoordinator: StartViewModelDelegate {
-  func didDelete(_ user: User) {
+  func delete(_ user: User) {
     deleteUser(user)
   }
   
-  func didTapAdd() {
+  func add() {
     showAddUserController()
   }
   
-  func didSelect(_ user: User) {
+  func select(_ user: User) {
     startUserCoordinator(user)
   }
 }

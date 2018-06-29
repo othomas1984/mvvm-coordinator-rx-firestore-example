@@ -73,15 +73,15 @@ extension ItemCoordinator {
 }
 
 extension ItemCoordinator: ItemViewModelDelegate {
-  func didDelete(_ detail: Detail) {
+  func delete(_ detail: Detail) {
     deleteDetail(detail)
   }
   
-  func didSelect(_ detail: Detail) {
+  func select(_ detail: Detail) {
     startDetailCoordinator(detail)
   }
   
-  func didTapAdd() {
+  func add() {
     showAddDetailController()
   }
 }
