@@ -51,7 +51,7 @@ extension DetailCoordinator {
         }
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction

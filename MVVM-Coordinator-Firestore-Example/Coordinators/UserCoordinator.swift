@@ -47,7 +47,7 @@ extension UserCoordinator {
     let constraintAction = UIAlertAction(title: "Constraint", style: .default) { action in
       self.showAddConstraintController()
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(itemAction)
     ac.addAction(constraintAction)
     ac.addAction(cancelAction)
@@ -66,7 +66,7 @@ extension UserCoordinator {
         FirestoreService.createItem(for: self.user, with: name)
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction
@@ -84,7 +84,7 @@ extension UserCoordinator {
         FirestoreService.createConstraint(for: self.user, with: name)
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction
@@ -106,7 +106,7 @@ extension UserCoordinator {
         }
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction

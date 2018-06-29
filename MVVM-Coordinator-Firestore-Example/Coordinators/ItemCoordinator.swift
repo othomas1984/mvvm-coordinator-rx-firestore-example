@@ -56,7 +56,7 @@ extension ItemCoordinator {
         FirestoreService.createDetail(for: self.item, with: name, constraint: constraint)
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction
@@ -78,7 +78,7 @@ extension ItemCoordinator {
         }
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
     ac.addAction(okAction)
     ac.addAction(cancelAction)
     ac.preferredAction = okAction
