@@ -6,7 +6,7 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import Foundation
+import FirebaseFirestore
 import RxSwift
 
 protocol DetailViewModelDelegate: class {
@@ -19,8 +19,24 @@ class DetailViewModel {
   init(_ detail: Detail, delegate: DetailViewModelDelegate) {
     self.delegate = delegate
     privateDetail = Variable<Detail>(detail)
+    detailListenerHandle = FirestoreService.detailListener(detail: detail) { [unowned self] detail in
+      // TODO: Shoudl probably dismiss this VC if the user no longer exists
+      guard let detail = detail else { print("Object seems to have been deleted"); return }
+      
+      self.privateDetail.value = detail
+    }
   }
   
+  var detailListenerHandle: ListenerRegistration? {
+    didSet {
+      oldValue?.remove()
+    }
+  }
+  
+  deinit {
+    detailListenerHandle?.remove()
+  }
+
   lazy var detailName: Observable<String> = {
     return privateDetail.asObservable().map { [unowned self] in $0.name }
   }()

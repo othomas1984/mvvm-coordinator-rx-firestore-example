@@ -24,19 +24,32 @@ class ItemViewModel {
   init(_ item: Item, delegate: ItemViewModelDelegate) {
     self.delegate = delegate
     privateItem = Variable<Item>(item)
-    listenerHandle = FirestoreService.getDetails(userPath: item.path) { [unowned self] in
+    detailsListenerHandle = FirestoreService.getDetails(userPath: item.path) { [unowned self] in
       self.privateDetails.value = $0
+    }
+    itemListenerHandle = FirestoreService.itemListener(item: item) { [unowned self] item in
+      // TODO: Shoudl probably dismiss this VC if the user no longer exists
+      guard let item = item else { print("Object seems to have been deleted"); return }
+      
+      self.privateItem.value = item
     }
   }
   
-  var listenerHandle: ListenerRegistration? {
+  var detailsListenerHandle: ListenerRegistration? {
+    didSet {
+      oldValue?.remove()
+    }
+  }
+  
+  var itemListenerHandle: ListenerRegistration? {
     didSet {
       oldValue?.remove()
     }
   }
   
   deinit {
-    listenerHandle?.remove()
+    detailsListenerHandle?.remove()
+    itemListenerHandle?.remove()
   }
   
   lazy var itemName: Observable<String> = {

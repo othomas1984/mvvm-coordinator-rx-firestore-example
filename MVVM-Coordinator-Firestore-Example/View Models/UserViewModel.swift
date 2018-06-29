@@ -33,6 +33,18 @@ class UserViewModel {
     constraintsListenerHandle = FirestoreService.getConstraints(userPath: user.path) { [unowned self] in
       self.privateConstraints.value = $0
     }
+    userListenerHandle = FirestoreService.userListener(user: user) { [unowned self] user in
+      // TODO: Shoudl probably dismiss this VC if the user no longer exists
+      guard let user = user else { print("Object seems to have been deleted"); return }
+      
+      self.privateUser.value = user
+    }
+  }
+  
+  var userListenerHandle: ListenerRegistration? {
+    didSet {
+      oldValue?.remove()
+    }
   }
   
   var itemsListenerHandle: ListenerRegistration? {
@@ -48,6 +60,7 @@ class UserViewModel {
   }
   
   deinit {
+    userListenerHandle?.remove()
     itemsListenerHandle?.remove()
     constraintsListenerHandle?.remove()
   }

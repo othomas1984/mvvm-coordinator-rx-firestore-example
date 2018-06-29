@@ -23,19 +23,19 @@ class StartViewModel {
   
   init(delegate: StartViewModelDelegate) {
     self.delegate = delegate
-    listenerHandle = FirestoreService.getUsers { [unowned self] in
+    usersListenerHandle = FirestoreService.getUsers { [unowned self] in
       self.privateUsers.value = $0
     }
   }
   
-  var listenerHandle: ListenerRegistration? {
+  var usersListenerHandle: ListenerRegistration? {
     didSet {
       oldValue?.remove()
     }
   }
   
   deinit {
-    listenerHandle?.remove()
+    usersListenerHandle?.remove()
   }
   
   lazy var users: Observable<[User]> = {

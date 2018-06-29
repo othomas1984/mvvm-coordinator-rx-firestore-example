@@ -9,6 +9,10 @@
 import FirebaseFirestore
 
 class FirestoreService {
+  static func userListener(user: User, completion: @escaping (User?) -> Void) -> ListenerRegistration {
+    return listen(to: user, completion: completion)
+  }
+  
   static func getUsers(completion: @escaping ([User]) -> Void) -> ListenerRegistration {
     return get(atPath: nil, completion: completion)
   }
@@ -17,12 +21,20 @@ class FirestoreService {
     return create(forParent: nil, with: ["name": name], completion: completion)
   }
   
+  static func itemListener(item: Item, completion: @escaping (Item?) -> Void) -> ListenerRegistration {
+    return listen(to: item, completion: completion)
+  }
+  
   static func getItems(userPath: DocumentReference, completion: @escaping ([Item]) -> Void) -> ListenerRegistration {
     return get(atPath: userPath, completion: completion)
   }
-
+  
   static func createItem(for user: User, with name: String, completion: ((Item?) -> Void)? = nil) {
     return create(forParent: user, with: ["name": name], completion: completion)
+  }
+  
+  static func constraintsListener(constraint: Constraint, completion: @escaping (Constraint?) -> Void) -> ListenerRegistration {
+    return listen(to: constraint, completion: completion)
   }
   
   static func getConstraints(userPath: DocumentReference, completion: @escaping ([Constraint]) -> Void) -> ListenerRegistration {
@@ -31,6 +43,10 @@ class FirestoreService {
   
   static func createConstraint(for user: User, with name: String, completion: ((Constraint?) -> Void)? = nil) {
     return create(forParent: user, with: ["name": name], completion: completion)
+  }
+  
+  static func detailListener(detail: Detail, completion: @escaping (Detail?) -> Void) -> ListenerRegistration {
+    return listen(to: detail, completion: completion)
   }
   
   static func getDetails(userPath: DocumentReference, completion: @escaping ([Detail]) -> Void) -> ListenerRegistration {
@@ -55,6 +71,15 @@ class FirestoreService {
         
         let items: [T] = snapshot.documents.compactMap { T(snapShot: $0) }
         completion(items)
+    }
+  }
+  
+  private static func listen<T: FirestoreModel>(to object: T, completion: @escaping ((T?) -> Void)) -> ListenerRegistration {
+    return object.path.addSnapshotListener { (snapshot, error) in
+      if let error = error { print(error); return }
+      guard let snapshot = snapshot else { print("No data found"); completion(nil); return }
+      let item: T = T(snapShot: snapshot)
+      completion(item)
     }
   }
   
