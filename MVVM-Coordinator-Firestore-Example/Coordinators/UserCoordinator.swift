@@ -91,6 +91,28 @@ extension UserCoordinator {
     navigationController.present(ac, animated: true)
   }
   
+  private func showEditUserController(_ user: User) {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.text = user.name
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+      if let name = ac.textFields?.first?.text, !name.isEmpty {
+        FirestoreService.update(user, with: ["name": name]) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
+  
   private func deleteItem(_ item: FirestoreModel) {
     FirestoreService.delete(item) { error in
       if let error = error {
@@ -101,6 +123,10 @@ extension UserCoordinator {
 }
 
 extension UserCoordinator: UserViewModelDelegate {
+  func edit(_ user: User) {
+    showEditUserController(user)
+  }
+  
   func delete(_ constraint: Constraint) {
     deleteItem(constraint)
   }

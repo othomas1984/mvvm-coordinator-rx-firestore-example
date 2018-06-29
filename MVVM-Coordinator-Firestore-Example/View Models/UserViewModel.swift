@@ -121,4 +121,18 @@ class UserViewModel {
       }.disposed(by: disposeBag)
     }
   }
+  var titleButton: Observable<()>? {
+    didSet {
+      titleButton?.subscribe { [unowned self] event in
+        switch event {
+        case .next:
+          self.delegate?.edit(self.privateUser.value)
+        case let .error(error):
+          print(error)
+        case .completed:
+          break
+        }
+        }.disposed(by: disposeBag)
+    }
+  }
 }

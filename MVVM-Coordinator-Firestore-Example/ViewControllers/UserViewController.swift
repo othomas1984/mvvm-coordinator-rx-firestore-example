@@ -18,13 +18,21 @@ class UserViewController: UIViewController {
   @IBOutlet weak var itemsTableView: UITableView!
   @IBOutlet weak var itemsLabel: UILabel!
   @IBOutlet weak var constraintsLabel: UILabel!
+  
+  var titleButton = UIButton()
   override func viewDidLoad() {
     super.viewDidLoad()
     
     itemsLabel.text = "Items"
     constraintsLabel.text = "Constraints"
-
+    titleButton.translatesAutoresizingMaskIntoConstraints = false
+    navigationItem.titleView = titleButton
+    titleButton.setTitleColor(.black, for: .normal)
+    titleButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+    model.titleButton = titleButton.rx.tap.asObservable()
+    
     model.userName.bind(to: rx.title).disposed(by: disposeBag)
+    model.userName.bind(to: titleButton.rx.title()).disposed(by: disposeBag)
     model.constraints.bind(to: constraintsTableView.rx.items(cellIdentifier: "constraintCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       cell.selectionStyle = .none
