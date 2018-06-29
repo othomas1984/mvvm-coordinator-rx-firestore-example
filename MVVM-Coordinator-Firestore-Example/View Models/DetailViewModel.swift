@@ -49,7 +49,7 @@ class DetailViewModel {
   
   var titleButton: Observable<()>? {
     didSet {
-      titleButton?.subscribe { [unowned self] event in
+      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.edit(self.privateDetail.value)

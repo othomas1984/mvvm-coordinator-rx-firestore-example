@@ -63,7 +63,7 @@ class ItemViewModel {
   
   var detailDeleted: Observable<(IndexPath)>? {
     didSet {
-      detailDeleted?.subscribe { [unowned self] event in
+      detailDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.delete(detail)
@@ -73,7 +73,7 @@ class ItemViewModel {
   
   var detailSelected: Observable<(IndexPath)>? {
     didSet {
-      detailSelected?.subscribe { [unowned self] event in
+      detailSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.select(detail)
@@ -83,7 +83,7 @@ class ItemViewModel {
   
   var addButton: Observable<()>? {
     didSet {
-      addButton?.subscribe { [unowned self] event in
+      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.add()
@@ -98,7 +98,7 @@ class ItemViewModel {
   
   var titleButton: Observable<()>? {
     didSet {
-      titleButton?.subscribe { [unowned self] event in
+      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.edit(self.privateItem.value)

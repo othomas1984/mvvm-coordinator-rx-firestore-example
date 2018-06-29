@@ -45,7 +45,7 @@ class StartViewModel {
   
   var userDeleted: Observable<(IndexPath)>? {
     didSet {
-      userDeleted?.subscribe { [unowned self] event in
+      userDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.delete(user)
@@ -55,7 +55,7 @@ class StartViewModel {
   
   var userSelected: Observable<(IndexPath)>? {
     didSet {
-      userSelected?.subscribe { [unowned self] event in
+      userSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.select(user)
@@ -65,7 +65,7 @@ class StartViewModel {
   
   var addButton: Observable<()>? {
     didSet {
-      addButton?.subscribe { [unowned self] event in
+      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.add()

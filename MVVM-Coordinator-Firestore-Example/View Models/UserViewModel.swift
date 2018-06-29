@@ -79,7 +79,7 @@ class UserViewModel {
 
   var itemDeleted: Observable<(IndexPath)>? {
     didSet {
-      itemDeleted?.subscribe { [unowned self] event in
+      itemDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.delete(item)
@@ -89,7 +89,7 @@ class UserViewModel {
   
   var constraintDeleted: Observable<(IndexPath)>? {
     didSet {
-      constraintDeleted?.subscribe { [unowned self] event in
+      constraintDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let constraint = self.privateConstraints.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.delete(constraint)
@@ -99,7 +99,7 @@ class UserViewModel {
   
   var itemSelected: Observable<(IndexPath)>? {
     didSet {
-      itemSelected?.subscribe { [unowned self] event in
+      itemSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
         self.delegate?.select(item)
@@ -109,7 +109,7 @@ class UserViewModel {
   
   var addButton: Observable<()>? {
     didSet {
-      addButton?.subscribe { [unowned self] event in
+      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.add()
@@ -124,7 +124,7 @@ class UserViewModel {
   
   var titleButton: Observable<()>? {
     didSet {
-      titleButton?.subscribe { [unowned self] event in
+      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         switch event {
         case .next:
           self.delegate?.edit(self.privateUser.value)
