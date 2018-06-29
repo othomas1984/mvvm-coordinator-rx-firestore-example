@@ -8,15 +8,22 @@
 
 import UIKit
 
-class UserCoordinator: Coordinator {
-  var navigationController: UINavigationController
+class UserCoordinator: RootViewCoordinator {
+  lazy var rootViewController: UIViewController = {
+    return navigationController
+  }()
+  
+  var navigationController: UINavigationController = {
+    return UINavigationController()
+  }()
+  
   var user: User
   
   var childCoordinators = [Coordinator]()
   
   required init(_ navigationController: UINavigationController, user: User) {
     self.user = user
-    self.navigationController = navigationController
+    navigationController.present(rootViewController, animated: true)
   }
 
   func start() {
@@ -29,7 +36,12 @@ extension UserCoordinator {
     let userVM = UserViewModel(user, delegate: self)
     guard let userVC = UIStoryboard.init(name: "User", bundle: nil).instantiateInitialViewController() as? UserViewController else { assertionFailure(); return }
     userVC.model = userVM
-    navigationController.pushViewController(userVC, animated: true)
+    userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(UserCoordinator.dismiss))
+    navigationController.pushViewController(userVC, animated: false)
+  }
+  
+  @objc func dismiss() {
+    rootViewController.dismiss(animated: true)
   }
   
   private func startItemCoordinator(_ item: Item) {
