@@ -42,7 +42,7 @@ extension StartCoordinator {
   }
   
   private func startUserCoordinator(_ user: User) {
-    let userCoordinator = UserCoordinator(navigationController, user: user)
+    let userCoordinator = UserCoordinator(navigationController, delegate: self, user: user)
     addChildCoordinator(userCoordinator)
     userCoordinator.start()
   }
@@ -70,6 +70,14 @@ extension StartCoordinator {
       if let error = error {
         print(error)
       }
+    }
+  }
+}
+
+extension StartCoordinator: UserCoordinatorDelegate {
+  func userCoordinatorDidDismiss(_ coordinator: UserCoordinator) {
+    coordinator.rootViewController.dismiss(animated: true) {
+      self.removeChildCoordinator(coordinator)
     }
   }
 }

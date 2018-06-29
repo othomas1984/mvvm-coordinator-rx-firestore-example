@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol UserCoordinatorDelegate: class {
+  func userCoordinatorDidDismiss(_ coordinator: UserCoordinator)
+}
+
 class UserCoordinator: RootViewCoordinator {
   lazy var rootViewController: UIViewController = {
     return navigationController
@@ -18,10 +22,12 @@ class UserCoordinator: RootViewCoordinator {
   }()
   
   var user: User
+  private weak var delegate: UserCoordinatorDelegate?
   
   var childCoordinators = [Coordinator]()
   
-  required init(_ navigationController: UINavigationController, user: User) {
+  required init(_ navigationController: UINavigationController, delegate: UserCoordinatorDelegate, user: User) {
+    self.delegate = delegate
     self.user = user
     navigationController.present(rootViewController, animated: true)
   }
@@ -36,12 +42,12 @@ extension UserCoordinator {
     let userVM = UserViewModel(user, delegate: self)
     guard let userVC = UIStoryboard.init(name: "User", bundle: nil).instantiateInitialViewController() as? UserViewController else { assertionFailure(); return }
     userVC.model = userVM
-    userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(UserCoordinator.dismiss))
+    userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismiss))
     navigationController.pushViewController(userVC, animated: false)
   }
   
   @objc func dismiss() {
-    rootViewController.dismiss(animated: true)
+    delegate?.userCoordinatorDidDismiss(self)
   }
   
   private func startItemCoordinator(_ item: Item) {
