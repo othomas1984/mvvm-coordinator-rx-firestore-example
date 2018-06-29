@@ -12,6 +12,7 @@ import RxSwift
 protocol ItemViewModelDelegate: class {
   func select(_ detail: Detail)
   func delete(_ detail: Detail)
+  func edit(_ item: Item)
   func add()
 }
 
@@ -86,6 +87,21 @@ class ItemViewModel {
         switch event {
         case .next:
           self.delegate?.add()
+        case let .error(error):
+          print(error)
+        case .completed:
+          break
+        }
+      }.disposed(by: disposeBag)
+    }
+  }
+  
+  var titleButton: Observable<()>? {
+    didSet {
+      titleButton?.subscribe { [unowned self] event in
+        switch event {
+        case .next:
+          self.delegate?.edit(self.privateItem.value)
         case let .error(error):
           print(error)
         case .completed:

@@ -63,6 +63,28 @@ extension ItemCoordinator {
     navigationController.present(ac, animated: true)
   }
   
+  private func showEditItemController(_ item: Item) {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.text = item.name
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
+      if let name = ac.textFields?.first?.text, !name.isEmpty {
+        FirestoreService.update(item, with: ["name": name]) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
+  
   private func deleteDetail(_ detail: Detail) {
     FirestoreService.delete(detail) { error in
       if let error = error {
@@ -73,6 +95,10 @@ extension ItemCoordinator {
 }
 
 extension ItemCoordinator: ItemViewModelDelegate {
+  func edit(_ item: Item) {
+    showEditItemController(item)
+  }
+
   func delete(_ detail: Detail) {
     deleteDetail(detail)
   }

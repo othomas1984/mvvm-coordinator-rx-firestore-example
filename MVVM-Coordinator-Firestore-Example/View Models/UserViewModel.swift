@@ -121,6 +121,7 @@ class UserViewModel {
       }.disposed(by: disposeBag)
     }
   }
+  
   var titleButton: Observable<()>? {
     didSet {
       titleButton?.subscribe { [unowned self] event in
@@ -132,7 +133,7 @@ class UserViewModel {
         case .completed:
           break
         }
-        }.disposed(by: disposeBag)
+      }.disposed(by: disposeBag)
     }
   }
 }

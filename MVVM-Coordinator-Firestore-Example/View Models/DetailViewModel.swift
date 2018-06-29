@@ -10,10 +10,12 @@ import FirebaseFirestore
 import RxSwift
 
 protocol DetailViewModelDelegate: class {
+  func edit(_ detail: Detail)
 }
 
 class DetailViewModel {
   private weak var delegate: DetailViewModelDelegate?
+  private var disposeBag = DisposeBag()
   private var privateDetail: Variable<Detail>
   
   init(_ detail: Detail, delegate: DetailViewModelDelegate) {
@@ -44,4 +46,19 @@ class DetailViewModel {
   lazy var detailConstraint: Observable<String> = {
     return privateDetail.asObservable().map { [unowned self] in $0.constraint }
   }()
+  
+  var titleButton: Observable<()>? {
+    didSet {
+      titleButton?.subscribe { [unowned self] event in
+        switch event {
+        case .next:
+          self.delegate?.edit(self.privateDetail.value)
+        case let .error(error):
+          print(error)
+        case .completed:
+          break
+        }
+        }.disposed(by: disposeBag)
+    }
+  }
 }
