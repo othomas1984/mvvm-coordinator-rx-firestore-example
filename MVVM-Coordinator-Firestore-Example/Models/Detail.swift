@@ -7,18 +7,10 @@
 //
 
 import Foundation
-import FirebaseFirestore
 
-class Detail: FirestoreModel {
-  static var collectionPath: String = "details"
-  var path: DocumentReference
-  var name: String
-  var constraint: String
-
-  required init(snapShot: DocumentSnapshot) {
-    self.path = snapShot.reference
-    let data = snapShot.data() ?? [String: Any]()
-    self.name = data["name"] as? String ?? "Unknown Name"
-    self.constraint = data["constraint"] as? String ?? "Unknown Constraint"
-  }
+struct Detail: FirestoreDataModel, Codable {
+  let id: String
+  let path: String
+  let name: String
+  let constraint: String
 }

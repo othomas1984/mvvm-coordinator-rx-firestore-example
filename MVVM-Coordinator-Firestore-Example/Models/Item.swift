@@ -7,16 +7,9 @@
 //
 
 import Foundation
-import FirebaseFirestore
 
-class Item: FirestoreModel {
-  static var collectionPath: String = "items"
-  var path: DocumentReference
-  var name: String
-  
-  required init(snapShot: DocumentSnapshot) {
-    self.path = snapShot.reference
-    let data = snapShot.data() ?? [String: Any]()
-    self.name = data["name"] as? String ?? "Unknown Name"
-  }
+struct Item: FirestoreDataModel, Codable {
+  let id: String
+  let path: String
+  let name: String
 }

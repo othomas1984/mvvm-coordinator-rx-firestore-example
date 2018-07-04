@@ -9,90 +9,132 @@
 import FirebaseFirestore
 
 class FirestoreService {
-  static func userListener(user: User, completion: @escaping (User?) -> Void) -> ListenerRegistration {
-    return listen(to: user, completion: completion)
+  struct Path {
+    static let userCollection = Firestore.firestore().collection("users-mvvm-coordinator-example").path
+    static func itemCollection(userPath path: String) -> String {
+      return Firestore.firestore().document(path).collection("items").path
+    }
+    static func constraintCollection(userPath path: String) -> String {
+      return Firestore.firestore().document(path).collection("constraints").path
+    }
+    static func detailCollection(itemPath path: String) -> String {
+      return Firestore.firestore().document(path).collection("details").path
+    }
   }
   
-  static func getUsers(completion: @escaping ([User]) -> Void) -> ListenerRegistration {
-    return get(atPath: nil, completion: completion)
-  }
-  
+  // MARK: - User
   static func createUser(with name: String, completion: ((User?) -> Void)? = nil) {
-    return create(forParent: nil, with: ["name": name], completion: completion)
+    return create(data: ["name": name], in: Path.userCollection, completion: completion)
   }
   
-  static func itemListener(item: Item, completion: @escaping (Item?) -> Void) -> ListenerRegistration {
-    return listen(to: item, completion: completion)
+  static func userListener(path: String, completion: @escaping (User?) -> Void) -> ListenerRegistration {
+    return documentListener(path: path, completion: completion)
   }
   
-  static func getItems(userPath: DocumentReference, completion: @escaping ([Item]) -> Void) -> ListenerRegistration {
-    return get(atPath: userPath, completion: completion)
+  static func usersListener(completion: @escaping ([User]) -> Void) -> ListenerRegistration {
+    return collectionListener(path: Path.userCollection, completion: completion)
   }
   
-  static func createItem(for user: User, with name: String, completion: ((Item?) -> Void)? = nil) {
-    return create(forParent: user, with: ["name": name], completion: completion)
+  static func updateUser(path: String, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    update(path: path, with: data, completion: completion)
+  }
+
+  static func deleteUser(path: String, completion: ((Error?) -> Void)?) {
+    delete(path: path, completion: completion)
   }
   
-  static func constraintsListener(constraint: Constraint, completion: @escaping (Constraint?) -> Void) -> ListenerRegistration {
-    return listen(to: constraint, completion: completion)
+  // MARK: - Item
+  static func createItem(userPath: String, with name: String, completion: ((Item?) -> Void)? = nil) {
+    return create(data: ["name": name], in: Path.itemCollection(userPath: userPath), completion: completion)
   }
   
-  static func getConstraints(userPath: DocumentReference, completion: @escaping ([Constraint]) -> Void) -> ListenerRegistration {
-    return get(atPath: userPath, completion: completion)
+  static func itemListener(path: String, completion: @escaping (Item?) -> Void) -> ListenerRegistration {
+    return documentListener(path: path, completion: completion)
   }
   
-  static func createConstraint(for user: User, with name: String, completion: ((Constraint?) -> Void)? = nil) {
-    return create(forParent: user, with: ["name": name], completion: completion)
+  static func itemsListener(userPath: String, completion: @escaping ([Item]) -> Void) -> ListenerRegistration {
+    return collectionListener(path: Path.itemCollection(userPath: userPath), completion: completion)
   }
   
-  static func detailListener(detail: Detail, completion: @escaping (Detail?) -> Void) -> ListenerRegistration {
-    return listen(to: detail, completion: completion)
+  static func updateItem(path: String, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    update(path: path, with: data, completion: completion)
   }
   
-  static func getDetails(userPath: DocumentReference, completion: @escaping ([Detail]) -> Void) -> ListenerRegistration {
-    return get(atPath: userPath, completion: completion)
+  static func deleteItem(path: String, completion: ((Error?) -> Void)?) {
+    delete(path: path, completion: completion)
   }
   
-  // TODO: Require constraint to be an existing constraint somehow
-  static func createDetail(for item: Item, with name: String, constraint: String, completion: ((Detail?) -> Void)? = nil) {
-    return create(forParent: item, with: ["name": name, "constraint": constraint], completion: completion)
+  // MARK: - Constraint
+  static func createConstraint(userPath: String, with name: String, completion: ((Constraint?) -> Void)? = nil) {
+    return create(data: ["name": name], in: Path.constraintCollection(userPath: userPath), completion: completion)
   }
   
-  static func delete(_ object: FirestoreModel, completion: ((Error?) -> Void)?) {
-    // TODO: Needs to have server code to delete sub collections and items
-    object.path.delete(completion: completion)
+  static func constraintListener(path: String, completion: @escaping (Constraint?) -> Void) -> ListenerRegistration {
+    return documentListener(path: path, completion: completion)
   }
   
-  static func update(_ object: FirestoreModel, with data: [String: Any], completion: ((Error?) -> Void)?) {
-    object.path.updateData(data, completion: completion)
+  static func constraintsListener(userPath: String, completion: @escaping ([Constraint]) -> Void) -> ListenerRegistration {
+    return collectionListener(path: Path.constraintCollection(userPath: userPath), completion: completion)
   }
   
-  private static func get<T: FirestoreModel>(atPath path: DocumentReference?, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {
-    return (path?.collection(T.collectionPath) ?? Firestore.firestore().collection(T.collectionPath))
+  static func updateConstraint(path: String, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    update(path: path, with: data, completion: completion)
+  }
+  
+  static func deleteConstraint(path: String, completion: ((Error?) -> Void)?) {
+    delete(path: path, completion: completion)
+  }
+  
+  // MARK: - Detail
+  static func createDetail(itemPath: String, with name: String, constraint: String, completion: ((Detail?) -> Void)? = nil) {
+    return create(data: ["name": name, "constraint": constraint], in: Path.detailCollection(itemPath: itemPath), completion: completion)
+  }
+  
+  static func detailListener(path: String, completion: @escaping (Detail?) -> Void) -> ListenerRegistration {
+    return documentListener(path: path, completion: completion)
+  }
+  
+  static func detailsListener(itemPath: String, completion: @escaping ([Detail]) -> Void) -> ListenerRegistration {
+    return collectionListener(path: Path.detailCollection(itemPath: itemPath), completion: completion)
+  }
+  
+  static func updateDetail(path: String, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    update(path: path, with: data, completion: completion)
+  }
+  
+  static func deleteDetail(path: String, completion: ((Error?) -> Void)?) {
+    delete(path: path, completion: completion)
+  }
+  
+  // MARK: - Generics
+  private static func collectionListener<T: Decodable>(path: String, completion:  @escaping ([T]) -> Void) -> ListenerRegistration {
+    return Firestore.firestore().collection(path)
       .addSnapshotListener { (snapshot, error) in
         if let error = error { print(error); return }
-        guard let snapshot = snapshot else { print("No data found"); completion([]); return }
-        
-        let items: [T] = snapshot.documents.compactMap { T(snapShot: $0) }
+        let items: [T] = snapshot?.documents.compactMap { $0.as(T.self) } ?? []
         completion(items)
     }
   }
   
-  private static func listen<T: FirestoreModel>(to object: T, completion: @escaping ((T?) -> Void)) -> ListenerRegistration {
-    return object.path.addSnapshotListener { (snapshot, error) in
+  private static func documentListener<T: Decodable>(path: String, completion: @escaping ((T?) -> Void)) -> ListenerRegistration {
+    return Firestore.firestore().document(path).addSnapshotListener { (snapshot, error) in
       if let error = error { print(error); return }
-      guard let snapshot = snapshot else { print("No data found"); completion(nil); return }
-      let item: T = T(snapShot: snapshot)
-      completion(item)
+      completion(snapshot?.as(T.self))
     }
   }
   
-  private static func create<T: FirestoreModel>(forParent parent: FirestoreModel?, with data: [String: Any], completion: ((T?) -> Void)?) {
-    (parent?.path.collection(T.collectionPath) ?? Firestore.firestore().collection(T.collectionPath)).addDocument(data: data).getDocument { (snapshot, error) in
+  private static func create<T: Codable>(data: [String: Any], in path: String, completion: ((T?) -> Void)?) {
+    Firestore.firestore().collection(path).addDocument(data: data).getDocument { (snapshot, error) in
       if let error = error { print(error); return }
-      guard let snapshot = snapshot else { print("New item not found"); completion?(nil); return}
-      let item = T(snapShot: snapshot)
-      completion?(item)
+      completion?(snapshot?.as(T.self))
     }
+  }
+  
+  private static func delete(path: String, completion: ((Error?) -> Void)?) {
+    Firestore.firestore().document(path).delete(completion: completion)
+  }
+  
+  private static func update(path: String, with data: [String: Any], completion: ((Error?) -> Void)?) {
+    Firestore.firestore().document(path).updateData(data, completion: completion)
   }
 }

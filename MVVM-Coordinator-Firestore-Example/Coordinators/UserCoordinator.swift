@@ -81,7 +81,7 @@ extension UserCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { action in
       if let name = ac.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createItem(for: self.user, with: name)
+        FirestoreService.createItem(userPath: self.user.path, with: name)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -99,7 +99,7 @@ extension UserCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { action in
       if let name = ac.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createConstraint(for: self.user, with: name)
+        FirestoreService.createConstraint(userPath: self.user.path, with: name)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -117,7 +117,7 @@ extension UserCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { action in
       if let name = ac.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.update(user, with: ["name": name]) { error in
+        FirestoreService.updateUser(path: user.path, with: ["name": name]) { error in
           if let error = error {
             print(error)
           }
@@ -131,8 +131,8 @@ extension UserCoordinator {
     navigationController.present(ac, animated: true)
   }
   
-  private func deleteItem(_ item: FirestoreModel) {
-    FirestoreService.delete(item) { error in
+  private func deleteItem(_ item: FirestoreDataModel) {
+    FirestoreService.deleteItem(path: item.path) { error in
       if let error = error {
         print(error)
       }

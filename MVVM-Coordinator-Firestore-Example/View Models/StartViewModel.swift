@@ -23,7 +23,7 @@ class StartViewModel {
   
   init(delegate: StartViewModelDelegate) {
     self.delegate = delegate
-    usersListenerHandle = FirestoreService.getUsers { [unowned self] in
+    usersListenerHandle = FirestoreService.usersListener { [unowned self] in
       self.privateUsers.value = $0
     }
   }

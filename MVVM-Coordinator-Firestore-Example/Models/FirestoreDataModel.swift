@@ -1,5 +1,5 @@
 //
-//  Constraint.swift
+//  FirestoreDataModel.swift
 //  MVVM-Coordinator-Firestore-Example
 //
 //  Created by Owen Thomas on 6/25/18.
@@ -8,8 +8,7 @@
 
 import Foundation
 
-struct Constraint: FirestoreDataModel, Codable {
-  let id: String
-  let path: String
-  let name: String
+protocol FirestoreDataModel {
+  var id: String { get }
+  var path: String { get }
 }

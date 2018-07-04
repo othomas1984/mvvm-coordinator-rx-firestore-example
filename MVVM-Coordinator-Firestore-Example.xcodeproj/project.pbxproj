@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33646D0220ECBD530021A2A1 /* DocumentSnapshotExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */; };
+		33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */; };
 		3372410020E1C6A5003FDCFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337240FF20E1C6A5003FDCFF /* AppDelegate.swift */; };
 		3372410720E1C6A6003FDCFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3372410620E1C6A6003FDCFF /* Assets.xcassets */; };
 		3372410A20E1C6A6003FDCFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3372410820E1C6A6003FDCFF /* LaunchScreen.storyboard */; };
@@ -25,7 +27,7 @@
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94020E1DF9800CB7B55 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93F20E1DF9800CB7B55 /* FirestoreService.swift */; };
-		33D6F94220E1E22600CB7B55 /* FirestoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* FirestoreModel.swift */; };
+		33D6F94220E1E22600CB7B55 /* FirestoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* FirestoreDataModel.swift */; };
 		33D6F94620E1EFF000CB7B55 /* Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94520E1EFF000CB7B55 /* Detail.swift */; };
 		33D6F94820E1F03300CB7B55 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */; };
 		33D6F94A20E1F0DC00CB7B55 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		2BDCC54FE8218CE3B4925142 /* Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example/Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSnapshotExtension.swift; sourceTree = "<group>"; };
+		33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		337240FC20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVM-Coordinator-Firestore-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		337240FF20E1C6A5003FDCFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3372410620E1C6A6003FDCFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -60,7 +64,7 @@
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F93F20E1DF9800CB7B55 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
-		33D6F94120E1E22600CB7B55 /* FirestoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreModel.swift; sourceTree = "<group>"; };
+		33D6F94120E1E22600CB7B55 /* FirestoreDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataModel.swift; sourceTree = "<group>"; };
 		33D6F94520E1EFF000CB7B55 /* Detail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Detail.swift; sourceTree = "<group>"; };
 		33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +99,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		33646D0020ECBD460021A2A1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */,
+				33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		337240F320E1C6A5003FDCFF = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +129,7 @@
 		337240FE20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example */ = {
 			isa = PBXGroup;
 			children = (
+				33646D0020ECBD460021A2A1 /* Extensions */,
 				3372412E20E1CF62003FDCFF /* GoogleService-Info.plist */,
 				3372410B20E1C6A6003FDCFF /* Info.plist */,
 				3372410620E1C6A6003FDCFF /* Assets.xcassets */,
@@ -167,7 +181,7 @@
 		3372411420E1C7EA003FDCFF /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				33D6F94120E1E22600CB7B55 /* FirestoreModel.swift */,
+				33D6F94120E1E22600CB7B55 /* FirestoreDataModel.swift */,
 				3372412820E1CCC9003FDCFF /* User.swift */,
 				33D6F93A20E1DF5300CB7B55 /* Item.swift */,
 				33D6F94520E1EFF000CB7B55 /* Detail.swift */,
@@ -348,13 +362,15 @@
 				33D6F94E20E1F1DE00CB7B55 /* DetailCoordinator.swift in Sources */,
 				33D6F94020E1DF9800CB7B55 /* FirestoreService.swift in Sources */,
 				3372412720E1CCB1003FDCFF /* StartViewModel.swift in Sources */,
-				33D6F94220E1E22600CB7B55 /* FirestoreModel.swift in Sources */,
+				33D6F94220E1E22600CB7B55 /* FirestoreDataModel.swift in Sources */,
+				33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */,
 				3372413520E1DA34003FDCFF /* UserViewModel.swift in Sources */,
 				3372412120E1C9B9003FDCFF /* StartCoordinator.swift in Sources */,
 				33D6F94A20E1F0DC00CB7B55 /* DetailViewController.swift in Sources */,
 				3372413120E1D7DB003FDCFF /* UserCoordinator.swift in Sources */,
 				33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */,
 				33D6F95620E1F54000CB7B55 /* ItemCoordinator.swift in Sources */,
+				33646D0220ECBD530021A2A1 /* DocumentSnapshotExtension.swift in Sources */,
 				33D6F95020E1F3A700CB7B55 /* ItemViewModel.swift in Sources */,
 				33D6F95220E1F45100CB7B55 /* ItemViewController.swift in Sources */,
 				33D6F94620E1EFF000CB7B55 /* Detail.swift in Sources */,

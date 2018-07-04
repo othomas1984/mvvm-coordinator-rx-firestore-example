@@ -66,7 +66,7 @@ extension StartCoordinator {
   }
   
   private func deleteUser(_ user: User) {
-    FirestoreService.delete(user) { error in
+    FirestoreService.deleteUser(path: user.path) { error in
       if let error = error {
         print(error)
       }

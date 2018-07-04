@@ -21,7 +21,7 @@ class DetailViewModel {
   init(_ detail: Detail, delegate: DetailViewModelDelegate) {
     self.delegate = delegate
     privateDetail = Variable<Detail>(detail)
-    detailListenerHandle = FirestoreService.detailListener(detail: detail) { [unowned self] detail in
+    detailListenerHandle = FirestoreService.detailListener(path: detail.path) { [unowned self] detail in
       // TODO: Shoudl probably dismiss this VC if the user no longer exists
       guard let detail = detail else { print("Object seems to have been deleted"); return }
       

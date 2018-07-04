@@ -27,13 +27,13 @@ class UserViewModel {
   init(_ user: User, delegate: UserViewModelDelegate) {
     self.delegate = delegate
     privateUser = Variable<User>(user)
-    itemsListenerHandle = FirestoreService.getItems(userPath: user.path) { [unowned self] in
+    itemsListenerHandle = FirestoreService.itemsListener(userPath: user.path) { [unowned self] in
       self.privateItems.value = $0
     }
-    constraintsListenerHandle = FirestoreService.getConstraints(userPath: user.path) { [unowned self] in
+    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: user.path) { [unowned self] in
       self.privateConstraints.value = $0
     }
-    userListenerHandle = FirestoreService.userListener(user: user) { [unowned self] user in
+    userListenerHandle = FirestoreService.userListener(path: user.path) { [unowned self] user in
       // TODO: Shoudl probably dismiss this VC if the user no longer exists
       guard let user = user else { print("Object seems to have been deleted"); return }
       

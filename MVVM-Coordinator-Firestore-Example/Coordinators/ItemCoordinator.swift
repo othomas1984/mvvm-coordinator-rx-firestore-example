@@ -53,7 +53,7 @@ extension ItemCoordinator {
     let okAction = UIAlertAction(title: "Ok", style: .default) { action in
       if let name = ac.textFields?.first?.text, !name.isEmpty,
         ac.textFields?.count ?? 0 > 1, let constraint = ac.textFields?[1].text, !constraint.isEmpty {
-        FirestoreService.createDetail(for: self.item, with: name, constraint: constraint)
+        FirestoreService.createDetail(itemPath: self.item.path, with: name, constraint: constraint)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -71,7 +71,7 @@ extension ItemCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { action in
       if let name = ac.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.update(item, with: ["name": name]) { error in
+        FirestoreService.updateItem(path: item.path, with: ["name": name]) { error in
           if let error = error {
             print(error)
           }
@@ -86,7 +86,7 @@ extension ItemCoordinator {
   }
   
   private func deleteDetail(_ detail: Detail) {
-    FirestoreService.delete(detail) { error in
+    FirestoreService.deleteDetail(path: detail.path) { error in
       if let error = error {
         print(error)
       }
