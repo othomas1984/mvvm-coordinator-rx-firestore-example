@@ -41,10 +41,9 @@ extension DetailCoordinator {
     ac.addTextField { (textField) in
       textField.text = detail.constraint
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty,
-        ac.textFields?.count ?? 0 > 1, let constraint = ac.textFields?[1].text, !constraint.isEmpty {
-        
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty,
+        ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
         FirestoreService.updateDetail(path: detail.path, with: ["name": name, "constraint": constraint]) { error in
           if let error = error {
             print(error)

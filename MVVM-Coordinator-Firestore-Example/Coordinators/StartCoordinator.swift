@@ -53,8 +53,8 @@ extension StartCoordinator {
     ac.addTextField { (textField) in
       textField.placeholder = "Enter a name"
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
         FirestoreService.createUser(with: name)
       }
     }

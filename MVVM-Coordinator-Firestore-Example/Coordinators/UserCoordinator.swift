@@ -79,8 +79,8 @@ extension UserCoordinator {
     ac.addTextField { (textField) in
       textField.placeholder = "Enter a name"
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
         FirestoreService.createItem(userPath: self.user.path, with: name)
       }
     }
@@ -97,8 +97,8 @@ extension UserCoordinator {
     ac.addTextField { (textField) in
       textField.placeholder = "Enter a name"
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
         FirestoreService.createConstraint(userPath: self.user.path, with: name)
       }
     }
@@ -115,8 +115,8 @@ extension UserCoordinator {
     ac.addTextField { (textField) in
       textField.text = user.name
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
         FirestoreService.updateUser(path: user.path, with: ["name": name]) { error in
           if let error = error {
             print(error)

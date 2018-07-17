@@ -50,9 +50,9 @@ extension ItemCoordinator {
     ac.addTextField { (textField) in
       textField.placeholder = "Existing Constraint?"
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty,
-        ac.textFields?.count ?? 0 > 1, let constraint = ac.textFields?[1].text, !constraint.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty,
+        ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
         FirestoreService.createDetail(itemPath: self.item.path, with: name, constraint: constraint)
       }
     }
@@ -69,8 +69,8 @@ extension ItemCoordinator {
     ac.addTextField { (textField) in
       textField.text = item.name
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { action in
-      if let name = ac.textFields?.first?.text, !name.isEmpty {
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
         FirestoreService.updateItem(path: item.path, with: ["name": name]) { error in
           if let error = error {
             print(error)
