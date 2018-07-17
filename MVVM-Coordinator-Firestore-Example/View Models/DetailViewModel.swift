@@ -11,25 +11,36 @@ import RxSwift
 
 protocol DetailViewModelDelegate: class {
   func edit(_ detail: Detail)
+  func dismiss()
 }
 
 class DetailViewModel {
-  private weak var delegate: DetailViewModelDelegate?
   private var disposeBag = DisposeBag()
-  private var privateDetail: Variable<Detail>
+  private var titleSubject = PublishSubject<()>()
+
+  var detailName: Observable<String>
+  var detailConstraint: Observable<String>
+  var titleButton: AnyObserver<()>
   
   init(_ detail: Detail, delegate: DetailViewModelDelegate) {
-    self.delegate = delegate
-    privateDetail = Variable<Detail>(detail)
-    detailListenerHandle = FirestoreService.detailListener(path: detail.path) { [unowned self] detail in
-      // TODO: Shoudl probably dismiss this VC if the user no longer exists
-      guard let detail = detail else { print("Object seems to have been deleted"); return }
-      
-      self.privateDetail.value = detail
+    let detailSubject = BehaviorSubject<Detail?>(value: nil)
+    detailName = detailSubject.map { $0?.name ?? "" }
+    detailConstraint = detailSubject.map { $0?.constraint ?? "" }
+    titleButton = titleSubject.asObserver()
+    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
+      do {
+        if case .next = event, let detail = try detailSubject.value() {
+          delegate.edit(detail)
+        }
+      } catch { print(error) }
+    }.disposed(by: disposeBag)
+    detailListenerHandle = FirestoreService.detailListener(path: detail.path) { detail in
+      guard let detail = detail else { delegate.dismiss(); return }
+      detailSubject.on(.next(detail))
     }
   }
   
-  var detailListenerHandle: ListenerRegistration? {
+  private var detailListenerHandle: ListenerRegistration? {
     didSet {
       oldValue?.remove()
     }
@@ -37,28 +48,5 @@ class DetailViewModel {
   
   deinit {
     detailListenerHandle?.remove()
-  }
-
-  lazy var detailName: Observable<String> = {
-    return privateDetail.asObservable().map { [unowned self] in $0.name }
-  }()
-  
-  lazy var detailConstraint: Observable<String> = {
-    return privateDetail.asObservable().map { [unowned self] in $0.constraint }
-  }()
-  
-  var titleButton: Observable<()>? {
-    didSet {
-      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.edit(self.privateDetail.value)
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-        }.disposed(by: disposeBag)
-    }
   }
 }

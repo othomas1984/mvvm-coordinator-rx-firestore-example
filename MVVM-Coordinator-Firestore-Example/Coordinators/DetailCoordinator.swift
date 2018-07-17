@@ -64,4 +64,8 @@ extension DetailCoordinator: DetailViewModelDelegate {
   func edit(_ detail: Detail) {
     showEditDetailController(detail)
   }
+  
+  func dismiss() {
+    navigationController.dismiss(animated: true)
+  }
 }

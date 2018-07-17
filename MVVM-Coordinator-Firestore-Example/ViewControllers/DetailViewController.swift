@@ -41,8 +41,6 @@ class DetailViewController: UIViewController {
     model.detailName.bind(to: rx.title).disposed(by: disposeBag)
     model.detailName.bind(to: nameValueLabel.rx.text).disposed(by: disposeBag)
     model.detailConstraint.bind(to: constraintValueLabel.rx.text).disposed(by: disposeBag)
-
-    // Observables
-    model.titleButton = titleButton.rx.tap.asObservable()
+    titleButton.rx.tap.bind(to: model.titleButton).disposed(by: disposeBag)
   }
 }
