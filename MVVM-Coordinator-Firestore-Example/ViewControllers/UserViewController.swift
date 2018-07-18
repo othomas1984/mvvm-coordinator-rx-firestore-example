@@ -39,26 +39,24 @@ class UserViewController: UIViewController {
     // Bindings
     model.userName.bind(to: rx.title).disposed(by: disposeBag)
     model.userName.bind(to: titleButton.rx.title()).disposed(by: disposeBag)
-    
-    // Observables
-    model.titleButton = titleButton.rx.tap.asObservable()
-    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
+    titleButton.rx.tap.bind(to: model.titleTapped).disposed(by: disposeBag)
+    navigationItem.rightBarButtonItem?.rx.tap.bind(to: model.addTapped).disposed(by: disposeBag)
     
     // Tables - Items
     model.items.bind(to: itemsTableView.rx.items(cellIdentifier: "itemCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       }.disposed(by: disposeBag)
-    model.itemSelected = itemsTableView.rx.itemSelected.map { [unowned self] in
+    itemsTableView.rx.itemSelected.bind { [unowned self] in
       self.itemsTableView.cellForRow(at: $0)?.isSelected = false
-      return $0
-      }.asObservable()
-    model.itemDeleted = itemsTableView.rx.itemDeleted.asObservable()
+      self.model.itemSelected.onNext($0)
+    }.disposed(by: disposeBag)
+    itemsTableView.rx.itemDeleted.bind(to: model.itemDeleted).disposed(by: disposeBag)
 
     // Tables - Constraints
     model.constraints.bind(to: constraintsTableView.rx.items(cellIdentifier: "constraintCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       cell.selectionStyle = .none
       }.disposed(by: disposeBag)
-    model.constraintDeleted = constraintsTableView.rx.itemDeleted.asObservable()
+    constraintsTableView.rx.itemDeleted.bind(to: model.constraintDeleted).disposed(by: disposeBag)
   }
 }

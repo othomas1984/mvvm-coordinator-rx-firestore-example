@@ -18,24 +18,106 @@ protocol UserViewModelDelegate: class {
 
 class UserViewModel {
   private var disposeBag = DisposeBag()
-  private weak var delegate: UserViewModelDelegate?
-  private var privateUser: Variable<User>
-  private var privateItems = Variable<[Item]>([])
-  private var privateConstraints = Variable<[Constraint]>([])
+  
+  private var titleSubject = PublishSubject<()>()
+  private var addButtonSubject = PublishSubject<()>()
+  private var itemSelectedSubject = PublishSubject<IndexPath>()
+  private var itemDeletedSubject = PublishSubject<IndexPath>()
+  private var constraintSelectedSubject = PublishSubject<IndexPath>()
+  private var constraintDeletedSubject = PublishSubject<IndexPath>()
+
+  var userName: Observable<String>
+  var items: Observable<[Item]>
+  var constraints: Observable<[Constraint]>
+  var titleTapped: AnyObserver<()>
+  var addTapped: AnyObserver<()>
+  var itemSelected: AnyObserver<IndexPath>
+  var itemDeleted: AnyObserver<IndexPath>
+  var constraintDeleted: AnyObserver<IndexPath>
 
   init(_ user: User, delegate: UserViewModelDelegate) {
-    self.delegate = delegate
-    privateUser = Variable<User>(user)
-    itemsListenerHandle = FirestoreService.itemsListener(userPath: user.path) { [unowned self] in
-      self.privateItems.value = $0
+    // User
+    let userSubject = BehaviorSubject<User?>(value: nil)
+    userListenerHandle = FirestoreService.userListener(path: user.path) { user in
+      guard let user = user else { delegate.viewModelDidDismiss(); return }
+      userSubject.onNext(user)
     }
-    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: user.path) { [unowned self] in
-      self.privateConstraints.value = $0
+    userName = userSubject.map { $0?.name ?? "Unknown User"}
+
+    // Items
+    let itemsSubject = BehaviorSubject<[Item]>(value: [])
+    items = itemsSubject.map {
+      $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
-    userListenerHandle = FirestoreService.userListener(path: user.path) { [unowned self] user in
-      guard let user = user else { delegate.viewModelDidDismiss(); return }      
-      self.privateUser.value = user
+
+    // Constraints
+    let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
+    itemsListenerHandle = FirestoreService.itemsListener(userPath: user.path) {
+      itemsSubject.onNext($0)
     }
+    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: user.path) {
+      constraintsSubject.onNext($0)
+    }
+    constraints = constraintsSubject.map {
+      $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+    
+    // Item Actions
+    itemSelected = itemSelectedSubject.asObserver()
+    itemSelectedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(items) { (index, items) in
+        return (index, items)
+      }.subscribe { result in
+        guard let index = result.element?.0.row,
+          let items = result.element?.1, items.count > index else { return }
+        delegate.select(items[index])
+      }.disposed(by: disposeBag)
+    
+    itemDeleted = itemDeletedSubject.asObserver()
+    itemDeletedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(items) { (index, items) in
+        return (index, items)
+      }.subscribe { result in
+        guard let index = result.element?.0.row,
+          let items = result.element?.1, items.count > index else { return }
+        FirestoreService.deleteItem(path: items[index].path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }.disposed(by: disposeBag)
+    
+    // Constraint Actions
+    constraintDeleted = constraintDeletedSubject.asObserver()
+    constraintDeletedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(constraints) { (index, constraints) in
+        return (index, constraints)
+      }.subscribe { result in
+        guard let index = result.element?.0.row,
+          let constraints = result.element?.1, constraints.count > index else { return }
+        FirestoreService.deleteConstraint(path: constraints[index].path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }.disposed(by: disposeBag)
+    
+    // Title Button
+    titleTapped = titleSubject.asObserver()
+    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(userSubject).subscribe { event in
+        if case let .next(userOptional) = event, let user = userOptional {
+          delegate.edit(user)
+        }
+      }.disposed(by: disposeBag)
+    
+    // Add Button
+    addTapped = addButtonSubject.asObserver()
+    addButtonSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
+      if case .next = event {
+        delegate.add()
+      }
+      }.disposed(by: disposeBag)
   }
   
   var userListenerHandle: ListenerRegistration? {
@@ -60,85 +142,5 @@ class UserViewModel {
     userListenerHandle?.remove()
     itemsListenerHandle?.remove()
     constraintsListenerHandle?.remove()
-  }
-  
-  lazy var userName: Observable<String> = {
-    return privateUser.asObservable().map { [unowned self] in $0.name }
-  }()
-  lazy var items: Observable<[Item]> = {
-    privateItems.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
-  }()
-  lazy var constraints: Observable<[Constraint]> = {
-    privateConstraints.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
-  }()
-
-  var itemDeleted: Observable<(IndexPath)>? {
-    didSet {
-      itemDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        FirestoreService.deleteItem(path: item.path) { error in
-          if let error = error {
-            print(error)
-          }
-        }
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var constraintDeleted: Observable<(IndexPath)>? {
-    didSet {
-      constraintDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let constraint = self.privateConstraints.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        FirestoreService.deleteConstraint(path: constraint.path) { error in
-          if let error = error {
-            print(error)
-          }
-        }
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var itemSelected: Observable<(IndexPath)>? {
-    didSet {
-      itemSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.select(item)
-      }.disposed(by: disposeBag)
-    }
-  }
-  
-  var addButton: Observable<()>? {
-    didSet {
-      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.add()
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-      }.disposed(by: disposeBag)
-    }
-  }
-  
-  var titleButton: Observable<()>? {
-    didSet {
-      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.edit(self.privateUser.value)
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-      }.disposed(by: disposeBag)
-    }
   }
 }
