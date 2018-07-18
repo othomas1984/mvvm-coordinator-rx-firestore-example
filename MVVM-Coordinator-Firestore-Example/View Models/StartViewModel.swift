@@ -17,15 +17,54 @@ protocol StartViewModelDelegate: class {
 }
 
 class StartViewModel {
-  private var privateUsers = Variable<[User]>([])
   private weak var delegate: StartViewModelDelegate?
   private var disposeBag = DisposeBag()
+  private var userDeletedSubject = PublishSubject<IndexPath>()
+  private var userSelectedSubject = PublishSubject<IndexPath>()
+  private var addTappedSubject = PublishSubject<()>()
+
+  var userDeleted: AnyObserver<IndexPath>
+  var userSelected: AnyObserver<IndexPath>
+  var addTapped: AnyObserver<()>
+  var users: Observable<[User]>
   
   init(delegate: StartViewModelDelegate) {
     self.delegate = delegate
-    usersListenerHandle = FirestoreService.usersListener { [unowned self] in
-      self.privateUsers.value = $0
+    let userSubject = BehaviorSubject<[User]>(value: [])
+    usersListenerHandle = FirestoreService.usersListener {
+      userSubject.onNext($0)
     }
+    users = userSubject
+      .map { $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
+    
+    userSelected = userSelectedSubject.asObserver()
+    userSelectedSubject.throttle(1, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(users) { (index, users) in
+        return (index, users)
+      }.subscribe { result in
+        guard let users = result.element?.1, let index = result.element?.0.row, users.count > index else { return }
+        delegate.select(users[index])
+      }.disposed(by: disposeBag)
+
+    userDeleted = userDeletedSubject.asObserver()
+    userDeletedSubject.throttle(1, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(users) { (index, users) in
+        return (index, users)
+      }.subscribe { result in
+        guard let users = result.element?.1, let index = result.element?.0.row, users.count > index else { return }
+        FirestoreService.deleteUser(path: users[index].path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }.disposed(by: disposeBag)
+
+    addTapped = addTappedSubject.asObserver()
+    addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
+      if case .next = event {
+        delegate.add()
+      }
+    }.disposed(by: disposeBag)
   }
   
   var usersListenerHandle: ListenerRegistration? {
@@ -36,46 +75,6 @@ class StartViewModel {
   
   deinit {
     usersListenerHandle?.remove()
-  }
-  
-  lazy var users: Observable<[User]> = {
-    privateUsers.asObservable()
-      .map { $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
-  }()
-  
-  var userDeleted: Observable<(IndexPath)>? {
-    didSet {
-      userDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.delete(user)
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var userSelected: Observable<(IndexPath)>? {
-    didSet {
-      userSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let user = self.privateUsers.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.select(user)
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var addButton: Observable<()>? {
-    didSet {
-      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.add()
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-      }.disposed(by: disposeBag)
-    }
   }
 }
 

@@ -27,17 +27,16 @@ class UsersTableViewController: UITableViewController {
   }
   
   private func setupBindings() {
-    // Observables
-    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
+    navigationItem.rightBarButtonItem?.rx.tap.bind(to: model.addTapped).disposed(by: disposeBag)
 
     // Tables
     model.users.bind(to: tableView.rx.items(cellIdentifier: "userCell", cellType: UITableViewCell.self)) { _, user, cell in
       cell.textLabel?.text = user.name
       }.disposed(by: disposeBag)
-    model.userSelected = tableView.rx.itemSelected.map { [unowned self] in
+    tableView.rx.itemSelected.bind { [unowned self] in
       self.tableView.cellForRow(at: $0)?.isSelected = false
-      return $0
-      }.asObservable()
-    model.userDeleted = tableView.rx.itemDeleted.asObservable()
+      self.model.userSelected.onNext($0)
+    }.disposed(by: disposeBag)
+    tableView.rx.itemDeleted.bind(to: model.userDeleted).disposed(by: disposeBag)
   }
 }
