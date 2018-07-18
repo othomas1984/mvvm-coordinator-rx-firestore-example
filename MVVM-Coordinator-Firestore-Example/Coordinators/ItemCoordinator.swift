@@ -84,14 +84,6 @@ extension ItemCoordinator {
     ac.preferredAction = okAction
     navigationController.present(ac, animated: true)
   }
-  
-  private func deleteDetail(_ detail: Detail) {
-    FirestoreService.deleteDetail(path: detail.path) { error in
-      if let error = error {
-        print(error)
-      }
-    }
-  }
 }
 
 extension ItemCoordinator: ItemViewModelDelegate {
@@ -99,15 +91,16 @@ extension ItemCoordinator: ItemViewModelDelegate {
     showEditItemController(item)
   }
 
-  func delete(_ detail: Detail) {
-    deleteDetail(detail)
-  }
-  
   func select(_ detail: Detail) {
     startDetailCoordinator(detail)
   }
   
   func add() {
     showAddDetailController()
+  }
+  
+  func dismiss() {
+    // TODO: Dismiss coordinator as well
+    navigationController.popViewController(animated: true)
   }
 }

@@ -36,20 +36,21 @@ class ItemViewController: UIViewController {
     // Bindings
     model.itemName.bind(to: titleButton.rx.title()).disposed(by: disposeBag)
     model.itemName.bind(to: rx.title).disposed(by: disposeBag)
-
-    // Observables
-    model.titleButton = titleButton.rx.tap.asObservable()
-    model.addButton = navigationItem.rightBarButtonItem?.rx.tap.asObservable()
+    titleButton.rx.tap.bind(to: model.titleTapped).disposed(by: disposeBag)
+    navigationItem.rightBarButtonItem?.rx.tap.bind(to: model.addTapped).disposed(by: disposeBag)
 
     // Tables
     model.details.bind(to: tableView.rx.items(cellIdentifier: "detailCell", cellType: UITableViewCell.self)) { _, item, cell in
       cell.textLabel?.text = item.name
       cell.detailTextLabel?.text = item.constraint
       }.disposed(by: disposeBag)
-    model.detailSelected = tableView.rx.itemSelected.map { [unowned self] in
-      self.tableView.cellForRow(at: $0)?.isSelected = false
-      return $0
-      }.asObservable()
-    model.detailDeleted = tableView.rx.itemDeleted.asObservable()
+    tableView.rx.itemSelected.bind { [unowned self] index in
+      self.tableView.cellForRow(at: index)?.isSelected = false
+      self.model.detailSelected.onNext(index)
+      }.disposed(by: disposeBag)
+    tableView.rx.itemDeleted.bind { [unowned self] index in
+      self.tableView.cellForRow(at: index)?.isSelected = false
+      self.model.detailDeleted.onNext(index)
+      }.disposed(by: disposeBag)
   }
 }

@@ -11,29 +11,85 @@ import RxSwift
 
 protocol ItemViewModelDelegate: class {
   func select(_ detail: Detail)
-  func delete(_ detail: Detail)
   func edit(_ item: Item)
   func add()
+  func dismiss()
 }
 
 class ItemViewModel {
   private var disposeBag = DisposeBag()
-  private weak var delegate: ItemViewModelDelegate?
-  private var privateItem: Variable<Item>
-  private var privateDetails = Variable<[Detail]>([])
+
+  private var titleSubject = PublishSubject<()>()
+  private var addButtonSubject = PublishSubject<()>()
+  private var detailSelectedSubject = PublishSubject<IndexPath>()
+  private var detailDeletedSubject = PublishSubject<IndexPath>()
   
+  var itemName: Observable<String>
+  var details: Observable<[Detail]>
+  var titleTapped: AnyObserver<()>
+  var addTapped: AnyObserver<()>
+  var detailSelected: AnyObserver<IndexPath>
+  var detailDeleted: AnyObserver<IndexPath>
+
   init(_ item: Item, delegate: ItemViewModelDelegate) {
-    self.delegate = delegate
-    privateItem = Variable<Item>(item)
-    detailsListenerHandle = FirestoreService.detailsListener(itemPath: item.path) { [unowned self] in
-      self.privateDetails.value = $0
+    // Item
+    let itemSubject = BehaviorSubject<Item?>(value: nil)
+    itemListenerHandle = FirestoreService.itemListener(path: item.path) { item in
+      guard let item = item else { delegate.dismiss(); return }
+      itemSubject.onNext(item)
     }
-    itemListenerHandle = FirestoreService.itemListener(path: item.path) { [unowned self] item in
-      // TODO: Shoudl probably dismiss this VC if the user no longer exists
-      guard let item = item else { print("Object seems to have been deleted"); return }
-      
-      self.privateItem.value = item
+    itemName = itemSubject.map { $0?.name ?? "" }
+
+    // Details List
+    let detailsSubject = BehaviorSubject<[Detail]>(value: [])
+    detailsListenerHandle = FirestoreService.detailsListener(itemPath: item.path) {
+      detailsSubject.onNext($0)
     }
+    details = detailsSubject.map {
+      $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+    
+    // Detail Actions
+    detailSelected = detailSelectedSubject.asObserver()
+    detailSelectedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(details) { (index, details) in
+      return (index, details)
+      }.subscribe { result in
+        guard let index = result.element?.0.row,
+          let details = result.element?.1, details.count > index else { return }
+        delegate.select(details[index])
+      }.disposed(by: disposeBag)
+
+    detailDeleted = detailDeletedSubject.asObserver()
+    detailDeletedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(details) { (index, details) in
+      return (index, details)
+      }.subscribe { result in
+        guard let index = result.element?.0.row,
+          let details = result.element?.1, details.count > index else { return }
+        FirestoreService.deleteDetail(path: details[index].path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
+      }.disposed(by: disposeBag)
+
+    // Title Button
+    titleTapped = titleSubject.asObserver()
+    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(itemSubject).subscribe { event in
+        if case let .next(itemOptional) = event, let item = itemOptional {
+          delegate.edit(item)
+        }
+      }.disposed(by: disposeBag)
+
+    // Add Button
+    addTapped = addButtonSubject.asObserver()
+    addButtonSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
+      if case .next = event {
+        delegate.add()
+      }
+      }.disposed(by: disposeBag)
   }
   
   var detailsListenerHandle: ListenerRegistration? {
@@ -51,63 +107,5 @@ class ItemViewModel {
   deinit {
     detailsListenerHandle?.remove()
     itemListenerHandle?.remove()
-  }
-  
-  lazy var itemName: Observable<String> = {
-    return privateItem.asObservable().map { [unowned self] in $0.name }
-  }()
-  lazy var details: Observable<[Detail]> = {
-    privateDetails.asObservable()
-      .map { [unowned self] in $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
-  }()
-  
-  var detailDeleted: Observable<(IndexPath)>? {
-    didSet {
-      detailDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.delete(detail)
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var detailSelected: Observable<(IndexPath)>? {
-    didSet {
-      detailSelected?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        guard let index = event.element?.row else { return }
-        let detail = self.privateDetails.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.select(detail)
-        }.disposed(by: disposeBag)
-    }
-  }
-  
-  var addButton: Observable<()>? {
-    didSet {
-      addButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.add()
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-      }.disposed(by: disposeBag)
-    }
-  }
-  
-  var titleButton: Observable<()>? {
-    didSet {
-      titleButton?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
-        switch event {
-        case .next:
-          self.delegate?.edit(self.privateItem.value)
-        case let .error(error):
-          print(error)
-        case .completed:
-          break
-        }
-      }.disposed(by: disposeBag)
-    }
-  }
+  }  
 }
