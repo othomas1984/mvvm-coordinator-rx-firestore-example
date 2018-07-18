@@ -65,6 +65,7 @@ extension DetailCoordinator: DetailViewModelDelegate {
   }
   
   func dismiss() {
-    navigationController.dismiss(animated: true)
+    // TODO: Dismiss coordinator as well
+    navigationController.popViewController(animated: true)
   }
 }
