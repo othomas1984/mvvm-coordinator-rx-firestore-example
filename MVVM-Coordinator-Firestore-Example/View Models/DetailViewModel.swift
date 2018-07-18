@@ -11,7 +11,7 @@ import RxSwift
 
 protocol DetailViewModelDelegate: class {
   func edit(_ detail: Detail)
-  func dismiss()
+  func viewModelDidDismiss()
 }
 
 class DetailViewModel {
@@ -35,7 +35,7 @@ class DetailViewModel {
       } catch { print(error) }
     }.disposed(by: disposeBag)
     detailListenerHandle = FirestoreService.detailListener(path: detail.path) { detail in
-      guard let detail = detail else { delegate.dismiss(); return }
+      guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
     }
   }

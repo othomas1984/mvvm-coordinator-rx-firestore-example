@@ -11,10 +11,9 @@ import RxSwift
 
 protocol UserViewModelDelegate: class {
   func select(_ item: Item)
-  func delete(_ item: Item)
-  func delete(_ constraint: Constraint)
   func edit(_ user: User)
   func add()
+  func viewModelDidDismiss()
 }
 
 class UserViewModel {
@@ -34,9 +33,7 @@ class UserViewModel {
       self.privateConstraints.value = $0
     }
     userListenerHandle = FirestoreService.userListener(path: user.path) { [unowned self] user in
-      // TODO: Shoudl probably dismiss this VC if the user no longer exists
-      guard let user = user else { print("Object seems to have been deleted"); return }
-      
+      guard let user = user else { delegate.viewModelDidDismiss(); return }      
       self.privateUser.value = user
     }
   }
@@ -82,7 +79,11 @@ class UserViewModel {
       itemDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let item = self.privateItems.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.delete(item)
+        FirestoreService.deleteItem(path: item.path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
         }.disposed(by: disposeBag)
     }
   }
@@ -92,7 +93,11 @@ class UserViewModel {
       constraintDeleted?.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { [unowned self] event in
         guard let index = event.element?.row else { return }
         let constraint = self.privateConstraints.value.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }[index]
-        self.delegate?.delete(constraint)
+        FirestoreService.deleteConstraint(path: constraint.path) { error in
+          if let error = error {
+            print(error)
+          }
+        }
         }.disposed(by: disposeBag)
     }
   }

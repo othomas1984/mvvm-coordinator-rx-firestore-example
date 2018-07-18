@@ -130,27 +130,11 @@ extension UserCoordinator {
     ac.preferredAction = okAction
     navigationController.present(ac, animated: true)
   }
-  
-  private func deleteItem(_ item: FirestoreDataModel) {
-    FirestoreService.deleteItem(path: item.path) { error in
-      if let error = error {
-        print(error)
-      }
-    }
-  }
 }
 
 extension UserCoordinator: UserViewModelDelegate {
   func edit(_ user: User) {
     showEditUserController(user)
-  }
-  
-  func delete(_ constraint: Constraint) {
-    deleteItem(constraint)
-  }
-  
-  func delete(_ item: Item) {
-    deleteItem(item)
   }
   
   func add() {
@@ -159,5 +143,10 @@ extension UserCoordinator: UserViewModelDelegate {
   
   func select(_ item: Item) {
     startItemCoordinator(item)
+  }
+  
+  func viewModelDidDismiss() {
+    // TODO: Dismiss coordinator as well
+    navigationController.dismiss(animated: true)
   }
 }

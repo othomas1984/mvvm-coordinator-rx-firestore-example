@@ -13,7 +13,7 @@ protocol ItemViewModelDelegate: class {
   func select(_ detail: Detail)
   func edit(_ item: Item)
   func add()
-  func dismiss()
+  func viewModelDidDismiss()
 }
 
 class ItemViewModel {
@@ -35,7 +35,7 @@ class ItemViewModel {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
     itemListenerHandle = FirestoreService.itemListener(path: item.path) { item in
-      guard let item = item else { delegate.dismiss(); return }
+      guard let item = item else { delegate.viewModelDidDismiss(); return }
       itemSubject.onNext(item)
     }
     itemName = itemSubject.map { $0?.name ?? "" }

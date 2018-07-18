@@ -99,7 +99,7 @@ extension ItemCoordinator: ItemViewModelDelegate {
     showAddDetailController()
   }
   
-  func dismiss() {
+  func viewModelDidDismiss() {
     // TODO: Dismiss coordinator as well
     navigationController.popViewController(animated: true)
   }
