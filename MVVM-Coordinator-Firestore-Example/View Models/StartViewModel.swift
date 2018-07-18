@@ -12,7 +12,6 @@ import RxSwift
 
 protocol StartViewModelDelegate: class {
   func select(_ user: User)
-  func delete(_ user: User)
   func add()
 }
 
