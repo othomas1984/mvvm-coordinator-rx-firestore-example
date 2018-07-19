@@ -10,7 +10,7 @@ import FirebaseFirestore
 import RxSwift
 
 protocol UserViewModelDelegate: class {
-  func select(_ item: Item)
+  func select(_ itemPath: String)
   func edit(_ user: User)
   func add()
   func viewModelDidDismiss()
@@ -70,7 +70,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let items = result.element?.1, items.count > index else { return }
-        delegate.select(items[index])
+        delegate.select(items[index].path)
       }.disposed(by: disposeBag)
     
     itemDeleted = itemDeletedSubject.asObserver()

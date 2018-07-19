@@ -10,13 +10,13 @@ import UIKit
 
 
 class ItemCoordinator: Coordinator {
-  var navigationController: UINavigationController
-  var item: Item
+  private var navigationController: UINavigationController
+  private var itemPath: String
   
   var childCoordinators = [Coordinator]()
   
-  required init(_ navigationController: UINavigationController, item: Item) {
-    self.item = item
+  required init(_ navigationController: UINavigationController, itemPath: String) {
+    self.itemPath = itemPath
     self.navigationController = navigationController
   }
   
@@ -27,7 +27,7 @@ class ItemCoordinator: Coordinator {
 
 extension ItemCoordinator {
   private func showItemViewController() {
-    let itemVM = ItemViewModel(item, delegate: self)
+    let itemVM = ItemViewModel(itemPath, delegate: self)
     guard let itemVC = UIStoryboard.init(name: "Item", bundle: nil).instantiateInitialViewController() as? ItemViewController else { assertionFailure(); return }
     itemVC.model = itemVM
     navigationController.pushViewController(itemVC, animated: true)
@@ -53,7 +53,7 @@ extension ItemCoordinator {
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty,
         ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
-        FirestoreService.createDetail(itemPath: self.item.path, with: name, constraint: constraint)
+        FirestoreService.createDetail(itemPath: self.itemPath, with: name, constraint: constraint)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

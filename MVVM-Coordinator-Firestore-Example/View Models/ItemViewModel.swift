@@ -31,10 +31,10 @@ class ItemViewModel {
   var detailSelected: AnyObserver<IndexPath>
   var detailDeleted: AnyObserver<IndexPath>
   
-  init(_ item: Item, delegate: ItemViewModelDelegate) {
+  init(_ itemPath: String, delegate: ItemViewModelDelegate) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
-    itemListenerHandle = FirestoreService.itemListener(path: item.path) { item in
+    itemListenerHandle = FirestoreService.itemListener(path: itemPath) { item in
       guard let item = item else { delegate.viewModelDidDismiss(); return }
       itemSubject.onNext(item)
     }
@@ -42,7 +42,7 @@ class ItemViewModel {
     
     // Details List
     let detailsSubject = BehaviorSubject<[Detail]>(value: [])
-    detailsListenerHandle = FirestoreService.detailsListener(itemPath: item.path) {
+    detailsListenerHandle = FirestoreService.detailsListener(itemPath: itemPath) {
       detailsSubject.onNext($0)
     }
     details = detailsSubject.map {

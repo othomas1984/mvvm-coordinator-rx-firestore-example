@@ -21,7 +21,7 @@ class UserCoordinator: RootViewCoordinator {
     return UINavigationController()
   }()
   
-  var user: User
+  private var user: User
   private weak var delegate: UserCoordinatorDelegate?
   
   var childCoordinators = [Coordinator]()
@@ -50,8 +50,8 @@ extension UserCoordinator {
     delegate?.userCoordinatorDidDismiss(self)
   }
   
-  private func startItemCoordinator(_ item: Item) {
-    let itemCoordinator = ItemCoordinator(navigationController, item: item)
+  private func startItemCoordinator(_ itemPath: String) {
+    let itemCoordinator = ItemCoordinator(navigationController, itemPath: itemPath)
     addChildCoordinator(itemCoordinator)
     itemCoordinator.start()
   }
@@ -141,8 +141,8 @@ extension UserCoordinator: UserViewModelDelegate {
     showChooseItemOrConstraintController()
   }
   
-  func select(_ item: Item) {
-    startItemCoordinator(item)
+  func select(_ itemPath: String) {
+    startItemCoordinator(itemPath)
   }
   
   func viewModelDidDismiss() {
