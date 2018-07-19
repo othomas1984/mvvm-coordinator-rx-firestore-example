@@ -10,12 +10,12 @@ import UIKit
 
 class DetailCoordinator: Coordinator {
   private var navigationController: UINavigationController
-  private var detail: Detail
+  private var detailPath: String
   
   var childCoordinators = [Coordinator]()
   
-  required init(_ navigationController: UINavigationController, detail: Detail) {
-    self.detail = detail
+  required init(_ navigationController: UINavigationController, detailPath: String) {
+    self.detailPath = detailPath
     self.navigationController = navigationController
   }
   
@@ -26,7 +26,7 @@ class DetailCoordinator: Coordinator {
 
 extension DetailCoordinator {
   private func showUserViewController() {
-    let detailVM = DetailViewModel(detail, delegate: self)
+    let detailVM = DetailViewModel(detailPath, delegate: self)
     guard let detailVC = UIStoryboard.init(name: "Detail", bundle: nil).instantiateInitialViewController() as? DetailViewController else { assertionFailure(); return }
     detailVC.model = detailVM
     navigationController.pushViewController(detailVC, animated: true)

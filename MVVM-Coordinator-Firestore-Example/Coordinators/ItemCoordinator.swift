@@ -33,8 +33,8 @@ extension ItemCoordinator {
     navigationController.pushViewController(itemVC, animated: true)
   }
   
-  private func startDetailCoordinator(_ detail: Detail) {
-    let detailCoordinator = DetailCoordinator(navigationController, detail: detail)
+  private func startDetailCoordinator(_ detailPath: String) {
+    let detailCoordinator = DetailCoordinator(navigationController, detailPath: detailPath)
       addChildCoordinator(detailCoordinator)
       detailCoordinator.start()
   }
@@ -91,8 +91,8 @@ extension ItemCoordinator: ItemViewModelDelegate {
     showEditItemController(item)
   }
 
-  func select(_ detail: Detail) {
-    startDetailCoordinator(detail)
+  func select(_ detailPath: String) {
+    startDetailCoordinator(detailPath)
   }
   
   func add() {

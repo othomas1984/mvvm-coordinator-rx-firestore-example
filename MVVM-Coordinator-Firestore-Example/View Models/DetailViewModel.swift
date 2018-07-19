@@ -22,7 +22,7 @@ class DetailViewModel {
   var detailConstraint: Observable<String>
   var titleButton: AnyObserver<()>
   
-  init(_ detail: Detail, delegate: DetailViewModelDelegate) {
+  init(_ detailPath: String, delegate: DetailViewModelDelegate) {
     let detailSubject = BehaviorSubject<Detail?>(value: nil)
     detailName = detailSubject.map { $0?.name ?? "" }
     detailConstraint = detailSubject.map { $0?.constraint ?? "" }
@@ -34,7 +34,7 @@ class DetailViewModel {
         }
       } catch { print(error) }
     }.disposed(by: disposeBag)
-    detailListenerHandle = FirestoreService.detailListener(path: detail.path) { detail in
+    detailListenerHandle = FirestoreService.detailListener(path: detailPath) { detail in
       guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
     }

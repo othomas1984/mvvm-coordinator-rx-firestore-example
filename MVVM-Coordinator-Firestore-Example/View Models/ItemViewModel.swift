@@ -10,7 +10,7 @@ import FirebaseFirestore
 import RxSwift
 
 protocol ItemViewModelDelegate: class {
-  func select(_ detail: Detail)
+  func select(_ detailPath: String)
   func edit(_ item: Item)
   func add()
   func viewModelDidDismiss()
@@ -18,7 +18,7 @@ protocol ItemViewModelDelegate: class {
 
 class ItemViewModel {
   private var disposeBag = DisposeBag()
-
+  
   private var titleSubject = PublishSubject<()>()
   private var addButtonSubject = PublishSubject<()>()
   private var detailSelectedSubject = PublishSubject<IndexPath>()
@@ -30,7 +30,7 @@ class ItemViewModel {
   var addTapped: AnyObserver<()>
   var detailSelected: AnyObserver<IndexPath>
   var detailDeleted: AnyObserver<IndexPath>
-
+  
   init(_ item: Item, delegate: ItemViewModelDelegate) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
@@ -39,7 +39,7 @@ class ItemViewModel {
       itemSubject.onNext(item)
     }
     itemName = itemSubject.map { $0?.name ?? "" }
-
+    
     // Details List
     let detailsSubject = BehaviorSubject<[Detail]>(value: [])
     detailsListenerHandle = FirestoreService.detailsListener(itemPath: item.path) {
@@ -53,17 +53,17 @@ class ItemViewModel {
     detailSelected = detailSelectedSubject.asObserver()
     detailSelectedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(details) { (index, details) in
-      return (index, details)
+        return (index, details)
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let details = result.element?.1, details.count > index else { return }
-        delegate.select(details[index])
+        delegate.select(details[index].path)
       }.disposed(by: disposeBag)
-
+    
     detailDeleted = detailDeletedSubject.asObserver()
     detailDeletedSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(details) { (index, details) in
-      return (index, details)
+        return (index, details)
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let details = result.element?.1, details.count > index else { return }
@@ -73,7 +73,7 @@ class ItemViewModel {
           }
         }
       }.disposed(by: disposeBag)
-
+    
     // Title Button
     titleTapped = titleSubject.asObserver()
     titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
@@ -82,7 +82,7 @@ class ItemViewModel {
           delegate.edit(item)
         }
       }.disposed(by: disposeBag)
-
+    
     // Add Button
     addTapped = addButtonSubject.asObserver()
     addButtonSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
@@ -107,5 +107,5 @@ class ItemViewModel {
   deinit {
     detailsListenerHandle?.remove()
     itemListenerHandle?.remove()
-  }  
+  }
 }
