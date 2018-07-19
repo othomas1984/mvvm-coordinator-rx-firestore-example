@@ -35,10 +35,10 @@ class UserViewModel {
   var itemDeleted: AnyObserver<IndexPath>
   var constraintDeleted: AnyObserver<IndexPath>
 
-  init(_ user: User, delegate: UserViewModelDelegate) {
+  init(_ userPath: String, delegate: UserViewModelDelegate) {
     // User
     let userSubject = BehaviorSubject<User?>(value: nil)
-    userListenerHandle = FirestoreService.userListener(path: user.path) { user in
+    userListenerHandle = FirestoreService.userListener(path: userPath) { user in
       guard let user = user else { delegate.viewModelDidDismiss(); return }
       userSubject.onNext(user)
     }
@@ -52,10 +52,10 @@ class UserViewModel {
 
     // Constraints
     let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
-    itemsListenerHandle = FirestoreService.itemsListener(userPath: user.path) {
+    itemsListenerHandle = FirestoreService.itemsListener(userPath: userPath) {
       itemsSubject.onNext($0)
     }
-    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: user.path) {
+    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0)
     }
     constraints = constraintsSubject.map {

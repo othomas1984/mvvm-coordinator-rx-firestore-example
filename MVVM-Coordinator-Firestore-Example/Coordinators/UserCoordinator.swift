@@ -21,14 +21,14 @@ class UserCoordinator: RootViewCoordinator {
     return UINavigationController()
   }()
   
-  private var user: User
+  private var userPath: String
   private weak var delegate: UserCoordinatorDelegate?
   
   var childCoordinators = [Coordinator]()
   
-  required init(_ navigationController: UINavigationController, delegate: UserCoordinatorDelegate, user: User) {
+  required init(_ navigationController: UINavigationController, delegate: UserCoordinatorDelegate, userPath: String) {
     self.delegate = delegate
-    self.user = user
+    self.userPath = userPath
     navigationController.present(rootViewController, animated: true)
   }
 
@@ -39,7 +39,7 @@ class UserCoordinator: RootViewCoordinator {
 
 extension UserCoordinator {
   private func showUserViewController() {
-    let userVM = UserViewModel(user, delegate: self)
+    let userVM = UserViewModel(userPath, delegate: self)
     guard let userVC = UIStoryboard.init(name: "User", bundle: nil).instantiateInitialViewController() as? UserViewController else { assertionFailure(); return }
     userVC.model = userVM
     userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismiss))
@@ -81,7 +81,7 @@ extension UserCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createItem(userPath: self.user.path, with: name)
+        FirestoreService.createItem(userPath: self.userPath, with: name)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -99,7 +99,7 @@ extension UserCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createConstraint(userPath: self.user.path, with: name)
+        FirestoreService.createConstraint(userPath: self.userPath, with: name)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

@@ -41,8 +41,8 @@ extension StartCoordinator {
     navigationController.pushViewController(usersVC, animated: false)
   }
   
-  private func startUserCoordinator(_ user: User) {
-    let userCoordinator = UserCoordinator(navigationController, delegate: self, user: user)
+  private func startUserCoordinator(_ userPath: String) {
+    let userCoordinator = UserCoordinator(navigationController, delegate: self, userPath: userPath)
     addChildCoordinator(userCoordinator)
     userCoordinator.start()
   }
@@ -79,7 +79,7 @@ extension StartCoordinator: StartViewModelDelegate {
     showAddUserController()
   }
   
-  func select(_ user: User) {
-    startUserCoordinator(user)
+  func select(_ userPath: String) {
+    startUserCoordinator(userPath)
   }
 }
