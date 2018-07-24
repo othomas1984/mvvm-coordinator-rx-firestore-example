@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -42,9 +41,15 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="533-yn-aOr">
+                                <rect key="frame" x="0.0" y="95" width="375" height="216"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="533-yn-aOr" firstAttribute="leading" secondItem="Cz9-ER-u2c" secondAttribute="leading" id="2Q1-7X-Dy4"/>
+                            <constraint firstItem="533-yn-aOr" firstAttribute="top" secondItem="GrB-Sa-ACe" secondAttribute="bottom" constant="8" symbolic="YES" id="5K7-gS-pWI"/>
+                            <constraint firstItem="Cz9-ER-u2c" firstAttribute="trailing" secondItem="533-yn-aOr" secondAttribute="trailing" id="7jp-XM-rMh"/>
                             <constraint firstItem="JHl-q2-yHT" firstAttribute="baseline" secondItem="FpD-Bm-1ke" secondAttribute="baseline" id="93F-42-kbx"/>
                             <constraint firstItem="Cz9-ER-u2c" firstAttribute="trailing" secondItem="GrB-Sa-ACe" secondAttribute="trailing" id="IGc-sQ-vU6"/>
                             <constraint firstItem="GrB-Sa-ACe" firstAttribute="leading" secondItem="mc8-9W-l3F" secondAttribute="trailing" id="IpM-Zp-2zp"/>
@@ -60,6 +65,7 @@
                     </view>
                     <connections>
                         <outlet property="constraintLabel" destination="mc8-9W-l3F" id="asz-Pg-RDs"/>
+                        <outlet property="constraintPickerView" destination="533-yn-aOr" id="BEr-NB-zh6"/>
                         <outlet property="constraintValueLabel" destination="GrB-Sa-ACe" id="Iqr-3q-w9A"/>
                         <outlet property="nameLabel" destination="JHl-q2-yHT" id="f0I-lD-xze"/>
                         <outlet property="nameValueLabel" destination="FpD-Bm-1ke" id="hIY-XK-E2U"/>

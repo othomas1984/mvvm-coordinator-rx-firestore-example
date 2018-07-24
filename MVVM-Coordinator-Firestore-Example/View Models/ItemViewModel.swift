@@ -33,7 +33,7 @@ class ItemViewModel {
   let detailSelected: AnyObserver<IndexPath>
   let detailDeleted: AnyObserver<IndexPath>
   
-  init(_ itemPath: String, delegate: ItemViewModelDelegate) {
+  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
     itemListenerHandle = FirestoreService.itemListener(path: itemPath) { item in

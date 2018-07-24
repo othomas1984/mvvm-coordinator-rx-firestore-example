@@ -12,11 +12,13 @@ import UIKit
 class ItemCoordinator: Coordinator {
   private var navigationController: UINavigationController
   private var itemPath: String
-  
+  private var userPath: String
+
   var childCoordinators = [Coordinator]()
   
-  required init(_ navigationController: UINavigationController, itemPath: String) {
+  required init(_ navigationController: UINavigationController, itemPath: String, userPath: String) {
     self.itemPath = itemPath
+    self.userPath = userPath
     self.navigationController = navigationController
   }
   
@@ -27,14 +29,14 @@ class ItemCoordinator: Coordinator {
 
 extension ItemCoordinator {
   private func showItemViewController() {
-    let itemVM = ItemViewModel(itemPath, delegate: self)
+    let itemVM = ItemViewModel(itemPath, userPath: userPath, delegate: self)
     guard let itemVC = UIStoryboard.init(name: "Item", bundle: nil).instantiateInitialViewController() as? ItemViewController else { assertionFailure(); return }
     itemVC.model = itemVM
     navigationController.pushViewController(itemVC, animated: true)
   }
   
   private func startDetailCoordinator(_ detailPath: String) {
-    let detailCoordinator = DetailCoordinator(navigationController, detailPath: detailPath)
+    let detailCoordinator = DetailCoordinator(navigationController, detailPath: detailPath, userPath: userPath)
       addChildCoordinator(detailCoordinator)
       detailCoordinator.start()
   }

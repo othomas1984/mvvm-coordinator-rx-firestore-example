@@ -17,13 +17,18 @@ protocol DetailViewModelDelegate: class {
 class DetailViewModel {
   private let disposeBag = DisposeBag()
   private let titleSubject = PublishSubject<()>()
+  private let constraintSelectedSubject = PublishSubject<(row: Int, component: Int)>()
   private let detailListenerHandle: ListenerRegistration
-
+  private let constraintsListenerHandle: ListenerRegistration
+  
   let detailName: Observable<String>
   let detailConstraint: Observable<String>
   let titleButton: AnyObserver<()>
-  
-  init(_ detailPath: String, delegate: DetailViewModelDelegate) {
+  let constraintSelected: AnyObserver<(row: Int, component: Int)>
+  let constraints: Observable<[Constraint]>
+  let selectedConstraint: Observable<Int?>
+
+  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate) {
     let detailSubject = BehaviorSubject<Detail?>(value: nil)
     detailName = detailSubject.map { $0?.name ?? "" }
     detailConstraint = detailSubject.map { $0?.constraint ?? "" }
@@ -37,6 +42,28 @@ class DetailViewModel {
     detailListenerHandle = FirestoreService.detailListener(path: detailPath) { detail in
       guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
+    }
+    
+    let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
+    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
+      constraintsSubject.onNext($0)
+    }
+    constraints = constraintsSubject.map {
+      $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+    constraintSelected = constraintSelectedSubject.asObserver()
+    constraintSelectedSubject.withLatestFrom(constraints) { (selection, constraints) in
+      return (selection: selection, constraints: constraints)
+    }.subscribe { event in
+      if case let .next(result) = event {
+        let constraint = result.constraints[result.selection.row]
+        FirestoreService.updateDetail(path: detailPath, with: ["constraint": constraint.name], completion: nil)
+      }
+    }.disposed(by: disposeBag)
+    
+    selectedConstraint = Observable.combineLatest(constraints, detailSubject).map { (constraints, detail) in
+      guard let detail = detail, let index = constraints.index(where: { $0.name == detail.constraint }) else { return nil }
+      return index
     }
   }
   

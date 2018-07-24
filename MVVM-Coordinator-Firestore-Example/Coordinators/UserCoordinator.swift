@@ -51,7 +51,7 @@ extension UserCoordinator {
   }
   
   private func startItemCoordinator(_ itemPath: String) {
-    let itemCoordinator = ItemCoordinator(navigationController, itemPath: itemPath)
+    let itemCoordinator = ItemCoordinator(navigationController, itemPath: itemPath, userPath: userPath)
     addChildCoordinator(itemCoordinator)
     itemCoordinator.start()
   }

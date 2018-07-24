@@ -49,15 +49,15 @@ class UserViewModel {
 
     // Items
     let itemsSubject = BehaviorSubject<[Item]>(value: [])
+    itemsListenerHandle = FirestoreService.itemsListener(userPath: userPath) {
+      itemsSubject.onNext($0)
+    }
     items = itemsSubject.map {
       $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
 
     // Constraints
     let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
-    itemsListenerHandle = FirestoreService.itemsListener(userPath: userPath) {
-      itemsSubject.onNext($0)
-    }
     constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0)
     }
