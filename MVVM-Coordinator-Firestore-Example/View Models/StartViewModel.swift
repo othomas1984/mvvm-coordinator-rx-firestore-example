@@ -16,15 +16,17 @@ protocol StartViewModelDelegate: class {
 }
 
 class StartViewModel {
-  private var disposeBag = DisposeBag()
-  private var userDeletedSubject = PublishSubject<IndexPath>()
-  private var userSelectedSubject = PublishSubject<IndexPath>()
-  private var addTappedSubject = PublishSubject<()>()
+  private let disposeBag = DisposeBag()
+  private let usersListenerHandle: ListenerRegistration
 
-  var userDeleted: AnyObserver<IndexPath>
-  var userSelected: AnyObserver<IndexPath>
-  var addTapped: AnyObserver<()>
-  var users: Observable<[User]>
+  private let userDeletedSubject = PublishSubject<IndexPath>()
+  private let userSelectedSubject = PublishSubject<IndexPath>()
+  private let addTappedSubject = PublishSubject<()>()
+
+  let userDeleted: AnyObserver<IndexPath>
+  let userSelected: AnyObserver<IndexPath>
+  let addTapped: AnyObserver<()>
+  let users: Observable<[User]>
   
   init(delegate: StartViewModelDelegate) {
     let userSubject = BehaviorSubject<[User]>(value: [])
@@ -64,14 +66,8 @@ class StartViewModel {
     }.disposed(by: disposeBag)
   }
   
-  var usersListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
   deinit {
-    usersListenerHandle?.remove()
+    usersListenerHandle.remove()
   }
 }
 

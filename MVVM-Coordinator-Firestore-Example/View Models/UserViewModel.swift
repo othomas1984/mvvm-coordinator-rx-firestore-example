@@ -17,23 +17,26 @@ protocol UserViewModelDelegate: class {
 }
 
 class UserViewModel {
-  private var disposeBag = DisposeBag()
+  private let disposeBag = DisposeBag()
+  private let userListenerHandle: ListenerRegistration
+  private let itemsListenerHandle: ListenerRegistration
+  private let constraintsListenerHandle: ListenerRegistration
   
-  private var titleSubject = PublishSubject<()>()
-  private var addButtonSubject = PublishSubject<()>()
-  private var itemSelectedSubject = PublishSubject<IndexPath>()
-  private var itemDeletedSubject = PublishSubject<IndexPath>()
-  private var constraintSelectedSubject = PublishSubject<IndexPath>()
-  private var constraintDeletedSubject = PublishSubject<IndexPath>()
+  private let titleSubject = PublishSubject<()>()
+  private let addButtonSubject = PublishSubject<()>()
+  private let itemSelectedSubject = PublishSubject<IndexPath>()
+  private let itemDeletedSubject = PublishSubject<IndexPath>()
+  private let constraintSelectedSubject = PublishSubject<IndexPath>()
+  private let constraintDeletedSubject = PublishSubject<IndexPath>()
 
-  var userName: Observable<String>
-  var items: Observable<[Item]>
-  var constraints: Observable<[Constraint]>
-  var titleTapped: AnyObserver<()>
-  var addTapped: AnyObserver<()>
-  var itemSelected: AnyObserver<IndexPath>
-  var itemDeleted: AnyObserver<IndexPath>
-  var constraintDeleted: AnyObserver<IndexPath>
+  let userName: Observable<String>
+  let items: Observable<[Item]>
+  let constraints: Observable<[Constraint]>
+  let titleTapped: AnyObserver<()>
+  let addTapped: AnyObserver<()>
+  let itemSelected: AnyObserver<IndexPath>
+  let itemDeleted: AnyObserver<IndexPath>
+  let constraintDeleted: AnyObserver<IndexPath>
 
   init(_ userPath: String, delegate: UserViewModelDelegate) {
     // User
@@ -120,27 +123,9 @@ class UserViewModel {
       }.disposed(by: disposeBag)
   }
   
-  var userListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
-  var itemsListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
-  var constraintsListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
   deinit {
-    userListenerHandle?.remove()
-    itemsListenerHandle?.remove()
-    constraintsListenerHandle?.remove()
+    userListenerHandle.remove()
+    itemsListenerHandle.remove()
+    constraintsListenerHandle.remove()
   }
 }

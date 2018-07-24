@@ -17,19 +17,21 @@ protocol ItemViewModelDelegate: class {
 }
 
 class ItemViewModel {
-  private var disposeBag = DisposeBag()
+  private let disposeBag = DisposeBag()
   
-  private var titleSubject = PublishSubject<()>()
-  private var addButtonSubject = PublishSubject<()>()
-  private var detailSelectedSubject = PublishSubject<IndexPath>()
-  private var detailDeletedSubject = PublishSubject<IndexPath>()
-  
-  var itemName: Observable<String>
-  var details: Observable<[Detail]>
-  var titleTapped: AnyObserver<()>
-  var addTapped: AnyObserver<()>
-  var detailSelected: AnyObserver<IndexPath>
-  var detailDeleted: AnyObserver<IndexPath>
+  private let titleSubject = PublishSubject<()>()
+  private let addButtonSubject = PublishSubject<()>()
+  private let detailSelectedSubject = PublishSubject<IndexPath>()
+  private let detailDeletedSubject = PublishSubject<IndexPath>()
+  private let detailsListenerHandle: ListenerRegistration
+  private let itemListenerHandle: ListenerRegistration
+
+  let itemName: Observable<String>
+  let details: Observable<[Detail]>
+  let titleTapped: AnyObserver<()>
+  let addTapped: AnyObserver<()>
+  let detailSelected: AnyObserver<IndexPath>
+  let detailDeleted: AnyObserver<IndexPath>
   
   init(_ itemPath: String, delegate: ItemViewModelDelegate) {
     // Item
@@ -92,20 +94,8 @@ class ItemViewModel {
       }.disposed(by: disposeBag)
   }
   
-  var detailsListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
-  var itemListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
   deinit {
-    detailsListenerHandle?.remove()
-    itemListenerHandle?.remove()
+    detailsListenerHandle.remove()
+    itemListenerHandle.remove()
   }
 }

@@ -15,38 +15,32 @@ protocol DetailViewModelDelegate: class {
 }
 
 class DetailViewModel {
-  private var disposeBag = DisposeBag()
-  private var titleSubject = PublishSubject<()>()
+  private let disposeBag = DisposeBag()
+  private let titleSubject = PublishSubject<()>()
+  private let detailListenerHandle: ListenerRegistration
 
-  var detailName: Observable<String>
-  var detailConstraint: Observable<String>
-  var titleButton: AnyObserver<()>
+  let detailName: Observable<String>
+  let detailConstraint: Observable<String>
+  let titleButton: AnyObserver<()>
   
   init(_ detailPath: String, delegate: DetailViewModelDelegate) {
     let detailSubject = BehaviorSubject<Detail?>(value: nil)
     detailName = detailSubject.map { $0?.name ?? "" }
     detailConstraint = detailSubject.map { $0?.constraint ?? "" }
     titleButton = titleSubject.asObserver()
-    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
-      do {
-        if case .next = event, let detail = try detailSubject.value() {
+    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(detailSubject).subscribe { event in
+        if case let .next(detailOptional) = event, let detail = detailOptional {
           delegate.edit(detail)
         }
-      } catch { print(error) }
-    }.disposed(by: disposeBag)
+      }.disposed(by: disposeBag)
     detailListenerHandle = FirestoreService.detailListener(path: detailPath) { detail in
       guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
     }
   }
   
-  private var detailListenerHandle: ListenerRegistration? {
-    didSet {
-      oldValue?.remove()
-    }
-  }
-  
   deinit {
-    detailListenerHandle?.remove()
+    detailListenerHandle.remove()
   }
 }
