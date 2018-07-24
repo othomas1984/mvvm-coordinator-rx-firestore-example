@@ -16,7 +16,6 @@ protocol StartViewModelDelegate: class {
 }
 
 class StartViewModel {
-  private weak var delegate: StartViewModelDelegate?
   private var disposeBag = DisposeBag()
   private var userDeletedSubject = PublishSubject<IndexPath>()
   private var userSelectedSubject = PublishSubject<IndexPath>()
@@ -28,7 +27,6 @@ class StartViewModel {
   var users: Observable<[User]>
   
   init(delegate: StartViewModelDelegate) {
-    self.delegate = delegate
     let userSubject = BehaviorSubject<[User]>(value: [])
     usersListenerHandle = FirestoreService.usersListener {
       userSubject.onNext($0)
