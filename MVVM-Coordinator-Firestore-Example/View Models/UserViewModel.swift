@@ -38,10 +38,10 @@ class UserViewModel {
   let itemDeleted: AnyObserver<IndexPath>
   let constraintDeleted: AnyObserver<IndexPath>
 
-  init(_ userPath: String, delegate: UserViewModelDelegate) {
+  init(_ userPath: String, delegate: UserViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
     // User
     let userSubject = BehaviorSubject<User?>(value: nil)
-    userListenerHandle = FirestoreService.userListener(path: userPath) { user in
+    userListenerHandle = firestoreService.userListener(path: userPath) { user in
       guard let user = user else { delegate.viewModelDidDismiss(); return }
       userSubject.onNext(user)
     }
@@ -49,7 +49,7 @@ class UserViewModel {
 
     // Items
     let itemsSubject = BehaviorSubject<[Item]>(value: [])
-    itemsListenerHandle = FirestoreService.itemsListener(userPath: userPath) {
+    itemsListenerHandle = firestoreService.itemsListener(userPath: userPath) {
       itemsSubject.onNext($0)
     }
     items = itemsSubject.map {
@@ -58,7 +58,7 @@ class UserViewModel {
 
     // Constraints
     let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
-    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
+    constraintsListenerHandle = firestoreService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0)
     }
     constraints = constraintsSubject.map {
@@ -83,7 +83,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let items = result.element?.1, items.count > index else { return }
-        FirestoreService.deleteItem(path: items[index].path) { error in
+        firestoreService.deleteItem(path: items[index].path) { error in
           if let error = error {
             print(error)
           }
@@ -98,7 +98,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let constraints = result.element?.1, constraints.count > index else { return }
-        FirestoreService.deleteConstraint(path: constraints[index].path) { error in
+        firestoreService.deleteConstraint(path: constraints[index].path) { error in
           if let error = error {
             print(error)
           }

@@ -29,7 +29,7 @@ class DetailViewModel {
   let constraints: Observable<[String]>
   let selectedConstraint: Observable<Int?>
 
-  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate) {
+  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
     let detailSubject = BehaviorSubject<Detail?>(value: nil)
     detailName = detailSubject.map { $0?.name ?? "" }
     detailConstraint = detailSubject.map { $0?.constraint ?? "" }
@@ -64,7 +64,7 @@ class DetailViewModel {
           delegate.addConstraint()
         } else {
           let constraint = result.constraints[result.selection.row]
-          FirestoreService.updateDetail(path: detailPath, with: ["constraint": constraint], completion: nil)
+          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraint], completion: nil)
         }
       }
     }.disposed(by: disposeBag)

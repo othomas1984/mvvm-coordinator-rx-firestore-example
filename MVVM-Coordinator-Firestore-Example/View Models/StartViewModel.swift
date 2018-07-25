@@ -28,9 +28,9 @@ class StartViewModel {
   let addTapped: AnyObserver<()>
   let users: Observable<[User]>
   
-  init(delegate: StartViewModelDelegate) {
+  init(delegate: StartViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
     let userSubject = BehaviorSubject<[User]>(value: [])
-    usersListenerHandle = FirestoreService.usersListener {
+    usersListenerHandle = firestoreService.usersListener {
       userSubject.onNext($0)
     }
     users = userSubject
@@ -51,7 +51,7 @@ class StartViewModel {
         return (index, users)
       }.subscribe { result in
         guard let users = result.element?.1, let index = result.element?.0.row, users.count > index else { return }
-        FirestoreService.deleteUser(path: users[index].path) { error in
+        firestoreService.deleteUser(path: users[index].path) { error in
           if let error = error {
             print(error)
           }

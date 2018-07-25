@@ -33,10 +33,10 @@ class ItemViewModel {
   let detailSelected: AnyObserver<IndexPath>
   let detailDeleted: AnyObserver<IndexPath>
   
-  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate) {
+  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
-    itemListenerHandle = FirestoreService.itemListener(path: itemPath) { item in
+    itemListenerHandle = firestoreService.itemListener(path: itemPath) { item in
       guard let item = item else { delegate.viewModelDidDismiss(); return }
       itemSubject.onNext(item)
     }
@@ -44,7 +44,7 @@ class ItemViewModel {
     
     // Details List
     let detailsSubject = BehaviorSubject<[Detail]>(value: [])
-    detailsListenerHandle = FirestoreService.detailsListener(itemPath: itemPath) {
+    detailsListenerHandle = firestoreService.detailsListener(itemPath: itemPath) {
       detailsSubject.onNext($0)
     }
     details = detailsSubject.map {
@@ -69,7 +69,7 @@ class ItemViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let details = result.element?.1, details.count > index else { return }
-        FirestoreService.deleteDetail(path: details[index].path) { error in
+        firestoreService.deleteDetail(path: details[index].path) { error in
           if let error = error {
             print(error)
           }
