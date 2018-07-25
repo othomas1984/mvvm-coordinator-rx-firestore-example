@@ -26,8 +26,7 @@ class DetailViewModel {
   let detailConstraint: Observable<String>
   let titleButton: AnyObserver<()>
   let constraintSelected: AnyObserver<(row: Int, component: Int)>
-  let constraints: Observable<[String]>
-  let selectedConstraint: Observable<Int?>
+  let constraints: Observable<[(name: String, selected: Bool)]>
 
   init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
     let detailSubject = BehaviorSubject<Detail?>(value: nil)
@@ -50,9 +49,11 @@ class DetailViewModel {
       constraintsSubject.onNext($0)
     }
     
-    constraints = constraintsSubject.map {
-      var constraintNames = $0.map { $0.name }.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
-      constraintNames.append("[Add New Constraint]")
+    constraints = Observable.combineLatest(constraintsSubject, detailSubject).map { (constraints, detail) in
+      var constraintNames = constraints.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }.map {
+        ($0.name, detail?.constraint == $0.name)
+      }
+      constraintNames.append(("[Add New Constraint]", false))
       return constraintNames
     }
     constraintSelected = constraintSelectedSubject.asObserver()
@@ -62,17 +63,14 @@ class DetailViewModel {
       if case let .next(result) = event {
         if result.selection.row == result.constraints.count - 1 {
           delegate.addConstraint()
+          guard let currentConstraints = try? constraintsSubject.value() else { return }
+          constraintsSubject.onNext(currentConstraints)
         } else {
           let constraint = result.constraints[result.selection.row]
-          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraint], completion: nil)
+          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraint.name], completion: nil)
         }
       }
-    }.disposed(by: disposeBag)
-    
-    selectedConstraint = Observable.combineLatest(constraints, detailSubject).map { (constraints, detail) in
-      guard let detail = detail, let index = constraints.index(where: { $0 == detail.constraint }) else { return nil }
-      return index
-    }
+    }.disposed(by: disposeBag)    
   }
   
   deinit {

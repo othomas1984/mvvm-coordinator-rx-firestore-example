@@ -38,21 +38,22 @@ class DetailViewController: UIViewController {
 
   private func setupBindings() {
     // Bindings
+    var firstLoad = true
     model.detailName.bind(to: titleButton.rx.title()).disposed(by: disposeBag)
     model.detailName.bind(to: rx.title).disposed(by: disposeBag)
     model.detailName.bind(to: nameValueLabel.rx.text).disposed(by: disposeBag)
     model.detailConstraint.bind(to: constraintValueLabel.rx.text).disposed(by: disposeBag)
     titleButton.rx.tap.bind(to: model.titleButton).disposed(by: disposeBag)
-    model.constraints.bind(to: constraintPickerView.rx.items) { _, item, _ in
+    model.constraints.bind(to: constraintPickerView.rx.items) { index, item, test2 in
+      if item.selected {
+        self.constraintPickerView.selectRow(index, inComponent: 0, animated: !firstLoad)
+        firstLoad = false
+      }
       let label = UILabel()
       label.textAlignment = .center
-      label.text = item
+      label.text = item.name
       return label
       }.disposed(by: disposeBag)
     constraintPickerView.rx.itemSelected.bind(to: model.constraintSelected).disposed(by: disposeBag)
-    model.selectedConstraint.bind { [unowned self] index in
-      guard let index = index else { return }
-      self.constraintPickerView.selectRow(index, inComponent: 0, animated: false)
-    }.disposed(by: disposeBag)
   }
 }
