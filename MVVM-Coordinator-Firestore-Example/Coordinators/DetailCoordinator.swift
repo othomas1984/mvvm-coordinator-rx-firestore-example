@@ -59,9 +59,34 @@ extension DetailCoordinator {
     ac.preferredAction = okAction
     navigationController.present(ac, animated: true)
   }
+
+  private func showAddConstraintController() {
+    // This would be it's own view controller managed by this coordinator eventually
+    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+    ac.addTextField { (textField) in
+      textField.placeholder = "Enter a name"
+    }
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
+      if let name = ac?.textFields?.first?.text, !name.isEmpty {
+        FirestoreService.createConstraint(userPath: self.userPath, with: name) { constraint in
+          FirestoreService.updateDetail(path: self.detailPath, with: ["constraint": name], completion: nil)
+        }
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+    ac.addAction(okAction)
+    ac.addAction(cancelAction)
+    ac.preferredAction = okAction
+    navigationController.present(ac, animated: true)
+  }
+
 }
 
 extension DetailCoordinator: DetailViewModelDelegate {
+  func addConstraint() {
+    showAddConstraintController()
+  }
+  
   func edit(_ detail: Detail) {
     showEditDetailController(detail)
   }

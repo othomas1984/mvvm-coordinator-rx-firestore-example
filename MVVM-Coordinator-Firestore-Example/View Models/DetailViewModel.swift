@@ -11,6 +11,7 @@ import RxSwift
 
 protocol DetailViewModelDelegate: class {
   func edit(_ detail: Detail)
+  func addConstraint()
   func viewModelDidDismiss()
 }
 
@@ -25,7 +26,7 @@ class DetailViewModel {
   let detailConstraint: Observable<String>
   let titleButton: AnyObserver<()>
   let constraintSelected: AnyObserver<(row: Int, component: Int)>
-  let constraints: Observable<[Constraint]>
+  let constraints: Observable<[String]>
   let selectedConstraint: Observable<Int?>
 
   init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate) {
@@ -48,21 +49,28 @@ class DetailViewModel {
     constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0)
     }
+    
     constraints = constraintsSubject.map {
-      $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+      var constraintNames = $0.map { $0.name }.sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+      constraintNames.append("[Add New Constraint]")
+      return constraintNames
     }
     constraintSelected = constraintSelectedSubject.asObserver()
     constraintSelectedSubject.withLatestFrom(constraints) { (selection, constraints) in
       return (selection: selection, constraints: constraints)
     }.subscribe { event in
       if case let .next(result) = event {
-        let constraint = result.constraints[result.selection.row]
-        FirestoreService.updateDetail(path: detailPath, with: ["constraint": constraint.name], completion: nil)
+        if result.selection.row == result.constraints.count - 1 {
+          delegate.addConstraint()
+        } else {
+          let constraint = result.constraints[result.selection.row]
+          FirestoreService.updateDetail(path: detailPath, with: ["constraint": constraint], completion: nil)
+        }
       }
     }.disposed(by: disposeBag)
     
     selectedConstraint = Observable.combineLatest(constraints, detailSubject).map { (constraints, detail) in
-      guard let detail = detail, let index = constraints.index(where: { $0.name == detail.constraint }) else { return nil }
+      guard let detail = detail, let index = constraints.index(where: { $0 == detail.constraint }) else { return nil }
       return index
     }
   }
