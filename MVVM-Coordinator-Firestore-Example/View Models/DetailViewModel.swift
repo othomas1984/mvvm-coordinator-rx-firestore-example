@@ -17,60 +17,71 @@ protocol DetailViewModelDelegate: class {
 
 class DetailViewModel {
   private let disposeBag = DisposeBag()
-  private let titleSubject = PublishSubject<()>()
-  private let constraintSelectedSubject = PublishSubject<(row: Int, component: Int)>()
   private let detailListenerHandle: ListenerRegistration
   private let constraintsListenerHandle: ListenerRegistration
-  
+
+  let titleButtonTapped = PublishSubject<()>()
+  let pickerSelectionChanged = PublishSubject<(row: Int, component: Int)>()
+
   let detailName: Observable<String>
   let detailConstraint: Observable<String>
-  let titleButton: AnyObserver<()>
-  let constraintSelected: AnyObserver<(row: Int, component: Int)>
-  let constraints: Observable<[(name: String, selected: Bool)]>
+  let selectedIndex: Observable<Int>
+  let pickerRowNames: Observable<[String]>
 
   init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
-    let detailSubject = BehaviorSubject<Detail?>(value: nil)
-    detailName = detailSubject.map { $0?.name ?? "" }
-    detailConstraint = detailSubject.map { $0?.constraint ?? "" }
-    titleButton = titleSubject.asObserver()
-    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
-      .withLatestFrom(detailSubject).subscribe { event in
-        if case let .next(detailOptional) = event, let detail = detailOptional {
-          delegate.edit(detail)
-        }
-      }.disposed(by: disposeBag)
+    let detailSubject = PublishSubject<Detail>()
+    let constraintsSubject = PublishSubject<[Constraint]>()
+    let selectedIndexSubject = PublishSubject<Int>()
+
+    // Setup Database Listeners
     detailListenerHandle = FirestoreService.detailListener(path: detailPath) { detail in
       guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
     }
-    
-    let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
     constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
-      constraintsSubject.onNext($0)
+      constraintsSubject.onNext($0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending })
     }
     
-    constraints = Observable.combineLatest(constraintsSubject, detailSubject).map { (constraints, detail) in
-      var constraintNames = constraints.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }.map {
-        ($0.name, detail?.constraint == $0.name)
-      }
-      constraintNames.append(("[Add New Constraint]", false))
-      return constraintNames
+    // Update UI elements
+    detailName = detailSubject.map { $0.name }
+    detailConstraint = detailSubject.map { $0.constraint }
+    
+    // Handle Title Button Taps
+    titleButtonTapped.throttle(1.0, latest: false, scheduler: MainScheduler())
+      .withLatestFrom(detailSubject).subscribe { event in
+        if case let .next(detail) = event {
+          delegate.edit(detail)
+        }
+      }.disposed(by: disposeBag)
+    selectedIndex = selectedIndexSubject.asObservable()
+    pickerRowNames = constraintsSubject.map { constraints in
+        var constraintNames = constraints.map { $0.name }
+        constraintNames.append("[Add New Constraint]")
+        return constraintNames
     }
-    constraintSelected = constraintSelectedSubject.asObserver()
-    constraintSelectedSubject.withLatestFrom(constraints) { (selection, constraints) in
-      return (selection: selection, constraints: constraints)
-    }.subscribe { event in
-      if case let .next(result) = event {
-        if result.selection.row == result.constraints.count - 1 {
+    
+    // Update picker selected item if either Detail or available Constraints change
+    Observable.combineLatest(detailSubject, constraintsSubject).debounce(0.01, scheduler: MainScheduler()).subscribe { event in
+      if let index = event.element?.1.index(where: {$0.name == event.element?.0.constraint}) {
+        selectedIndexSubject.onNext(index)
+      }
+      }.disposed(by: disposeBag)
+    
+    // Handle picker selection changes
+    pickerSelectionChanged
+      .withLatestFrom(constraintsSubject) { ($0, $1) }
+      .withLatestFrom(selectedIndexSubject) { ($0.0, $0.1, $1) }
+      .subscribe { event in
+      if case let .next(((index, _), constraints, selectedIndex)) = event {
+        if index == constraints.count {
           delegate.addConstraint()
-          guard let currentConstraints = try? constraintsSubject.value() else { return }
-          constraintsSubject.onNext(currentConstraints)
+          selectedIndexSubject.onNext(selectedIndex)
         } else {
-          let constraint = result.constraints[result.selection.row]
-          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraint.name], completion: nil)
+          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraints[index].name], completion: nil)
+          selectedIndexSubject.onNext(index)
         }
       }
-    }.disposed(by: disposeBag)    
+    }.disposed(by: disposeBag)
   }
   
   deinit {
