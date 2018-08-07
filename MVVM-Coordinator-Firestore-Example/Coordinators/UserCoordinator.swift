@@ -77,7 +77,7 @@ extension UserCoordinator {
     navigationController.present(controller, animated: false)
   }
   
-  private func showEditUserController(_ user: User) {
+  private func showEditUserController() {
     let controller = EditUserViewController()
     controller.model = EditUserViewModel(userPath: userPath, delegate: self)
     controller.modalPresentationStyle = .overCurrentContext
@@ -86,8 +86,8 @@ extension UserCoordinator {
 }
 
 extension UserCoordinator: UserViewModelDelegate {
-  func edit(_ user: User) {
-    showEditUserController(user)
+  func edit() {
+    showEditUserController()
   }
   
   func add() {

@@ -10,7 +10,7 @@ import RxSwift
 
 protocol UserViewModelDelegate: class {
   func select(_ itemPath: String)
-  func edit(_ user: User)
+  func edit()
   func add()
   func viewModelDidDismiss()
 }
@@ -109,7 +109,7 @@ class UserViewModel {
     titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(userSubject).subscribe { event in
         if case let .next(userOptional) = event, let user = userOptional {
-          delegate.edit(user)
+          delegate.edit()
         }
       }.disposed(by: disposeBag)
     
