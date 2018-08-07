@@ -71,21 +71,10 @@ extension UserCoordinator {
   }
   
   private func showAddConstraintController() {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.placeholder = "Enter a name"
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        DataService().createConstraint(userPath: self.userPath, with: name)
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    navigationController.present(ac, animated: true)
+    let controller = CreateConstraintViewController()
+    controller.model = CreateConstraintViewModel(userPath: userPath, delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
   
   private func showEditUserController(_ user: User) {
@@ -148,6 +137,12 @@ extension UserCoordinator: ChooseItemOrConstraintViewModelDelegate {
 
 extension UserCoordinator: CreateItemViewModelDelegate {
   func createItemViewModelDismiss() {
+    navigationController.dismiss(animated: true)
+  }
+}
+
+extension UserCoordinator: CreateConstraintViewModelDelegate {
+  func createConstraintViewModelDismiss() {
     navigationController.dismiss(animated: true)
   }
 }

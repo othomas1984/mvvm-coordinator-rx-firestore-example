@@ -34,6 +34,8 @@
 		337579222119658B002D072B /* ChooseItemOrConstraintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */; };
 		3375792421196D80002D072B /* CreateItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792321196D80002D072B /* CreateItemViewModel.swift */; };
 		3375792621196E87002D072B /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792521196E87002D072B /* CreateItemViewController.swift */; };
+		3375792821196FBE002D072B /* CreateConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792721196FBE002D072B /* CreateConstraintViewController.swift */; };
+		3375792A21196FE1002D072B /* CreateConstraintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792921196FE1002D072B /* CreateConstraintViewModel.swift */; };
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* DataModel.swift */; };
@@ -94,6 +96,8 @@
 		337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseItemOrConstraintViewModel.swift; sourceTree = "<group>"; };
 		3375792321196D80002D072B /* CreateItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewModel.swift; sourceTree = "<group>"; };
 		3375792521196E87002D072B /* CreateItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewController.swift; sourceTree = "<group>"; };
+		3375792721196FBE002D072B /* CreateConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateConstraintViewController.swift; sourceTree = "<group>"; };
+		3375792921196FE1002D072B /* CreateConstraintViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateConstraintViewModel.swift; sourceTree = "<group>"; };
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F94120E1E22600CB7B55 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -209,6 +213,7 @@
 				3372413220E1DA13003FDCFF /* UserViewController.swift */,
 				3375791F2119654B002D072B /* ChooseItemOrConstraintViewController.swift */,
 				3375792521196E87002D072B /* CreateItemViewController.swift */,
+				3375792721196FBE002D072B /* CreateConstraintViewController.swift */,
 				33D6F95120E1F45100CB7B55 /* ItemViewController.swift */,
 				33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */,
 			);
@@ -223,6 +228,7 @@
 				3372413420E1DA34003FDCFF /* UserViewModel.swift */,
 				337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */,
 				3375792321196D80002D072B /* CreateItemViewModel.swift */,
+				3375792921196FE1002D072B /* CreateConstraintViewModel.swift */,
 				33D6F94F20E1F3A700CB7B55 /* ItemViewModel.swift */,
 				33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */,
 			);
@@ -516,6 +522,7 @@
 				33D6F94E20E1F1DE00CB7B55 /* DetailCoordinator.swift in Sources */,
 				3372412720E1CCB1003FDCFF /* StartViewModel.swift in Sources */,
 				33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */,
+				3375792821196FBE002D072B /* CreateConstraintViewController.swift in Sources */,
 				33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */,
 				3372413520E1DA34003FDCFF /* UserViewModel.swift in Sources */,
 				3372412120E1C9B9003FDCFF /* StartCoordinator.swift in Sources */,
@@ -535,6 +542,7 @@
 				3375791C21192163002D072B /* CreateUserViewController.swift in Sources */,
 				33D6F95220E1F45100CB7B55 /* ItemViewController.swift in Sources */,
 				33D6F94620E1EFF000CB7B55 /* Detail.swift in Sources */,
+				3375792A21196FE1002D072B /* CreateConstraintViewModel.swift in Sources */,
 				3372411E20E1C9A2003FDCFF /* RootViewCoordinator.swift in Sources */,
 				3372412520E1CC5D003FDCFF /* UsersTableViewController.swift in Sources */,
 				3375792421196D80002D072B /* CreateItemViewModel.swift in Sources */,
