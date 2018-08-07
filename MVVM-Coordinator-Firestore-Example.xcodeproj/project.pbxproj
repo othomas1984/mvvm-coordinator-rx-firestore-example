@@ -406,13 +406,13 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf-iOS11.4/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS11.4/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS11.4/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest-iOS11.4/RxTest.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-iOS11.4/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core-iOS11.4/grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC-iOS11.4/ProtoRPC.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary-iOS11.4/RxLibrary.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library-iOS11.4/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb-iOS11.4/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -421,13 +421,13 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -446,7 +446,6 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf-iOS11.0/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS11.0/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS11.0/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/RxTest-iOS11.0/RxTest.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-iOS11.0/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core-iOS11.0/grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC-iOS11.0/ProtoRPC.framework",
@@ -461,7 +460,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",

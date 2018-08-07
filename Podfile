@@ -8,7 +8,6 @@ target 'MVVM-Coordinator-Firestore-Example' do
   pod 'FirebaseFirestore'
   pod 'RxCocoa'
   pod 'RxSwift'
-  pod 'RxTest'
   
 end
 target 'MVVM-Coordinator-Firestore-Example-UnitTests' do
