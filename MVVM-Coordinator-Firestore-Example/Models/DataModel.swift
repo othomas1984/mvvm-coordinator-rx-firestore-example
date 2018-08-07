@@ -1,5 +1,5 @@
 //
-//  FirestoreDataModel.swift
+//  DataModel.swift
 //  MVVM-Coordinator-Firestore-Example
 //
 //  Created by Owen Thomas on 6/25/18.
