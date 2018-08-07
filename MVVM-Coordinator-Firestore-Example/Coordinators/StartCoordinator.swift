@@ -48,22 +48,10 @@ extension StartCoordinator {
   }
   
   private func showAddUserController() {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.placeholder = "Enter a name"
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        DataService().createUser(with: name)
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    rootViewController.present(ac, animated: true)
-  }  
+    let controller = CreateUserViewController()
+    controller.modalPresentationStyle = .overCurrentContext
+    rootViewController.present(controller, animated: false, completion: nil)
+  }
 }
 
 extension StartCoordinator: UserCoordinatorDelegate {
