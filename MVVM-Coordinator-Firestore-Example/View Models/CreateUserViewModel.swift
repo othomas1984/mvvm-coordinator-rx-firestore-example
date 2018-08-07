@@ -7,8 +7,6 @@
 //
 
 import Foundation
-
-import Foundation
 import RxSwift
 
 // TODO: Do we still need to be class-only since we don't store the delegate anymore?
