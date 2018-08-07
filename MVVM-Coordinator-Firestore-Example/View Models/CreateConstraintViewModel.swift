@@ -22,14 +22,19 @@ class CreateConstraintViewModel {
   let addTapped: AnyObserver<String?>
   let cancelTapped: AnyObserver<()>
   
-  init(userPath: String, delegate: CreateConstraintViewModelDelegate, dataService: DataService = DataService()) {
+  init(userPath: String, forDetailPath detailPath: String?, delegate: CreateConstraintViewModelDelegate, dataService: DataService = DataService()) {
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
-      if case let .next(name) = event {
-        if let name = name, !name.isEmpty {
-          dataService.createConstraint(userPath: userPath, with: name)
+      guard case let .next(optionalName) = event, let name = optionalName, !name.isEmpty else {
+        delegate.createConstraintViewModelDismiss(); return
+      }
+      dataService.createConstraint(userPath: userPath, with: name) { constraint in
+        guard let detailPath = detailPath, let constraint = constraint else {
+          delegate.createConstraintViewModelDismiss(); return
         }
-        delegate.createConstraintViewModelDismiss()
+        dataService.updateDetail(path: detailPath, with: ["constraint": constraint.name]) { _ in
+          delegate.createConstraintViewModelDismiss()
+        }
       }
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()

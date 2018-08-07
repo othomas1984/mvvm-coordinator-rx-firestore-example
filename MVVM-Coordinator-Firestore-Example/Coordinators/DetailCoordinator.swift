@@ -61,25 +61,11 @@ extension DetailCoordinator {
   }
 
   private func showAddConstraintController() {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.placeholder = "Enter a name"
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        DataService().createConstraint(userPath: self.userPath, with: name) { constraint in
-          DataService().updateDetail(path: self.detailPath, with: ["constraint": name], completion: nil)
-        }
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    navigationController.present(ac, animated: true)
+    let controller = CreateConstraintViewController()
+    controller.model = CreateConstraintViewModel(userPath: userPath, forDetailPath: detailPath, delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
-
 }
 
 extension DetailCoordinator: DetailViewModelDelegate {
@@ -94,5 +80,11 @@ extension DetailCoordinator: DetailViewModelDelegate {
   func viewModelDidDismiss() {
     // TODO: Dismiss coordinator as well
     navigationController.popViewController(animated: true)
+  }
+}
+
+extension DetailCoordinator: CreateConstraintViewModelDelegate {
+  func createConstraintViewModelDismiss() {
+    navigationController.dismiss(animated: true)
   }
 }

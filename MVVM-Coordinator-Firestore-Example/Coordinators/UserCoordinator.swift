@@ -72,7 +72,7 @@ extension UserCoordinator {
   
   private func showAddConstraintController() {
     let controller = CreateConstraintViewController()
-    controller.model = CreateConstraintViewModel(userPath: userPath, delegate: self)
+    controller.model = CreateConstraintViewModel(userPath: userPath, forDetailPath: nil, delegate: self)
     controller.modalPresentationStyle = .overCurrentContext
     navigationController.present(controller, animated: false)
   }
