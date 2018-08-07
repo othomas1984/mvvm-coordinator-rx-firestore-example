@@ -49,6 +49,7 @@ extension StartCoordinator {
   
   private func showAddUserController() {
     let controller = CreateUserViewController()
+    controller.model = CreateUserViewModel(delegate: self)
     controller.modalPresentationStyle = .overCurrentContext
     rootViewController.present(controller, animated: false, completion: nil)
   }
@@ -69,5 +70,11 @@ extension StartCoordinator: StartViewModelDelegate {
   
   func select(_ userPath: String) {
     startUserCoordinator(userPath)
+  }
+}
+
+extension StartCoordinator: CreateUserViewModelDelegate {
+  func dismiss() {
+    rootViewController.dismiss(animated: false, completion: nil)
   }
 }
