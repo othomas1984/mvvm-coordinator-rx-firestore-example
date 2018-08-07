@@ -48,6 +48,7 @@ protocol QueryDocumentSnapshotProtocol {
   func data() -> [String: Any]
   var documentID: String { get }
   var ref: DocumentReferenceProtocol { get }
+  // TODO: Do the `as` methods belong here? Seems more like a (Query)DocumentSnapshot Extension
   func `as`<T: Decodable>(_ type: T.Type) -> T?
 }
 

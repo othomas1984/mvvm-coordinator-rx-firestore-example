@@ -62,6 +62,7 @@ extension DocumentSnapshot: DocumentSnapshotProtocol {
   var ref: DocumentReferenceProtocol {
     return reference
   }
+  // TODO: Do the `as` methods belong here? Seems more like a (Query)DocumentSnapshot Extension
   func `as`<T: Decodable>(_ type: T.Type) -> T? {
     return (data()?.merging(["id": documentID, "path": ref.path]) { $1 }).flatMap { $0.as(T.self) }
   }

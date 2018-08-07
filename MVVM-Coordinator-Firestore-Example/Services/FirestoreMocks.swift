@@ -112,6 +112,7 @@ class MockQueryDocumentSnapshot: QueryDocumentSnapshotProtocol {
     MockFirestore.methodCalled(className: "\(type(of: self))", methodName: #function)
     return MockDocumentReference()
   }
+  // TODO: Do the `as` methods belong here? Seems more like a (Query)DocumentSnapshot Extension
   func `as`<T>(_ type: T.Type) -> T? where T : Decodable {
     return nil
   }
@@ -131,6 +132,7 @@ class MockDocumentSnapshot: DocumentSnapshotProtocol {
     MockFirestore.methodCalled(className: "\(type(of: self))", methodName: #function)
     return MockDocumentReference()
   }
+  // TODO: Do the `as` methods belong here? Seems more like a (Query)DocumentSnapshot Extension
   func `as`<T>(_ type: T.Type) -> T? where T : Decodable {
     return nil
   }
