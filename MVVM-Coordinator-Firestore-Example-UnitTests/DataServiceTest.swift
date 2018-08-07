@@ -8,6 +8,7 @@
 
 import XCTest
 import RxTest
+import RxSwift
 
 @testable import MVVM_Coordinator_Firestore_Example
 
@@ -53,19 +54,29 @@ class DataServiceTest: XCTestCase {
     // TODO: Need to create mock dataService and delegate and check their method calls instead of checking at the
     // firestore level
     var vm: StartViewModel? = StartViewModel(delegate: self, dataService: dataService)
+    
+    // Using RxTest
     let testScheduler = TestScheduler(initialClock: 0)
-    let addButtonTaps = testScheduler.createHotObservable([next(100, ()), next(200, ())])
+    let addButtonTaps = testScheduler.createHotObservable([next(100, ())])
     let addDisposable = addButtonTaps.bind(to: vm!.addTapped)
     let selectButtonTaps = testScheduler.createHotObservable([next(100, (IndexPath(row: 0, section: 0)))])
     let selectDisposable = selectButtonTaps.bind(to: vm!.userSelected)
-    vm?.users.bind { users in
+    let usersDisposable = vm?.users.bind { users in
       print(users)
     }
     testScheduler.start()
     addDisposable.dispose()
     selectDisposable.dispose()
+    usersDisposable?.dispose()
+    
+    // Using RxSwift (pretty sure only one or the other will run, comment out the RxTest version to run the RxSwift one)
+    let addButtonSubject = PublishSubject<()>()
+    let addDisposable2 = addButtonSubject.bind(to: vm!.addTapped)
+    addButtonSubject.onNext(())
+    addDisposable2.dispose()
+
+
     vm = nil
-//
     XCTAssertEqual(firestore.methodCalls["MockCollectionReference"]?["addSnapshotListener"], 1)
     XCTAssertEqual(firestore.methodCalls["MockDataListenerHandle"]?["remove()"], 1)
 
