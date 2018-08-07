@@ -57,20 +57,10 @@ extension UserCoordinator {
   }
   
   private func showChooseItemOrConstraintController() {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .actionSheet)
-    let itemAction = UIAlertAction(title: "Item", style: .default) { action in
-      self.showAddItemController()
-    }
-    let constraintAction = UIAlertAction(title: "Constraint", style: .default) { action in
-      self.showAddConstraintController()
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(itemAction)
-    ac.addAction(constraintAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = itemAction
-    navigationController.present(ac, animated: true)
+    let controller = ChooseItemOrConstraintViewController()
+    controller.model = ChooseItemOrConstraintViewModel(delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
   
   private func showAddItemController() {
@@ -147,6 +137,22 @@ extension UserCoordinator: UserViewModelDelegate {
   
   func viewModelDidDismiss() {
     // TODO: Dismiss coordinator as well
+    navigationController.dismiss(animated: true)
+  }
+}
+
+extension UserCoordinator: ChooseItemOrConstraintViewModelDelegate {
+  func selectedConstraint() {
+    navigationController.dismiss(animated: false) {
+      self.showAddConstraintController()
+    }
+  }
+  func selectedItem() {
+    navigationController.dismiss(animated: false) {
+      self.showAddItemController()
+    }
+  }
+  func chooseItemOrConstraintDidDismiss() {
     navigationController.dismiss(animated: true)
   }
 }

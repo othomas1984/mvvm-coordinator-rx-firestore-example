@@ -6,7 +6,6 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import RxSwift
 import UIKit
 
 class CreateUserViewController: UIViewController {
