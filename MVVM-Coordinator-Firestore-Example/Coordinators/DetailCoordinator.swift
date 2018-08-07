@@ -83,20 +83,13 @@ extension DetailCoordinator: DetailViewModelDelegate {
   }
 }
 
-extension DetailCoordinator: CoordinatorDelegate {
-  func edit() {
-    
-  }
-  
-  func add() {
-    
-  }
-  
-  func select(type: String, item: String?) {
-    
-  }
-  
-  func dismiss() {
-    navigationController.dismiss(animated: true)
+extension DetailCoordinator: ViewModelDelegate {
+  func send(_ action: ViewModelAction) {
+    switch action {
+    case .edit, .show:
+      break
+    case .dismiss:
+      navigationController.dismiss(animated: true)
+    }
   }
 }

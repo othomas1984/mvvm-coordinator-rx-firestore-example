@@ -9,11 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol StartViewModelDelegate: class {
-  func select(_ userPath: String)
-  func add()
-}
-
 class StartViewModel {
   private let disposeBag = DisposeBag()
   private let usersListenerHandle: DataListenerHandle
@@ -27,7 +22,7 @@ class StartViewModel {
   let addTapped: AnyObserver<()>
   let users: Observable<[User]>
   
-  init(delegate: StartViewModelDelegate, dataService: DataService = DataService()) {
+  init(delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     let userSubject = BehaviorSubject<[User]>(value: [])
     usersListenerHandle = dataService.usersListener {
       userSubject.onNext($0)
@@ -41,7 +36,7 @@ class StartViewModel {
         return (index, users)
       }.subscribe { result in
         guard let users = result.element?.1, let index = result.element?.0.row, users.count > index else { return }
-        delegate.select(users[index].path)
+        delegate.send(.show(type: "user", id: users[index].path))
       }.disposed(by: disposeBag)
 
     userDeleted = userDeletedSubject.asObserver()
@@ -60,7 +55,7 @@ class StartViewModel {
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.add()
+        delegate.send(.show(type: "addUser", id: nil))
       }
     }.disposed(by: disposeBag)
   }

@@ -9,10 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol EditUserViewModelDelegate: class {
-  func editUserViewModelDismiss()
-}
-
 class EditUserViewModel {
   private let disposeBag = DisposeBag()
   
@@ -24,7 +20,7 @@ class EditUserViewModel {
   let cancelTapped: AnyObserver<()>
   let userName: Observable<String>
   
-  init(userPath: String, delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
+  init(userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     let userSubject = BehaviorSubject<User?>(value: nil)
     userListenerHandle = dataService.userListener(path: userPath) { user in
       userSubject.onNext(user)
@@ -37,15 +33,15 @@ class EditUserViewModel {
         return
       }
       guard let name = optionalName, !name.isEmpty else {
-        delegate.dismiss(); return
+        delegate.send(.dismiss); return
       }
       dataService.updateUser(path: userPath, with: ["name": name], completion: nil)
-      delegate.dismiss(); return
+      delegate.send(.dismiss); return
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.dismiss()
+        delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
   }

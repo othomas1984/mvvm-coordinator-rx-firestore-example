@@ -9,10 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol CreateItemViewModelDelegate: class {
-  func createItemViewModelDismiss()
-}
-
 class CreateItemViewModel {
   private let disposeBag = DisposeBag()
   
@@ -22,20 +18,20 @@ class CreateItemViewModel {
   let addTapped: AnyObserver<String?>
   let cancelTapped: AnyObserver<()>
   
-  init(userPath: String, delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
+  init(userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case let .next(name) = event {
         if let name = name, !name.isEmpty {
           dataService.createItem(userPath: userPath, with: name)
         }
-        delegate.dismiss()
+        delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.dismiss()
+        delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
   }

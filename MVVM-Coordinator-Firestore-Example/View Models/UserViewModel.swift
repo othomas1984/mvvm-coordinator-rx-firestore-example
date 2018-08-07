@@ -8,13 +8,6 @@
 
 import RxSwift
 
-protocol UserViewModelDelegate: class {
-  func select(_ itemPath: String)
-  func edit()
-  func add()
-  func viewModelDidDismiss()
-}
-
 class UserViewModel {
   private let disposeBag = DisposeBag()
   private let userListenerHandle: DataListenerHandle
@@ -37,11 +30,11 @@ class UserViewModel {
   let itemDeleted: AnyObserver<IndexPath>
   let constraintDeleted: AnyObserver<IndexPath>
 
-  init(_ userPath: String, delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
+  init(_ userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     // User
     let userSubject = BehaviorSubject<User?>(value: nil)
     userListenerHandle = dataService.userListener(path: userPath) { user in
-      guard let user = user else { delegate.dismiss(); return }
+      guard let user = user else { delegate.send(.dismiss); return }
       userSubject.onNext(user)
     }
     userName = userSubject.map { $0?.name ?? "Unknown User"}
@@ -72,7 +65,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let items = result.element?.1, items.count > index else { return }
-        delegate.select(type: "item", item: items[index].path)
+        delegate.send(.show(type: "item", id: items[index].path))
       }.disposed(by: disposeBag)
     
     itemDeleted = itemDeletedSubject.asObserver()
@@ -109,7 +102,7 @@ class UserViewModel {
     titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(userSubject).subscribe { event in
         if case .next = event {
-          delegate.edit()
+          delegate.send(.edit)
         }
       }.disposed(by: disposeBag)
     
@@ -117,7 +110,7 @@ class UserViewModel {
     addTapped = addButtonSubject.asObserver()
     addButtonSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.add()
+        delegate.send(.show(type: "addObject", id: nil))
       }
       }.disposed(by: disposeBag)
   }

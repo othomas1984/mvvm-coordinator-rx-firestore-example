@@ -9,12 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol ChooseItemOrConstraintViewModelDelegate: class {
-  func selectedItem()
-  func selectedConstraint()
-  func chooseItemOrConstraintDidDismiss()
-}
-
 class ChooseItemOrConstraintViewModel {
   private let disposeBag = DisposeBag()
   
@@ -26,23 +20,23 @@ class ChooseItemOrConstraintViewModel {
   let constraintTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   
-  init(delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
+  init(delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     itemTapped = itemTappedSubject.asObserver()
     itemTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.select(type: "item", item: nil)
+        delegate.send(.show(type: "addItem", id: nil))
       }
       }.disposed(by: disposeBag)
     constraintTapped = constraintTappedSubject.asObserver()
     constraintTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.select(type: "constraint", item: nil)
+        delegate.send(.show(type: "addConstraint", id: nil))
       }
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.dismiss()
+        delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
   }

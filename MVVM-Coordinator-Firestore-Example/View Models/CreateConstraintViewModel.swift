@@ -9,10 +9,6 @@
 import Foundation
 import RxSwift
 
-protocol CreateConstraintViewModelDelegate: class {
-  func createConstraintViewModelDismiss()
-}
-
 class CreateConstraintViewModel {
   private let disposeBag = DisposeBag()
   
@@ -22,28 +18,28 @@ class CreateConstraintViewModel {
   let addTapped: AnyObserver<String?>
   let cancelTapped: AnyObserver<()>
   
-  init(userPath: String, forDetailPath detailPath: String?, delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
+  init(userPath: String, forDetailPath detailPath: String?, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       guard case let .next(optionalName) = event else {
         return
       }
       guard let name = optionalName, !name.isEmpty else {
-        delegate.dismiss(); return
+        delegate.send(.dismiss); return
       }
       dataService.createConstraint(userPath: userPath, with: name) { constraint in
         guard let detailPath = detailPath, let constraint = constraint else {
-          delegate.dismiss(); return
+          delegate.send(.dismiss); return
         }
         dataService.updateDetail(path: detailPath, with: ["constraint": constraint.name]) { _ in
-          delegate.dismiss()
+          delegate.send(.dismiss)
         }
       }
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.dismiss()
+        delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
   }

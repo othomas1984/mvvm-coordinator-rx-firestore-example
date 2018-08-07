@@ -38,6 +38,7 @@
 		3375792A21196FE1002D072B /* CreateConstraintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792921196FE1002D072B /* CreateConstraintViewModel.swift */; };
 		3375792C211974E6002D072B /* EditUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792B211974E6002D072B /* EditUserViewModel.swift */; };
 		3375792E2119782B002D072B /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792D2119782B002D072B /* EditUserViewController.swift */; };
+		3375793021198BCF002D072B /* ViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792F21198BCF002D072B /* ViewModelDelegate.swift */; };
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* DataModel.swift */; };
@@ -102,6 +103,7 @@
 		3375792921196FE1002D072B /* CreateConstraintViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateConstraintViewModel.swift; sourceTree = "<group>"; };
 		3375792B211974E6002D072B /* EditUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewModel.swift; sourceTree = "<group>"; };
 		3375792D2119782B002D072B /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
+		3375792F21198BCF002D072B /* ViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelDelegate.swift; sourceTree = "<group>"; };
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F94120E1E22600CB7B55 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 		3372411320E1C7E0003FDCFF /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				3375792F21198BCF002D072B /* ViewModelDelegate.swift */,
 				3372412620E1CCB1003FDCFF /* StartViewModel.swift */,
 				3375791D21192605002D072B /* CreateUserViewModel.swift */,
 				3372413420E1DA34003FDCFF /* UserViewModel.swift */,
@@ -534,6 +537,7 @@
 				3372412120E1C9B9003FDCFF /* StartCoordinator.swift in Sources */,
 				337579202119654B002D072B /* ChooseItemOrConstraintViewController.swift in Sources */,
 				337579062118F06A002D072B /* FirestoreProtocols.swift in Sources */,
+				3375793021198BCF002D072B /* ViewModelDelegate.swift in Sources */,
 				3375791E21192605002D072B /* CreateUserViewModel.swift in Sources */,
 				33D6F94A20E1F0DC00CB7B55 /* DetailViewController.swift in Sources */,
 				3372413120E1D7DB003FDCFF /* UserCoordinator.swift in Sources */,

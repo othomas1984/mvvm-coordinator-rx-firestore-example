@@ -85,39 +85,32 @@ extension UserCoordinator {
   }
 }
 
-protocol CoordinatorDelegate {
-  func edit()
-  func add()
-  func select(type: String, item: String?)
-  func dismiss()
-}
-
-extension UserCoordinator: CoordinatorDelegate {
-  func edit() {
-    showEditUserController()
-  }
-  func add() {
-    showChooseItemOrConstraintController()
-  }
-  func select(type: String, item: String?) {
-    switch type {
-    case "item":
-      if let item = item {
-        startItemCoordinator(item)
-      } else {
+extension UserCoordinator: ViewModelDelegate {
+  func send(_ action: ViewModelAction) {
+    switch action {
+    case .edit:
+      showEditUserController()
+    case let .show(type, id):
+      switch type {
+      case "addObject":
+        showChooseItemOrConstraintController()
+      case "item":
+        if let id = id {
+          startItemCoordinator(id)
+        }
+      case "addItem":
         navigationController.dismiss(animated: false) {
           self.showAddItemController()
         }
+      case "addConstraint":
+        navigationController.dismiss(animated: false) {
+          self.showAddConstraintController()
+        }
+      default:
+        break
       }
-    case "constraint":
-      navigationController.dismiss(animated: false) {
-        self.showAddConstraintController()
-      }
-    default:
-      break
+    case .dismiss:
+      navigationController.dismiss(animated: true, completion: nil)
     }
-  }
-  func dismiss() {
-    navigationController.dismiss(animated: true, completion: nil)
   }
 }

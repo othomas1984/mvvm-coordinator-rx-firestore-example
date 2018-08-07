@@ -63,18 +63,23 @@ extension StartCoordinator: UserCoordinatorDelegate {
   }
 }
 
-extension StartCoordinator: StartViewModelDelegate {
-  func add() {
-    showAddUserController()
-  }
-  
-  func select(_ userPath: String) {
-    startUserCoordinator(userPath)
-  }
-}
-
-extension StartCoordinator: CreateUserViewModelDelegate {
-  func dismiss() {
-    rootViewController.dismiss(animated: false, completion: nil)
+extension StartCoordinator: ViewModelDelegate {
+  func send(_ action: ViewModelAction) {
+    switch action {
+    case .dismiss:
+      rootViewController.dismiss(animated: false)
+    case .edit:
+      break
+    case let .show(type, id):
+      switch type {
+      case "user":
+        guard let id = id else { return }
+        startUserCoordinator(id)
+      case "addUser":
+        showAddUserController()
+      default:
+        break
+      }
+    }
   }
 }
