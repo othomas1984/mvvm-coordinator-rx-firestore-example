@@ -26,23 +26,23 @@ class ChooseItemOrConstraintViewModel {
   let constraintTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   
-  init(delegate: ChooseItemOrConstraintViewModelDelegate, dataService: DataService = DataService()) {
+  init(delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
     itemTapped = itemTappedSubject.asObserver()
     itemTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.selectedItem()
+        delegate.select(type: "item", item: nil)
       }
       }.disposed(by: disposeBag)
     constraintTapped = constraintTappedSubject.asObserver()
     constraintTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.selectedConstraint()
+        delegate.select(type: "constraint", item: nil)
       }
       }.disposed(by: disposeBag)
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.chooseItemOrConstraintDidDismiss()
+        delegate.dismiss()
       }
       }.disposed(by: disposeBag)
   }

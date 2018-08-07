@@ -37,11 +37,11 @@ class UserViewModel {
   let itemDeleted: AnyObserver<IndexPath>
   let constraintDeleted: AnyObserver<IndexPath>
 
-  init(_ userPath: String, delegate: UserViewModelDelegate, dataService: DataService = DataService()) {
+  init(_ userPath: String, delegate: CoordinatorDelegate, dataService: DataService = DataService()) {
     // User
     let userSubject = BehaviorSubject<User?>(value: nil)
     userListenerHandle = dataService.userListener(path: userPath) { user in
-      guard let user = user else { delegate.viewModelDidDismiss(); return }
+      guard let user = user else { delegate.dismiss(); return }
       userSubject.onNext(user)
     }
     userName = userSubject.map { $0?.name ?? "Unknown User"}
@@ -72,7 +72,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let items = result.element?.1, items.count > index else { return }
-        delegate.select(items[index].path)
+        delegate.select(type: "item", item: items[index].path)
       }.disposed(by: disposeBag)
     
     itemDeleted = itemDeletedSubject.asObserver()
@@ -108,7 +108,7 @@ class UserViewModel {
     titleTapped = titleSubject.asObserver()
     titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(userSubject).subscribe { event in
-        if case let .next(userOptional) = event, let user = userOptional {
+        if case .next = event {
           delegate.edit()
         }
       }.disposed(by: disposeBag)

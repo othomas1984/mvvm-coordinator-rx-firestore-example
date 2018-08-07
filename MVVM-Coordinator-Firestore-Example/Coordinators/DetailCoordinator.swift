@@ -83,8 +83,20 @@ extension DetailCoordinator: DetailViewModelDelegate {
   }
 }
 
-extension DetailCoordinator: CreateConstraintViewModelDelegate {
-  func createConstraintViewModelDismiss() {
+extension DetailCoordinator: CoordinatorDelegate {
+  func edit() {
+    
+  }
+  
+  func add() {
+    
+  }
+  
+  func select(type: String, item: String?) {
+    
+  }
+  
+  func dismiss() {
     navigationController.dismiss(animated: true)
   }
 }

@@ -42,11 +42,11 @@ extension UserCoordinator {
     let userVM = UserViewModel(userPath, delegate: self)
     guard let userVC = UIStoryboard.init(name: "User", bundle: nil).instantiateInitialViewController() as? UserViewController else { assertionFailure(); return }
     userVC.model = userVM
-    userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismiss))
+    userVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissCoordinator))
     navigationController.pushViewController(userVC, animated: false)
   }
   
-  @objc func dismiss() {
+  @objc func dismissCoordinator() {
     delegate?.userCoordinatorDidDismiss(self)
   }
   
@@ -85,55 +85,39 @@ extension UserCoordinator {
   }
 }
 
-extension UserCoordinator: UserViewModelDelegate {
+protocol CoordinatorDelegate {
+  func edit()
+  func add()
+  func select(type: String, item: String?)
+  func dismiss()
+}
+
+extension UserCoordinator: CoordinatorDelegate {
   func edit() {
     showEditUserController()
   }
-  
   func add() {
     showChooseItemOrConstraintController()
   }
-  
-  func select(_ itemPath: String) {
-    startItemCoordinator(itemPath)
-  }
-  
-  func viewModelDidDismiss() {
-    // TODO: Dismiss coordinator as well
-    navigationController.dismiss(animated: true)
-  }
-}
-
-extension UserCoordinator: ChooseItemOrConstraintViewModelDelegate {
-  func selectedConstraint() {
-    navigationController.dismiss(animated: false) {
-      self.showAddConstraintController()
+  func select(type: String, item: String?) {
+    switch type {
+    case "item":
+      if let item = item {
+        startItemCoordinator(item)
+      } else {
+        navigationController.dismiss(animated: false) {
+          self.showAddItemController()
+        }
+      }
+    case "constraint":
+      navigationController.dismiss(animated: false) {
+        self.showAddConstraintController()
+      }
+    default:
+      break
     }
   }
-  func selectedItem() {
-    navigationController.dismiss(animated: false) {
-      self.showAddItemController()
-    }
-  }
-  func chooseItemOrConstraintDidDismiss() {
-    navigationController.dismiss(animated: true)
-  }
-}
-
-extension UserCoordinator: CreateItemViewModelDelegate {
-  func createItemViewModelDismiss() {
-    navigationController.dismiss(animated: true)
-  }
-}
-
-extension UserCoordinator: CreateConstraintViewModelDelegate {
-  func createConstraintViewModelDismiss() {
-    navigationController.dismiss(animated: true)
-  }
-}
-
-extension UserCoordinator: EditUserViewModelDelegate {
-  func editUserViewModelDismiss() {
-    navigationController.dismiss(animated: true)
+  func dismiss() {
+    navigationController.dismiss(animated: true, completion: nil)
   }
 }
