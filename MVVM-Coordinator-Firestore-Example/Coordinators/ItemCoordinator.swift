@@ -55,7 +55,7 @@ extension ItemCoordinator {
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty,
         ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
-        FirestoreService.createDetail(itemPath: self.itemPath, with: name, constraint: constraint)
+        DataService().createDetail(itemPath: self.itemPath, with: name, constraint: constraint)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -73,7 +73,7 @@ extension ItemCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.updateItem(path: item.path, with: ["name": name]) { error in
+        DataService().updateItem(path: item.path, with: ["name": name]) { error in
           if let error = error {
             print(error)
           }

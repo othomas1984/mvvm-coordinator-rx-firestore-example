@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FirestoreDataModel {
+protocol DataModel: Codable {
   var id: String { get }
   var path: String { get }
 }

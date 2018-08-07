@@ -6,7 +6,6 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import FirebaseFirestore
 import RxSwift
 
 protocol UserViewModelDelegate: class {
@@ -18,9 +17,9 @@ protocol UserViewModelDelegate: class {
 
 class UserViewModel {
   private let disposeBag = DisposeBag()
-  private let userListenerHandle: ListenerRegistration
-  private let itemsListenerHandle: ListenerRegistration
-  private let constraintsListenerHandle: ListenerRegistration
+  private let userListenerHandle: DataListenerHandle
+  private let itemsListenerHandle: DataListenerHandle
+  private let constraintsListenerHandle: DataListenerHandle
   
   private let titleSubject = PublishSubject<()>()
   private let addButtonSubject = PublishSubject<()>()
@@ -38,10 +37,10 @@ class UserViewModel {
   let itemDeleted: AnyObserver<IndexPath>
   let constraintDeleted: AnyObserver<IndexPath>
 
-  init(_ userPath: String, delegate: UserViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
+  init(_ userPath: String, delegate: UserViewModelDelegate, dataService: DataService = DataService()) {
     // User
     let userSubject = BehaviorSubject<User?>(value: nil)
-    userListenerHandle = firestoreService.userListener(path: userPath) { user in
+    userListenerHandle = dataService.userListener(path: userPath) { user in
       guard let user = user else { delegate.viewModelDidDismiss(); return }
       userSubject.onNext(user)
     }
@@ -49,7 +48,7 @@ class UserViewModel {
 
     // Items
     let itemsSubject = BehaviorSubject<[Item]>(value: [])
-    itemsListenerHandle = firestoreService.itemsListener(userPath: userPath) {
+    itemsListenerHandle = dataService.itemsListener(userPath: userPath) {
       itemsSubject.onNext($0)
     }
     items = itemsSubject.map {
@@ -58,7 +57,7 @@ class UserViewModel {
 
     // Constraints
     let constraintsSubject = BehaviorSubject<[Constraint]>(value: [])
-    constraintsListenerHandle = firestoreService.constraintsListener(userPath: userPath) {
+    constraintsListenerHandle = dataService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0)
     }
     constraints = constraintsSubject.map {
@@ -83,7 +82,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let items = result.element?.1, items.count > index else { return }
-        firestoreService.deleteItem(path: items[index].path) { error in
+        dataService.deleteItem(path: items[index].path) { error in
           if let error = error {
             print(error)
           }
@@ -98,7 +97,7 @@ class UserViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let constraints = result.element?.1, constraints.count > index else { return }
-        firestoreService.deleteConstraint(path: constraints[index].path) { error in
+        dataService.deleteConstraint(path: constraints[index].path) { error in
           if let error = error {
             print(error)
           }

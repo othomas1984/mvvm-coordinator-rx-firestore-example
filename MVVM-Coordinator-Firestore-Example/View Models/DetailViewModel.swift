@@ -6,7 +6,6 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import FirebaseFirestore
 import RxSwift
 
 protocol DetailViewModelDelegate: class {
@@ -17,8 +16,8 @@ protocol DetailViewModelDelegate: class {
 
 class DetailViewModel {
   private let disposeBag = DisposeBag()
-  private let detailListenerHandle: ListenerRegistration
-  private let constraintsListenerHandle: ListenerRegistration
+  private let detailListenerHandle: DataListenerHandle
+  private let constraintsListenerHandle: DataListenerHandle
 
   let titleButtonTapped = PublishSubject<()>()
   let pickerSelectionChanged = PublishSubject<(row: Int, component: Int)>()
@@ -28,17 +27,17 @@ class DetailViewModel {
   let selectedIndex: Observable<Int>
   let pickerRowNames: Observable<[String]>
 
-  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
+  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, dataService: DataService = DataService()) {
     let detailSubject = PublishSubject<Detail>()
     let constraintsSubject = PublishSubject<[Constraint]>()
     let selectedIndexSubject = PublishSubject<Int>()
 
     // Setup Database Listeners
-    detailListenerHandle = FirestoreService.detailListener(path: detailPath) { detail in
+    detailListenerHandle = dataService.detailListener(path: detailPath) { detail in
       guard let detail = detail else { delegate.viewModelDidDismiss(); return }
       detailSubject.on(.next(detail))
     }
-    constraintsListenerHandle = FirestoreService.constraintsListener(userPath: userPath) {
+    constraintsListenerHandle = dataService.constraintsListener(userPath: userPath) {
       constraintsSubject.onNext($0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending })
     }
     
@@ -77,7 +76,7 @@ class DetailViewModel {
           delegate.addConstraint()
           selectedIndexSubject.onNext(selectedIndex)
         } else {
-          firestoreService.updateDetail(path: detailPath, with: ["constraint": constraints[index].name], completion: nil)
+          dataService.updateDetail(path: detailPath, with: ["constraint": constraints[index].name], completion: nil)
           selectedIndexSubject.onNext(index)
         }
       }

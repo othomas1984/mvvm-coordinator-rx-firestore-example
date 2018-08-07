@@ -6,9 +6,7 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import FirebaseFirestore
-
-struct User: FirestoreDataModel, Codable {
+struct User: DataModel {
   let id: String
   let path: String
   let name: String

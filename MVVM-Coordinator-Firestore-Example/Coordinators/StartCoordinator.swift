@@ -55,7 +55,7 @@ extension StartCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createUser(with: name)
+        DataService().createUser(with: name)
       }
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

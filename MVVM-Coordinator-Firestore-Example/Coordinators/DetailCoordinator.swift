@@ -46,7 +46,7 @@ extension DetailCoordinator {
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty,
         ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
-        FirestoreService.updateDetail(path: detail.path, with: ["name": name, "constraint": constraint]) { error in
+        DataService().updateDetail(path: detail.path, with: ["name": name, "constraint": constraint]) { error in
           if let error = error {
             print(error)
           }
@@ -68,8 +68,8 @@ extension DetailCoordinator {
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
       if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        FirestoreService.createConstraint(userPath: self.userPath, with: name) { constraint in
-          FirestoreService.updateDetail(path: self.detailPath, with: ["constraint": name], completion: nil)
+        DataService().createConstraint(userPath: self.userPath, with: name) { constraint in
+          DataService().updateDetail(path: self.detailPath, with: ["constraint": name], completion: nil)
         }
       }
     }

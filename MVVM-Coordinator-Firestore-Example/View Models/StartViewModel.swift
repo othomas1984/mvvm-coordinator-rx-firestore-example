@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseFirestore
 import RxSwift
 
 protocol StartViewModelDelegate: class {
@@ -17,7 +16,7 @@ protocol StartViewModelDelegate: class {
 
 class StartViewModel {
   private let disposeBag = DisposeBag()
-  private let usersListenerHandle: ListenerRegistration
+  private let usersListenerHandle: DataListenerHandle
 
   private let userDeletedSubject = PublishSubject<IndexPath>()
   private let userSelectedSubject = PublishSubject<IndexPath>()
@@ -28,9 +27,9 @@ class StartViewModel {
   let addTapped: AnyObserver<()>
   let users: Observable<[User]>
   
-  init(delegate: StartViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
+  init(delegate: StartViewModelDelegate, dataService: DataService = DataService()) {
     let userSubject = BehaviorSubject<[User]>(value: [])
-    usersListenerHandle = firestoreService.usersListener {
+    usersListenerHandle = dataService.usersListener {
       userSubject.onNext($0)
     }
     users = userSubject
@@ -51,7 +50,7 @@ class StartViewModel {
         return (index, users)
       }.subscribe { result in
         guard let users = result.element?.1, let index = result.element?.0.row, users.count > index else { return }
-        firestoreService.deleteUser(path: users[index].path) { error in
+        dataService.deleteUser(path: users[index].path) { error in
           if let error = error {
             print(error)
           }

@@ -6,7 +6,6 @@
 //  Copyright © 2018 Owen Thomas. All rights reserved.
 //
 
-import FirebaseFirestore
 import RxSwift
 
 protocol ItemViewModelDelegate: class {
@@ -23,8 +22,8 @@ class ItemViewModel {
   private let addButtonSubject = PublishSubject<()>()
   private let detailSelectedSubject = PublishSubject<IndexPath>()
   private let detailDeletedSubject = PublishSubject<IndexPath>()
-  private let detailsListenerHandle: ListenerRegistration
-  private let itemListenerHandle: ListenerRegistration
+  private let detailsListenerHandle: DataListenerHandle
+  private let itemListenerHandle: DataListenerHandle
 
   let itemName: Observable<String>
   let details: Observable<[Detail]>
@@ -33,10 +32,10 @@ class ItemViewModel {
   let detailSelected: AnyObserver<IndexPath>
   let detailDeleted: AnyObserver<IndexPath>
   
-  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate, firestoreService: FirestoreService.Type = FirestoreService.self) {
+  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate, dataService: DataService = DataService()) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
-    itemListenerHandle = firestoreService.itemListener(path: itemPath) { item in
+    itemListenerHandle = dataService.itemListener(path: itemPath) { item in
       guard let item = item else { delegate.viewModelDidDismiss(); return }
       itemSubject.onNext(item)
     }
@@ -44,7 +43,7 @@ class ItemViewModel {
     
     // Details List
     let detailsSubject = BehaviorSubject<[Detail]>(value: [])
-    detailsListenerHandle = firestoreService.detailsListener(itemPath: itemPath) {
+    detailsListenerHandle = dataService.detailsListener(itemPath: itemPath) {
       detailsSubject.onNext($0)
     }
     details = detailsSubject.map {
@@ -69,7 +68,7 @@ class ItemViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let details = result.element?.1, details.count > index else { return }
-        firestoreService.deleteDetail(path: details[index].path) { error in
+        dataService.deleteDetail(path: details[index].path) { error in
           if let error = error {
             print(error)
           }
