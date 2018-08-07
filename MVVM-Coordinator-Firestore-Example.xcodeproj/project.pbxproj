@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		33646D0220ECBD530021A2A1 /* DocumentSnapshotExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */; };
 		33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */; };
 		3372410020E1C6A5003FDCFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337240FF20E1C6A5003FDCFF /* AppDelegate.swift */; };
 		3372410720E1C6A6003FDCFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3372410620E1C6A6003FDCFF /* Assets.xcassets */; };
@@ -28,6 +27,7 @@
 		337579062118F06A002D072B /* FirestoreProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579052118F06A002D072B /* FirestoreProtocols.swift */; };
 		337579082118F098002D072B /* FirestoreProtocolConformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579072118F098002D072B /* FirestoreProtocolConformance.swift */; };
 		3375790A2118F117002D072B /* FirestoreMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579092118F117002D072B /* FirestoreMocks.swift */; };
+		3375791A2118FA2A002D072B /* DataServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579192118FA2A002D072B /* DataServiceTest.swift */; };
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* DataModel.swift */; };
@@ -40,6 +40,7 @@
 		33D6F95220E1F45100CB7B55 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F95120E1F45100CB7B55 /* ItemViewController.swift */; };
 		33D6F95420E1F4BC00CB7B55 /* Item.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33D6F95320E1F4BC00CB7B55 /* Item.storyboard */; };
 		33D6F95620E1F54000CB7B55 /* ItemCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F95520E1F54000CB7B55 /* ItemCoordinator.swift */; };
+		3E439CDD8ED072CD3283521A /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A05E41C3A808D3B3A556B37 /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework */; };
 		5F6229DBDBEFC6E04EF4F4E7 /* Pods_MVVM_Coordinator_Firestore_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE49DFAF3B8687CF5EC8D3B1 /* Pods_MVVM_Coordinator_Firestore_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,8 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A05E41C3A808D3B3A556B37 /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BDCC54FE8218CE3B4925142 /* Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example/Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSnapshotExtension.swift; sourceTree = "<group>"; };
 		33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		337240FC20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVM-Coordinator-Firestore-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		337240FF20E1C6A5003FDCFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +79,9 @@
 		337579052118F06A002D072B /* FirestoreProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProtocols.swift; sourceTree = "<group>"; };
 		337579072118F098002D072B /* FirestoreProtocolConformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProtocolConformance.swift; sourceTree = "<group>"; };
 		337579092118F117002D072B /* FirestoreMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreMocks.swift; sourceTree = "<group>"; };
+		3375790F2118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MVVM-Coordinator-Firestore-Example-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		337579132118F9EA002D072B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		337579192118FA2A002D072B /* DataServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataServiceTest.swift; sourceTree = "<group>"; };
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F94120E1E22600CB7B55 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -91,6 +95,8 @@
 		33D6F95320E1F4BC00CB7B55 /* Item.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Item.storyboard; sourceTree = "<group>"; };
 		33D6F95520E1F54000CB7B55 /* ItemCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCoordinator.swift; sourceTree = "<group>"; };
 		4945940F8739C30C34A25C4D /* Pods-MVVM-Coordinator-Firestore-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example/Pods-MVVM-Coordinator-Firestore-Example.release.xcconfig"; sourceTree = "<group>"; };
+		4E76FA3424FED3F04611BCE5 /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example-UnitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example-UnitTests/Pods-MVVM-Coordinator-Firestore-Example-UnitTests.release.xcconfig"; sourceTree = "<group>"; };
+		77E62A850EE3C5CC82422D7F /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example-UnitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example-UnitTests/Pods-MVVM-Coordinator-Firestore-Example-UnitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DE49DFAF3B8687CF5EC8D3B1 /* Pods_MVVM_Coordinator_Firestore_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVM_Coordinator_Firestore_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -103,6 +109,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3375790C2118F9EA002D072B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E439CDD8ED072CD3283521A /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,6 +125,8 @@
 			children = (
 				2BDCC54FE8218CE3B4925142 /* Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig */,
 				4945940F8739C30C34A25C4D /* Pods-MVVM-Coordinator-Firestore-Example.release.xcconfig */,
+				77E62A850EE3C5CC82422D7F /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.debug.xcconfig */,
+				4E76FA3424FED3F04611BCE5 /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -118,7 +134,6 @@
 		33646D0020ECBD460021A2A1 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				33646D0120ECBD530021A2A1 /* DocumentSnapshotExtension.swift */,
 				33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */,
 			);
 			path = Extensions;
@@ -128,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				337240FE20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example */,
+				337579102118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests */,
 				337240FD20E1C6A5003FDCFF /* Products */,
 				043B50CA085A1ADCEBEC6C1D /* Pods */,
 				93CE0F4051155FE2AB58FC25 /* Frameworks */,
@@ -138,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				337240FC20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example.app */,
+				3375790F2118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -219,6 +236,15 @@
 			path = Coordinators;
 			sourceTree = "<group>";
 		};
+		337579102118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				337579192118FA2A002D072B /* DataServiceTest.swift */,
+				337579132118F9EA002D072B /* Info.plist */,
+			);
+			path = "MVVM-Coordinator-Firestore-Example-UnitTests";
+			sourceTree = "<group>";
+		};
 		33D6F93E20E1DF8C00CB7B55 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				DE49DFAF3B8687CF5EC8D3B1 /* Pods_MVVM_Coordinator_Firestore_Example.framework */,
+				1A05E41C3A808D3B3A556B37 /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -260,6 +287,26 @@
 			productReference = 337240FC20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		3375790E2118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 337579162118F9EA002D072B /* Build configuration list for PBXNativeTarget "MVVM-Coordinator-Firestore-Example-UnitTests" */;
+			buildPhases = (
+				AFD1A50AC2D73AB8FB06B4AF /* [CP] Check Pods Manifest.lock */,
+				3375790B2118F9EA002D072B /* Sources */,
+				3375790C2118F9EA002D072B /* Frameworks */,
+				3375790D2118F9EA002D072B /* Resources */,
+				5DB6E56531A1588A331707E9 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				337579152118F9EA002D072B /* PBXTargetDependency */,
+			);
+			name = "MVVM-Coordinator-Firestore-Example-UnitTests";
+			productName = "MVVM-Coordinator-Firestore-Example-UnitTests";
+			productReference = 3375790F2118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -272,6 +319,10 @@
 				TargetAttributes = {
 					337240FB20E1C6A5003FDCFF = {
 						CreatedOnToolsVersion = 9.4.1;
+					};
+					3375790E2118F9EA002D072B = {
+						CreatedOnToolsVersion = 9.4.1;
+						TestTargetID = 337240FB20E1C6A5003FDCFF;
 					};
 				};
 			};
@@ -289,6 +340,7 @@
 			projectRoot = "";
 			targets = (
 				337240FB20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example */,
+				3375790E2118F9EA002D072B /* MVVM-Coordinator-Firestore-Example-UnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -305,6 +357,13 @@
 				33D6F94C20E1F13600CB7B55 /* Detail.storyboard in Resources */,
 				33D6F95420E1F4BC00CB7B55 /* Item.storyboard in Resources */,
 				3372413720E1DAD2003FDCFF /* User.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3375790D2118F9EA002D072B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +388,46 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		5DB6E56531A1588A331707E9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example-UnitTests/Pods-MVVM-Coordinator-Firestore-Example-UnitTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL-iOS11.4/openssl.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac-iOS11.4/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf-iOS11.4/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS11.4/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS11.4/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest-iOS11.4/RxTest.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-iOS11.4/GRPCClient.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core-iOS11.4/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC-iOS11.4/ProtoRPC.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary-iOS11.4/RxLibrary.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library-iOS11.4/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb-iOS11.4/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example-UnitTests/Pods-MVVM-Coordinator-Firestore-Example-UnitTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		603ED8015180E501BF10F18A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,6 +440,7 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf-iOS11.0/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa-iOS11.0/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift-iOS11.0/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest-iOS11.0/RxTest.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-iOS11.0/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core-iOS11.0/grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC-iOS11.0/ProtoRPC.framework",
@@ -355,6 +455,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
@@ -365,6 +466,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example/Pods-MVVM-Coordinator-Firestore-Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFD1A50AC2D73AB8FB06B4AF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MVVM-Coordinator-Firestore-Example-UnitTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -391,7 +510,6 @@
 				33D6F95620E1F54000CB7B55 /* ItemCoordinator.swift in Sources */,
 				337579042116D7DA002D072B /* DataService.swift in Sources */,
 				337579082118F098002D072B /* FirestoreProtocolConformance.swift in Sources */,
-				33646D0220ECBD530021A2A1 /* DocumentSnapshotExtension.swift in Sources */,
 				3375790A2118F117002D072B /* FirestoreMocks.swift in Sources */,
 				33D6F95020E1F3A700CB7B55 /* ItemViewModel.swift in Sources */,
 				33D6F95220E1F45100CB7B55 /* ItemViewController.swift in Sources */,
@@ -400,6 +518,14 @@
 				3372412520E1CC5D003FDCFF /* UsersTableViewController.swift in Sources */,
 				3372410020E1C6A5003FDCFF /* AppDelegate.swift in Sources */,
 				3372412920E1CCC9003FDCFF /* User.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3375790B2118F9EA002D072B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3375791A2118FA2A002D072B /* DataServiceTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +705,48 @@
 			};
 			name = Release;
 		};
+		337579172118F9EA002D072B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 77E62A850EE3C5CC82422D7F /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LQZNX2BQDV;
+				INFOPLIST_FILE = "MVVM-Coordinator-Firestore-Example-UnitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swiftcoders.MVVM-Coordinator-Firestore-Example-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MVVM-Coordinator-Firestore-Example.app/MVVM-Coordinator-Firestore-Example";
+			};
+			name = Debug;
+		};
+		337579182118F9EA002D072B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E76FA3424FED3F04611BCE5 /* Pods-MVVM-Coordinator-Firestore-Example-UnitTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LQZNX2BQDV;
+				INFOPLIST_FILE = "MVVM-Coordinator-Firestore-Example-UnitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.swiftcoders.MVVM-Coordinator-Firestore-Example-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MVVM-Coordinator-Firestore-Example.app/MVVM-Coordinator-Firestore-Example";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -596,6 +764,15 @@
 			buildConfigurations = (
 				3372410F20E1C6A6003FDCFF /* Debug */,
 				3372411020E1C6A6003FDCFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		337579162118F9EA002D072B /* Build configuration list for PBXNativeTarget "MVVM-Coordinator-Firestore-Example-UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				337579172118F9EA002D072B /* Debug */,
+				337579182118F9EA002D072B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

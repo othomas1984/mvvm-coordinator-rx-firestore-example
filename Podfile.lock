@@ -64,15 +64,18 @@ PODS:
   - RxCocoa (4.2.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.2.0)
+  - RxTest (4.2.0):
+    - RxSwift (~> 4.0)
 
 DEPENDENCIES:
   - Firebase
   - FirebaseFirestore
   - RxCocoa
   - RxSwift
+  - RxTest
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - BoringSSL
     - Firebase
     - FirebaseAnalytics
@@ -89,6 +92,7 @@ SPEC REPOS:
     - Protobuf
     - RxCocoa
     - RxSwift
+    - RxTest
 
 SPEC CHECKSUMS:
   BoringSSL: cf3f1793eb6e3c445c4d150456341f149c268a35
@@ -107,7 +111,8 @@ SPEC CHECKSUMS:
   Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
   RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
   RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
+  RxTest: 8da864c0ee47534f586ff18fb0c7e5b2f1fe5023
 
-PODFILE CHECKSUM: 7633e8d092886686371eb53f6513c1aee5496604
+PODFILE CHECKSUM: ed97aa84d5faea47e420dadae940f038b070dba4
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
