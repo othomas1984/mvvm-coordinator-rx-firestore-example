@@ -32,6 +32,8 @@
 		3375791E21192605002D072B /* CreateUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375791D21192605002D072B /* CreateUserViewModel.swift */; };
 		337579202119654B002D072B /* ChooseItemOrConstraintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375791F2119654B002D072B /* ChooseItemOrConstraintViewController.swift */; };
 		337579222119658B002D072B /* ChooseItemOrConstraintViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */; };
+		3375792421196D80002D072B /* CreateItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792321196D80002D072B /* CreateItemViewModel.swift */; };
+		3375792621196E87002D072B /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792521196E87002D072B /* CreateItemViewController.swift */; };
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* DataModel.swift */; };
@@ -90,6 +92,8 @@
 		3375791D21192605002D072B /* CreateUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserViewModel.swift; sourceTree = "<group>"; };
 		3375791F2119654B002D072B /* ChooseItemOrConstraintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseItemOrConstraintViewController.swift; sourceTree = "<group>"; };
 		337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseItemOrConstraintViewModel.swift; sourceTree = "<group>"; };
+		3375792321196D80002D072B /* CreateItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewModel.swift; sourceTree = "<group>"; };
+		3375792521196E87002D072B /* CreateItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewController.swift; sourceTree = "<group>"; };
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F94120E1E22600CB7B55 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -204,6 +208,7 @@
 				3375791B21192163002D072B /* CreateUserViewController.swift */,
 				3372413220E1DA13003FDCFF /* UserViewController.swift */,
 				3375791F2119654B002D072B /* ChooseItemOrConstraintViewController.swift */,
+				3375792521196E87002D072B /* CreateItemViewController.swift */,
 				33D6F95120E1F45100CB7B55 /* ItemViewController.swift */,
 				33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */,
 			);
@@ -217,6 +222,7 @@
 				3375791D21192605002D072B /* CreateUserViewModel.swift */,
 				3372413420E1DA34003FDCFF /* UserViewModel.swift */,
 				337579212119658B002D072B /* ChooseItemOrConstraintViewModel.swift */,
+				3375792321196D80002D072B /* CreateItemViewModel.swift */,
 				33D6F94F20E1F3A700CB7B55 /* ItemViewModel.swift */,
 				33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */,
 			);
@@ -518,6 +524,7 @@
 				3375791E21192605002D072B /* CreateUserViewModel.swift in Sources */,
 				33D6F94A20E1F0DC00CB7B55 /* DetailViewController.swift in Sources */,
 				3372413120E1D7DB003FDCFF /* UserCoordinator.swift in Sources */,
+				3375792621196E87002D072B /* CreateItemViewController.swift in Sources */,
 				33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */,
 				33D6F95620E1F54000CB7B55 /* ItemCoordinator.swift in Sources */,
 				337579222119658B002D072B /* ChooseItemOrConstraintViewModel.swift in Sources */,
@@ -530,6 +537,7 @@
 				33D6F94620E1EFF000CB7B55 /* Detail.swift in Sources */,
 				3372411E20E1C9A2003FDCFF /* RootViewCoordinator.swift in Sources */,
 				3372412520E1CC5D003FDCFF /* UsersTableViewController.swift in Sources */,
+				3375792421196D80002D072B /* CreateItemViewModel.swift in Sources */,
 				3372410020E1C6A5003FDCFF /* AppDelegate.swift in Sources */,
 				3372412920E1CCC9003FDCFF /* User.swift in Sources */,
 			);
