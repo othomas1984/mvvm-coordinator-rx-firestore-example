@@ -18,19 +18,19 @@ class CreateUserViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
+    let alertController = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
+    alertController.addTextField { textField in
       textField.placeholder = "Enter a name"
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned ac, unowned self] action in
-        self.model.addTapped.onNext(ac.textFields?.first?.text)
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned alertController, unowned self] _ in
+      self.model.addTapped.onNext(alertController.textFields?.first?.text)
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] action in
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] _ in
       self.model.cancelTapped.onNext(())
     }
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    present(ac, animated: true)
+    alertController.addAction(okAction)
+    alertController.addAction(cancelAction)
+    alertController.preferredAction = okAction
+    present(alertController, animated: true)
   }
 }
