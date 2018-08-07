@@ -22,6 +22,9 @@ class EditUserViewController: UIViewController {
     let alertController = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
     alertController.addTextField { [unowned self] textField in
       textField.placeholder = "Enter a name"
+      textField.autocapitalizationType = .words
+      textField.textContentType = UITextContentType.name
+      textField.autocorrectionType = UITextAutocorrectionType.yes
       disposable = self.model.userName.bind(to: textField.rx.text)
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned alertController, unowned self] _ in

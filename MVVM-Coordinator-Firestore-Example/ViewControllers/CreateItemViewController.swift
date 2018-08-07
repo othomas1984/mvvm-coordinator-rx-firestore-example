@@ -20,6 +20,8 @@ class CreateItemViewController: UIViewController {
     let alertController = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
     alertController.addTextField { textField in
       textField.placeholder = "Enter a name"
+      textField.autocapitalizationType = .words
+      textField.autocorrectionType = UITextAutocorrectionType.yes
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned alertController, unowned self] _ in
       self.model.addTapped.onNext(alertController.textFields?.first?.text)
