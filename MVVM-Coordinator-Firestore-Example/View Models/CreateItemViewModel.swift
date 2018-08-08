@@ -36,4 +36,3 @@ class CreateItemViewModel {
       }.disposed(by: disposeBag)
   }
 }
-

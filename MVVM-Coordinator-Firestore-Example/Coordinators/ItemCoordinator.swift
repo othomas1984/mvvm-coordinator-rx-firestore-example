@@ -42,27 +42,10 @@ extension ItemCoordinator {
   }
   
   private func showAddDetailController() {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.placeholder = "Enter a name"
-    }
-    // TODO: Figure out how to access this user's constraints and only allow those (obviously
-    // not through use of a textfield)
-    ac.addTextField { (textField) in
-      textField.placeholder = "Existing Constraint?"
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty,
-        ac?.textFields?.count ?? 0 > 1, let constraint = ac?.textFields?[1].text, !constraint.isEmpty {
-        DataService().createDetail(itemPath: self.itemPath, with: name, constraint: constraint)
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    navigationController.present(ac, animated: true)
+    let controller = CreateDetailViewController()
+    controller.model = CreateDetailViewModel(itemPath: itemPath, delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
   
   private func showEditItemController(_ item: Item) {
@@ -104,5 +87,16 @@ extension ItemCoordinator: ItemViewModelDelegate {
   func viewModelDidDismiss() {
     // TODO: Dismiss coordinator as well
     navigationController.popViewController(animated: true)
+  }
+}
+
+extension ItemCoordinator: ViewModelDelegate {
+  func send(_ action: ViewModelAction) {
+    switch action {
+    case .dismiss:
+      navigationController.dismiss(animated: false)
+    case .edit, .show:
+      break
+    }
   }
 }

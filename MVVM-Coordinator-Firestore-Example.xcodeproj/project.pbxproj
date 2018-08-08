@@ -39,6 +39,8 @@
 		3375792C211974E6002D072B /* EditUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792B211974E6002D072B /* EditUserViewModel.swift */; };
 		3375792E2119782B002D072B /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792D2119782B002D072B /* EditUserViewController.swift */; };
 		3375793021198BCF002D072B /* ViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3375792F21198BCF002D072B /* ViewModelDelegate.swift */; };
+		33757932211A647E002D072B /* CreateDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33757931211A647E002D072B /* CreateDetailViewModel.swift */; };
+		33757934211A68D1002D072B /* CreateDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33757933211A68D1002D072B /* CreateDetailViewController.swift */; };
 		33D6F93B20E1DF5300CB7B55 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93A20E1DF5300CB7B55 /* Item.swift */; };
 		33D6F93D20E1DF6800CB7B55 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F93C20E1DF6800CB7B55 /* Constraint.swift */; };
 		33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D6F94120E1E22600CB7B55 /* DataModel.swift */; };
@@ -104,6 +106,8 @@
 		3375792B211974E6002D072B /* EditUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewModel.swift; sourceTree = "<group>"; };
 		3375792D2119782B002D072B /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
 		3375792F21198BCF002D072B /* ViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelDelegate.swift; sourceTree = "<group>"; };
+		33757931211A647E002D072B /* CreateDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDetailViewModel.swift; sourceTree = "<group>"; };
+		33757933211A68D1002D072B /* CreateDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDetailViewController.swift; sourceTree = "<group>"; };
 		33D6F93A20E1DF5300CB7B55 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		33D6F93C20E1DF6800CB7B55 /* Constraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		33D6F94120E1E22600CB7B55 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 				3375792521196E87002D072B /* CreateItemViewController.swift */,
 				3375792721196FBE002D072B /* CreateConstraintViewController.swift */,
 				33D6F95120E1F45100CB7B55 /* ItemViewController.swift */,
+				33757933211A68D1002D072B /* CreateDetailViewController.swift */,
 				33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */,
 			);
 			path = ViewControllers;
@@ -239,6 +244,7 @@
 				3375792321196D80002D072B /* CreateItemViewModel.swift */,
 				3375792921196FE1002D072B /* CreateConstraintViewModel.swift */,
 				33D6F94F20E1F3A700CB7B55 /* ItemViewModel.swift */,
+				33757931211A647E002D072B /* CreateDetailViewModel.swift */,
 				33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */,
 			);
 			path = "View Models";
@@ -532,6 +538,7 @@
 				3372412720E1CCB1003FDCFF /* StartViewModel.swift in Sources */,
 				33D6F94220E1E22600CB7B55 /* DataModel.swift in Sources */,
 				3375792821196FBE002D072B /* CreateConstraintViewController.swift in Sources */,
+				33757932211A647E002D072B /* CreateDetailViewModel.swift in Sources */,
 				33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */,
 				3372413520E1DA34003FDCFF /* UserViewModel.swift in Sources */,
 				3372412120E1C9B9003FDCFF /* StartCoordinator.swift in Sources */,
@@ -547,6 +554,7 @@
 				337579222119658B002D072B /* ChooseItemOrConstraintViewModel.swift in Sources */,
 				337579042116D7DA002D072B /* DataService.swift in Sources */,
 				337579082118F098002D072B /* FirestoreProtocolConformance.swift in Sources */,
+				33757934211A68D1002D072B /* CreateDetailViewController.swift in Sources */,
 				3375790A2118F117002D072B /* FirestoreMocks.swift in Sources */,
 				33D6F95020E1F3A700CB7B55 /* ItemViewModel.swift in Sources */,
 				3375791C21192163002D072B /* CreateUserViewController.swift in Sources */,

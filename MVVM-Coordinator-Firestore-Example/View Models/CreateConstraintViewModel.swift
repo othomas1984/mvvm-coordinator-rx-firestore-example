@@ -44,4 +44,3 @@ class CreateConstraintViewModel {
       }.disposed(by: disposeBag)
   }
 }
-
