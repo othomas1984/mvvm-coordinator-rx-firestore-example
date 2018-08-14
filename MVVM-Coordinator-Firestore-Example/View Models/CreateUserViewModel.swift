@@ -14,11 +14,11 @@ class CreateUserViewModel {
   
   private let addTappedSubject = PublishSubject<()>()
   private let cancelTappedSubject = PublishSubject<()>()
-  private let nameTextSubject = PublishSubject<String?>()
+  private let nameTextSubject = PublishSubject<String>()
 
   let addTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
-  let nameText: AnyObserver<String?>
+  let nameText: AnyObserver<String>
 
   init(delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     nameText = nameTextSubject.asObserver()
@@ -27,7 +27,7 @@ class CreateUserViewModel {
       .withLatestFrom(nameTextSubject)
       .throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
         guard case let .next(name) = event else { delegate.send(.dismiss); return }
-        if let name = name, !name.isEmpty {
+        if !name.isEmpty {
           dataService.createUser(with: name)
         }
         delegate.send(.dismiss)

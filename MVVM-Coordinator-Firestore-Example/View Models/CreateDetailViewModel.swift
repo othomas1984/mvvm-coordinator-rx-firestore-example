@@ -14,11 +14,11 @@ class CreateDetailViewModel {
   
   private let addTappedSubject = PublishSubject<()>()
   private let cancelTappedSubject = PublishSubject<()>()
-  private let nameTextSubject = PublishSubject<String?>()
-  private let constraintTextSubject = PublishSubject<String?>()
+  private let nameTextSubject = PublishSubject<String>()
+  private let constraintTextSubject = PublishSubject<String>()
 
-  let nameText: AnyObserver<String?>
-  let constraintText: AnyObserver<String?>
+  let nameText: AnyObserver<String>
+  let constraintText: AnyObserver<String>
   let addTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   
@@ -31,7 +31,7 @@ class CreateDetailViewModel {
       .withLatestFrom(nameTextSubject)
       .withLatestFrom(constraintTextSubject) { ($0, $1) }.subscribe { event in
         guard case let .next(name, constraint) = event else { delegate.send(.dismiss); return }
-        if let name = name, let constraint = constraint, !name.isEmpty, !constraint.isEmpty {
+        if !name.isEmpty, !constraint.isEmpty {
           dataService.createDetail(itemPath: itemPath, with: name, constraint: constraint)
         }
         delegate.send(.dismiss)

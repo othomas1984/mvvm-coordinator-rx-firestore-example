@@ -25,14 +25,14 @@ class CreateDetailViewController: UIViewController {
       textField.placeholder = "Enter a name"
       textField.autocapitalizationType = .words
       textField.autocorrectionType = UITextAutocorrectionType.yes
-      nameDisposable = textField.rx.text.bind(to: self.model.nameText)
+      nameDisposable = textField.rx.text.orEmpty.bind(to: self.model.nameText)
     }
     // TODO: Constraint should not be a textfield, it should be a selection from a list of existing constraints
     alertController.addTextField { [unowned self] textField in
       textField.placeholder = "Enter an existing constraint"
       textField.autocapitalizationType = .words
       textField.autocorrectionType = UITextAutocorrectionType.yes
-      constraintDisposable = textField.rx.text.bind(to: self.model.constraintText)
+      constraintDisposable = textField.rx.text.orEmpty.bind(to: self.model.constraintText)
     }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned self] _ in
       self.model.addTapped.onNext(())
