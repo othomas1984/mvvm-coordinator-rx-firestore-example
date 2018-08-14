@@ -12,13 +12,11 @@ import RxSwift
 class CreateItemViewModel {
   private let disposeBag = DisposeBag()
   
-  private let addTappedSubject = PublishSubject<String?>()
-  private let cancelTappedSubject = PublishSubject<()>()
-  
   let addTapped: AnyObserver<String?>
   let cancelTapped: AnyObserver<()>
   
   init(userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
+    let addTappedSubject = PublishSubject<String?>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case let .next(name) = event {
@@ -28,6 +26,7 @@ class CreateItemViewModel {
         delegate.send(.dismiss)
       }
       }.disposed(by: disposeBag)
+    let cancelTappedSubject = PublishSubject<()>()
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {

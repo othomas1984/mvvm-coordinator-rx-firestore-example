@@ -12,13 +12,11 @@ import RxSwift
 class CreateConstraintViewModel {
   private let disposeBag = DisposeBag()
   
-  private let addTappedSubject = PublishSubject<String?>()
-  private let cancelTappedSubject = PublishSubject<()>()
-  
   let addTapped: AnyObserver<String?>
   let cancelTapped: AnyObserver<()>
   
   init(userPath: String, forDetailPath detailPath: String?, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
+    let addTappedSubject = PublishSubject<String?>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       guard case let .next(optionalName) = event else {
@@ -36,6 +34,7 @@ class CreateConstraintViewModel {
         }
       }
       }.disposed(by: disposeBag)
+    let cancelTappedSubject = PublishSubject<()>()
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {

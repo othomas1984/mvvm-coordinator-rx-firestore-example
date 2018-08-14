@@ -12,19 +12,17 @@ import RxSwift
 class CreateDetailViewModel {
   private let disposeBag = DisposeBag()
   
-  private let addTappedSubject = PublishSubject<()>()
-  private let cancelTappedSubject = PublishSubject<()>()
-  private let nameTextSubject = PublishSubject<String>()
-  private let constraintTextSubject = PublishSubject<String>()
-
   let nameText: AnyObserver<String>
   let constraintText: AnyObserver<String>
   let addTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   
   init(itemPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
+    let nameTextSubject = PublishSubject<String>()
     nameText = nameTextSubject.asObserver()
+    let constraintTextSubject = PublishSubject<String>()
     constraintText = constraintTextSubject.asObserver()
+    let addTappedSubject = PublishSubject<()>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject
       .throttle(1, latest: false, scheduler: MainScheduler())
@@ -36,6 +34,7 @@ class CreateDetailViewModel {
         }
         delegate.send(.dismiss)
       }.disposed(by: disposeBag)
+    let cancelTappedSubject = PublishSubject<()>()
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {

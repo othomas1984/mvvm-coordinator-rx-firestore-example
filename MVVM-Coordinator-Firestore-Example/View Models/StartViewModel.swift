@@ -11,11 +11,6 @@ import RxSwift
 
 class StartViewModel {
   private let disposeBag = DisposeBag()
-  private let usersListenerHandle: DataListenerHandle
-
-  private let userDeletedSubject = PublishSubject<IndexPath>()
-  private let userSelectedSubject = PublishSubject<IndexPath>()
-  private let addTappedSubject = PublishSubject<()>()
 
   let userDeleted: AnyObserver<IndexPath>
   let userSelected: AnyObserver<IndexPath>
@@ -23,13 +18,19 @@ class StartViewModel {
   let users: Observable<[User]>
   
   init(delegate: ViewModelDelegate, dataService: DataService = DataService()) {
-    let userSubject = BehaviorSubject<[User]>(value: [])
-    usersListenerHandle = dataService.usersListener {
-      userSubject.onNext($0)
+    let usersSubject = Observable<[User]>.create { observer in
+      let handle = dataService.usersListener {
+        observer.onNext($0)
+      }
+      return Disposables.create {
+        handle.remove()
+      }
     }
-    users = userSubject
+    
+    users = usersSubject
       .map { $0.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending } }
     
+    let userSelectedSubject = PublishSubject<IndexPath>()
     userSelected = userSelectedSubject.asObserver()
     userSelectedSubject.throttle(1, latest: false, scheduler: MainScheduler())
       .withLatestFrom(users) { (index, users) in
@@ -39,6 +40,7 @@ class StartViewModel {
         delegate.send(.show(type: "user", id: users[index].path))
       }.disposed(by: disposeBag)
 
+    let userDeletedSubject = PublishSubject<IndexPath>()
     userDeleted = userDeletedSubject.asObserver()
     userDeletedSubject.throttle(1, latest: false, scheduler: MainScheduler())
       .withLatestFrom(users) { (index, users) in
@@ -52,6 +54,7 @@ class StartViewModel {
         }
       }.disposed(by: disposeBag)
 
+    let addTappedSubject = PublishSubject<()>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
@@ -59,9 +62,4 @@ class StartViewModel {
       }
     }.disposed(by: disposeBag)
   }
-  
-  deinit {
-    usersListenerHandle.remove()
-  }
 }
-

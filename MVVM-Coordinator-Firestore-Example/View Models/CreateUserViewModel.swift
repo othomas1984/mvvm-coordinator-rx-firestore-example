@@ -12,16 +12,14 @@ import RxSwift
 class CreateUserViewModel {
   private let disposeBag = DisposeBag()
   
-  private let addTappedSubject = PublishSubject<()>()
-  private let cancelTappedSubject = PublishSubject<()>()
-  private let nameTextSubject = PublishSubject<String>()
-
   let addTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   let nameText: AnyObserver<String>
 
   init(delegate: ViewModelDelegate, dataService: DataService = DataService()) {
+    let nameTextSubject = PublishSubject<String>()
     nameText = nameTextSubject.asObserver()
+    let addTappedSubject = PublishSubject<()>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject
       .withLatestFrom(nameTextSubject)
@@ -32,6 +30,7 @@ class CreateUserViewModel {
         }
         delegate.send(.dismiss)
       }.disposed(by: disposeBag)
+    let cancelTappedSubject = PublishSubject<()>()
     cancelTapped = cancelTappedSubject.asObserver()
     cancelTappedSubject.throttle(1, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
