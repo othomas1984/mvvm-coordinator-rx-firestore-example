@@ -30,9 +30,8 @@ class DataServiceTest: XCTestCase {
   }
   
   func testListeners() {
-    var handle: DataListenerHandle
     let usersExp = XCTestExpectation()
-    handle = dataService.usersListener { (users) in
+    var handle = dataService.usersListener { (users) in
       usersExp.fulfill()
     }
     handle.remove()
@@ -85,12 +84,8 @@ class DataServiceTest: XCTestCase {
   }
 }
 
-extension DataServiceTest: StartViewModelDelegate {
-  func select(_ userPath: String) {
+extension DataServiceTest: ViewModelDelegate {
+  func send(_ action: ViewModelAction) {
     
-  }
-  
-  func add() {
-    print("Test")
   }
 }
