@@ -11,6 +11,7 @@ import UIKit
 
 class EditUserViewController: UIViewController {
   var model: EditUserViewModel!
+  var disposeBag = DisposeBag()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -18,26 +19,31 @@ class EditUserViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    var disposable: Disposable?
+    var userNameToViewDisposable: Disposable?
+    var userNameFromViewDisposable: Disposable?
     let alertController = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
     alertController.addTextField { [unowned self] textField in
       textField.placeholder = "Enter a name"
       textField.autocapitalizationType = .words
       textField.textContentType = UITextContentType.name
       textField.autocorrectionType = UITextAutocorrectionType.yes
-      disposable = self.model.userName.bind(to: textField.rx.text)
+      userNameToViewDisposable = self.model.userNameToView.take(1).bind(to: textField.rx.text)
+      userNameFromViewDisposable = textField.rx.text.orEmpty.bind(to: self.model.userNameFromView)
     }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned alertController, unowned self] _ in
-      self.model.okTapped.onNext(alertController.textFields?.first?.text)
-      disposable?.dispose()
+    let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned self] _ in
+      self.model.okTapped.onNext(())
+      userNameToViewDisposable?.dispose()
+      userNameFromViewDisposable?.dispose()
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] _ in
       self.model.cancelTapped.onNext(())
-      disposable?.dispose()
+      userNameFromViewDisposable?.dispose()
     }
     alertController.addAction(okAction)
     alertController.addAction(cancelAction)
     alertController.preferredAction = okAction
-    self.present(alertController, animated: true)
+    model.userLoading.filter { !$0 }.take(1).bind { [unowned self] userLoading in
+      self.present(alertController, animated: true)
+    }.disposed(by: disposeBag)
   }
 }
