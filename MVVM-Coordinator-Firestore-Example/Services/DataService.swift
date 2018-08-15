@@ -79,7 +79,7 @@ class DataService {
   }
   
   // MARK: - Detail Services
-  func createDetail(itemPath: String, with name: String, constraint: String, completion: ((Detail?) -> Void)? = nil) {
+  func createDetail(itemPath: String, with name: String, constraint: String = "", completion: ((Detail?) -> Void)? = nil) {
     return create(data: ["name": name, "constraint": constraint], in: detailsPath(forItemPath: itemPath), completion: completion)
   }
   

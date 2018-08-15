@@ -53,31 +53,35 @@ class DetailViewModel {
         }
       }.disposed(by: disposeBag)
     selectedIndex = selectedIndexSubject.asObservable()
-    pickerRowNames = constraintsSubject.map { constraints in
-        var constraintNames = constraints.map { $0.name }
-        constraintNames.append("[Add New Constraint]")
-        return constraintNames
+    pickerRowNames = Observable.combineLatest(constraintsSubject, detailSubject).map { constraints, detail in
+      var constraintNames = constraints.map { $0.name }
+      if !constraintNames.contains(detail.constraint) {
+        constraintNames.insert("[Select One]", at: 0)
+      }
+      constraintNames.append("[Add New Constraint]")
+      return constraintNames
     }
     
     // Update picker selected item if either Detail or available Constraints change
-    Observable.combineLatest(detailSubject, constraintsSubject).debounce(0.01, scheduler: MainScheduler()).subscribe { event in
-      if let index = event.element?.1.index(where: {$0.name == event.element?.0.constraint}) {
+    Observable.combineLatest(detailSubject, pickerRowNames).debounce(0.01, scheduler: MainScheduler()).subscribe { event in
+      if let index = event.element?.1.index(where: {$0 == event.element?.0.constraint}) {
         selectedIndexSubject.onNext(index)
+      } else {
+        selectedIndexSubject.onNext(0)
       }
       }.disposed(by: disposeBag)
     
     // Handle picker selection changes
     pickerSelectionChanged
-      .withLatestFrom(constraintsSubject) { ($0, $1) }
+      .withLatestFrom(pickerRowNames) { ($0, $1) }
       .withLatestFrom(selectedIndexSubject) { ($0.0, $0.1, $1) }
       .subscribe { event in
-      if case let .next(((index, _), constraints, selectedIndex)) = event {
-        if index == constraints.count {
+      if case let .next(((index, _), pickerNames, selectedIndex)) = event {
+        if index == pickerNames.count - 1 {
           delegate.addConstraint()
           selectedIndexSubject.onNext(selectedIndex)
         } else {
-          dataService.updateDetail(path: detailPath, with: ["constraint": constraints[index].name], completion: nil)
-          selectedIndexSubject.onNext(index)
+          dataService.updateDetail(path: detailPath, with: ["constraint": pickerNames[index]], completion: nil)
         }
       }
     }.disposed(by: disposeBag)

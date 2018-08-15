@@ -13,24 +13,21 @@ class CreateDetailViewModel {
   private let disposeBag = DisposeBag()
   
   let nameText: AnyObserver<String>
-  let constraintText: AnyObserver<String>
   let addTapped: AnyObserver<()>
   let cancelTapped: AnyObserver<()>
   
   init(itemPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     let nameTextSubject = PublishSubject<String>()
     nameText = nameTextSubject.asObserver()
-    let constraintTextSubject = PublishSubject<String>()
-    constraintText = constraintTextSubject.asObserver()
     let addTappedSubject = PublishSubject<()>()
     addTapped = addTappedSubject.asObserver()
     addTappedSubject
       .throttle(1, latest: false, scheduler: MainScheduler())
       .withLatestFrom(nameTextSubject)
-      .withLatestFrom(constraintTextSubject) { ($0, $1) }.subscribe { event in
-        guard case let .next(name, constraint) = event else { delegate.send(.dismiss); return }
-        if !name.isEmpty, !constraint.isEmpty {
-          dataService.createDetail(itemPath: itemPath, with: name, constraint: constraint)
+      .subscribe { event in
+        guard case let .next(name) = event else { delegate.send(.dismiss); return }
+        if !name.isEmpty {
+          dataService.createDetail(itemPath: itemPath, with: name)
         }
         delegate.send(.dismiss)
       }.disposed(by: disposeBag)

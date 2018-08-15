@@ -19,7 +19,6 @@ class CreateDetailViewController: UIViewController {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     var nameDisposable: Disposable?
-    var constraintDisposable: Disposable?
     let alertController = UIAlertController(title: "Add", message: nil, preferredStyle: .alert)
     alertController.addTextField { [unowned self] textField in
       textField.placeholder = "Enter a name"
@@ -27,22 +26,13 @@ class CreateDetailViewController: UIViewController {
       textField.autocorrectionType = UITextAutocorrectionType.yes
       nameDisposable = textField.rx.text.orEmpty.bind(to: self.model.nameText)
     }
-    // TODO: Constraint should not be a textfield, it should be a selection from a list of existing constraints
-    alertController.addTextField { [unowned self] textField in
-      textField.placeholder = "Enter an existing constraint"
-      textField.autocapitalizationType = .words
-      textField.autocorrectionType = UITextAutocorrectionType.yes
-      constraintDisposable = textField.rx.text.orEmpty.bind(to: self.model.constraintText)
-    }
     let okAction = UIAlertAction(title: "Ok", style: .default) { [unowned self] _ in
       self.model.addTapped.onNext(())
       nameDisposable?.dispose()
-      constraintDisposable?.dispose()
     }
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [unowned self] _ in
       self.model.cancelTapped.onNext(())
       nameDisposable?.dispose()
-      constraintDisposable?.dispose()
     }
     alertController.addAction(okAction)
     alertController.addAction(cancelAction)
