@@ -34,26 +34,11 @@ extension DetailCoordinator {
     navigationController.pushViewController(detailVC, animated: true)
   }
   
-  private func showEditDetailController(_ detail: Detail) {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.text = detail.name
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        DataService().updateDetail(path: detail.path, with: ["name": name]) { error in
-          if let error = error {
-            print(error)
-          }
-        }
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    navigationController.present(ac, animated: true)
+  private func showEditDetailController() {
+    let controller = EditDetailViewController()
+    controller.model = EditDetailViewModel(detailPath: detailPath, delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
 
   private func showAddConstraintController() {
@@ -64,25 +49,18 @@ extension DetailCoordinator {
   }
 }
 
-extension DetailCoordinator: DetailViewModelDelegate {
-  func addConstraint() {
-    showAddConstraintController()
-  }
-  
-  func edit(_ detail: Detail) {
-    showEditDetailController(detail)
-  }
-  
-  func viewModelDidDismiss() {
-    // TODO: Dismiss coordinator as well
-    navigationController.popViewController(animated: true)
-  }
-}
-
 extension DetailCoordinator: ViewModelDelegate {
   func send(_ action: ViewModelAction) {
     switch action {
-    case .edit, .show:
+    case .edit:
+      showEditDetailController()
+    case let .show(type, _):
+      switch type {
+      case "addConstraint":
+        showAddConstraintController()
+      default:
+        break
+      }
       break
     case .dismiss:
       navigationController.dismiss(animated: true)

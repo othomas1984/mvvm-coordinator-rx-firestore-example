@@ -8,12 +8,6 @@
 
 import RxSwift
 
-protocol DetailViewModelDelegate: class {
-  func edit(_ detail: Detail)
-  func addConstraint()
-  func viewModelDidDismiss()
-}
-
 class DetailViewModel {
   private let disposeBag = DisposeBag()
   private let detailListenerHandle: DataListenerHandle
@@ -27,14 +21,14 @@ class DetailViewModel {
   let selectedIndex: Observable<Int>
   let pickerRowNames: Observable<[String]>
 
-  init(_ detailPath: String, userPath: String, delegate: DetailViewModelDelegate, dataService: DataService = DataService()) {
+  init(_ detailPath: String, userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     let detailSubject = PublishSubject<Detail>()
     let constraintsSubject = PublishSubject<[Constraint]>()
     let selectedIndexSubject = PublishSubject<Int>()
 
     // Setup Database Listeners
     detailListenerHandle = dataService.detailListener(path: detailPath) { detail in
-      guard let detail = detail else { delegate.viewModelDidDismiss(); return }
+      guard let detail = detail else { delegate.send(.dismiss); return }
       detailSubject.on(.next(detail))
     }
     constraintsListenerHandle = dataService.constraintsListener(userPath: userPath) {
@@ -46,10 +40,9 @@ class DetailViewModel {
     detailConstraint = detailSubject.map { $0.constraint }
     
     // Handle Title Button Taps
-    titleButtonTapped.throttle(1.0, latest: false, scheduler: MainScheduler())
-      .withLatestFrom(detailSubject).subscribe { event in
-        if case let .next(detail) = event {
-          delegate.edit(detail)
+    titleButtonTapped.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
+        if case let .next = event {
+          delegate.send(.edit)
         }
       }.disposed(by: disposeBag)
     selectedIndex = selectedIndexSubject.asObservable()
@@ -78,7 +71,7 @@ class DetailViewModel {
       .subscribe { event in
       if case let .next(((index, _), pickerNames, selectedIndex)) = event {
         if index == pickerNames.count - 1 {
-          delegate.addConstraint()
+          delegate.send(.show(type: "addConstraint", id: nil))
           selectedIndexSubject.onNext(selectedIndex)
         } else {
           dataService.updateDetail(path: detailPath, with: ["constraint": pickerNames[index]], completion: nil)
