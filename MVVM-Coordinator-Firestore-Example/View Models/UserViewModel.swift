@@ -99,8 +99,7 @@ class UserViewModel {
     
     // Title Button
     titleTapped = titleSubject.asObserver()
-    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
-      .withLatestFrom(userSubject).subscribe { event in
+    titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
         if case .next = event {
           delegate.send(.edit)
         }
