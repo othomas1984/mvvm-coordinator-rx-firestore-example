@@ -8,13 +8,6 @@
 
 import RxSwift
 
-protocol ItemViewModelDelegate: class {
-  func select(_ detailPath: String)
-  func edit(_ item: Item)
-  func add()
-  func viewModelDidDismiss()
-}
-
 class ItemViewModel {
   private let disposeBag = DisposeBag()
   
@@ -32,11 +25,11 @@ class ItemViewModel {
   let detailSelected: AnyObserver<IndexPath>
   let detailDeleted: AnyObserver<IndexPath>
   
-  init(_ itemPath: String, userPath: String, delegate: ItemViewModelDelegate, dataService: DataService = DataService()) {
+  init(_ itemPath: String, userPath: String, delegate: ViewModelDelegate, dataService: DataService = DataService()) {
     // Item
     let itemSubject = BehaviorSubject<Item?>(value: nil)
     itemListenerHandle = dataService.itemListener(path: itemPath) { item in
-      guard let item = item else { delegate.viewModelDidDismiss(); return }
+      guard let item = item else { delegate.send(.dismiss); return }
       itemSubject.onNext(item)
     }
     itemName = itemSubject.map { $0?.name ?? "" }
@@ -58,7 +51,7 @@ class ItemViewModel {
       }.subscribe { result in
         guard let index = result.element?.0.row,
           let details = result.element?.1, details.count > index else { return }
-        delegate.select(details[index].path)
+        delegate.send(.show(type: "detail", id: details[index].path))
       }.disposed(by: disposeBag)
     
     detailDeleted = detailDeletedSubject.asObserver()
@@ -79,8 +72,8 @@ class ItemViewModel {
     titleTapped = titleSubject.asObserver()
     titleSubject.throttle(1.0, latest: false, scheduler: MainScheduler())
       .withLatestFrom(itemSubject).subscribe { event in
-        if case let .next(itemOptional) = event, let item = itemOptional {
-          delegate.edit(item)
+        if case .next = event {
+          delegate.send(.edit)
         }
       }.disposed(by: disposeBag)
     
@@ -88,7 +81,7 @@ class ItemViewModel {
     addTapped = addButtonSubject.asObserver()
     addButtonSubject.throttle(1.0, latest: false, scheduler: MainScheduler()).subscribe { event in
       if case .next = event {
-        delegate.add()
+        delegate.send(.show(type: "addDetail", id: nil))
       }
       }.disposed(by: disposeBag)
   }

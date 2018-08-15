@@ -48,45 +48,11 @@ extension ItemCoordinator {
     navigationController.present(controller, animated: false)
   }
   
-  private func showEditItemController(_ item: Item) {
-    // This would be it's own view controller managed by this coordinator eventually
-    let ac = UIAlertController(title: "Edit", message: nil, preferredStyle: .alert)
-    ac.addTextField { (textField) in
-      textField.text = item.name
-    }
-    let okAction = UIAlertAction(title: "Ok", style: .default) { [weak ac] action in
-      if let name = ac?.textFields?.first?.text, !name.isEmpty {
-        DataService().updateItem(path: item.path, with: ["name": name]) { error in
-          if let error = error {
-            print(error)
-          }
-        }
-      }
-    }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-    ac.addAction(okAction)
-    ac.addAction(cancelAction)
-    ac.preferredAction = okAction
-    navigationController.present(ac, animated: true)
-  }
-}
-
-extension ItemCoordinator: ItemViewModelDelegate {
-  func edit(_ item: Item) {
-    showEditItemController(item)
-  }
-
-  func select(_ detailPath: String) {
-    startDetailCoordinator(detailPath)
-  }
-  
-  func add() {
-    showAddDetailController()
-  }
-  
-  func viewModelDidDismiss() {
-    // TODO: Dismiss coordinator as well
-    navigationController.popViewController(animated: true)
+  private func showEditItemController() {
+    let controller = EditItemViewController()
+    controller.model = EditItemViewModel(itemPath: itemPath, delegate: self)
+    controller.modalPresentationStyle = .overCurrentContext
+    navigationController.present(controller, animated: false)
   }
 }
 
@@ -95,8 +61,18 @@ extension ItemCoordinator: ViewModelDelegate {
     switch action {
     case .dismiss:
       navigationController.dismiss(animated: false)
-    case .edit, .show:
-      break
+    case .edit:
+      showEditItemController()
+    case let .show(type, id):
+      switch type {
+      case "detail":
+        guard let id = id else { return }
+        startDetailCoordinator(id)
+      case "addDetail":
+        showAddDetailController()
+      default:
+        break
+      }
     }
   }
 }

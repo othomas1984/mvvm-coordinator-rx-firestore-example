@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33141A6521229E6D00E527C6 /* EditItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33141A6421229E6D00E527C6 /* EditItemViewModel.swift */; };
+		33141A672123D29900E527C6 /* EditItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33141A662123D29900E527C6 /* EditItemViewController.swift */; };
 		33646D0420ECBD640021A2A1 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */; };
 		3372410020E1C6A5003FDCFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337240FF20E1C6A5003FDCFF /* AppDelegate.swift */; };
 		3372410720E1C6A6003FDCFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3372410620E1C6A6003FDCFF /* Assets.xcassets */; };
@@ -70,6 +72,8 @@
 /* Begin PBXFileReference section */
 		1A05E41C3A808D3B3A556B37 /* Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MVVM_Coordinator_Firestore_Example_UnitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BDCC54FE8218CE3B4925142 /* Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM-Coordinator-Firestore-Example/Pods-MVVM-Coordinator-Firestore-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		33141A6421229E6D00E527C6 /* EditItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemViewModel.swift; sourceTree = "<group>"; };
+		33141A662123D29900E527C6 /* EditItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemViewController.swift; sourceTree = "<group>"; };
 		33646D0320ECBD640021A2A1 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		337240FC20E1C6A5003FDCFF /* MVVM-Coordinator-Firestore-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MVVM-Coordinator-Firestore-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		337240FF20E1C6A5003FDCFF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +230,7 @@
 				3375792521196E87002D072B /* CreateItemViewController.swift */,
 				3375792721196FBE002D072B /* CreateConstraintViewController.swift */,
 				33D6F95120E1F45100CB7B55 /* ItemViewController.swift */,
+				33141A662123D29900E527C6 /* EditItemViewController.swift */,
 				33757933211A68D1002D072B /* CreateDetailViewController.swift */,
 				33D6F94920E1F0DC00CB7B55 /* DetailViewController.swift */,
 			);
@@ -244,6 +249,7 @@
 				3375792321196D80002D072B /* CreateItemViewModel.swift */,
 				3375792921196FE1002D072B /* CreateConstraintViewModel.swift */,
 				33D6F94F20E1F3A700CB7B55 /* ItemViewModel.swift */,
+				33141A6421229E6D00E527C6 /* EditItemViewModel.swift */,
 				33757931211A647E002D072B /* CreateDetailViewModel.swift */,
 				33D6F94720E1F03300CB7B55 /* DetailViewModel.swift */,
 			);
@@ -553,9 +559,11 @@
 				33D6F95620E1F54000CB7B55 /* ItemCoordinator.swift in Sources */,
 				337579222119658B002D072B /* ChooseItemOrConstraintViewModel.swift in Sources */,
 				337579042116D7DA002D072B /* DataService.swift in Sources */,
+				33141A6521229E6D00E527C6 /* EditItemViewModel.swift in Sources */,
 				337579082118F098002D072B /* FirestoreProtocolConformance.swift in Sources */,
 				33757934211A68D1002D072B /* CreateDetailViewController.swift in Sources */,
 				3375790A2118F117002D072B /* FirestoreMocks.swift in Sources */,
+				33141A672123D29900E527C6 /* EditItemViewController.swift in Sources */,
 				33D6F95020E1F3A700CB7B55 /* ItemViewModel.swift in Sources */,
 				3375791C21192163002D072B /* CreateUserViewController.swift in Sources */,
 				33D6F95220E1F45100CB7B55 /* ItemViewController.swift in Sources */,
